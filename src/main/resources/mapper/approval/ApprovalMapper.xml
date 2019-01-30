@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.approval.dao.ApprovalMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.approval.entity.Approval" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="action_type" property="actionType" jdbcType="VARCHAR" />
+    <result column="action_name" property="actionName" jdbcType="VARCHAR" />
+    <result column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="submitter" property="submitter" jdbcType="VARCHAR" />
+    <result column="sub_time" property="subTime" jdbcType="TIMESTAMP" />
+    <result column="obj_name" property="objName" jdbcType="VARCHAR" />
+    <result column="app_status" property="appStatus" jdbcType="INTEGER" />
+    <result column="threshold" property="threshold" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="scene" property="scene" jdbcType="VARCHAR" />
+    <result column="activate" property="activate" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="rule_set_name" property="ruleSetName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, action_type, action_name, business_id, submitter, sub_time, obj_name, app_status,
+    threshold, description, scene, activate, remarks,unique_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    am.*,ot.obj_name,et.type_name
+    from approval_manage am
+    left join approval_object_type ot on am.obj_id = ot.id left join engine_business_type et on et.id = am.business_id where am.id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from approval_manage
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.geo.rcs.modules.approval.entity.Approval" >
+    insert into approval_manage (id, action_type, action_name, 
+      business_id, submitter, sub_time,
+      obj_name, app_status, threshold, 
+      description, scene, activate, 
+      remarks)
+    values (#{id,jdbcType=BIGINT}, #{actionType,jdbcType=VARCHAR}, #{actionName,jdbcType=VARCHAR}, 
+      #{businessId,jdbcType=INTEGER}, #{submitter,jdbcType=VARCHAR}, #{subTime,jdbcType=TIMESTAMP},
+      #{objName,jdbcType=VARCHAR}, #{appStatus,jdbcType=INTEGER}, #{threshold,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, #{activate,jdbcType=INTEGER}, 
+      #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.geo.rcs.modules.approval.entity.Approval" >
+    insert into approval_manage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="actionType != null" >
+        action_type,
+      </if>
+      <if test="actionName != null" >
+        action_name,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="submitter != null" >
+        submitter,
+      </if>
+      <if test="subTime != null" >
+        sub_time,
+      </if>
+      <if test="objId != null" >
+        obj_id,
+      </if>
+      <if test="appStatus != null" >
+        app_status,
+      </if>
+      <if test="threshold != null" >
+        threshold,
+      </if>
+      <if test="thresholdMin != null">
+        threshold_min,
+      </if>
+      <if test="thresholdMax != null">
+        threshold_max,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="scene != null" >
+        scene,
+      </if>
+      <if test="activate != null" >
+        activate,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="uniqueCode != null" >
+        unique_code,
+      </if>
+      <if test="onlyId != null" >
+        only_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="actionType != null" >
+        #{actionType,jdbcType=INTEGER},
+      </if>
+      <if test="actionName != null" >
+        #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="submitter != null" >
+        #{submitter,jdbcType=VARCHAR},
+      </if>
+      <if test="subTime != null" >
+        #{subTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="objId != null" >
+        #{objId,jdbcType=INTEGER},
+      </if>
+      <if test="appStatus != null" >
+        #{appStatus,jdbcType=INTEGER},
+      </if>
+      <if test="threshold != null" >
+        #{threshold,jdbcType=INTEGER},
+      </if>
+      <if test="thresholdMin != null">
+        #{thresholdMin,jdbcType=INTEGER},
+      </if>
+      <if test="thresholdMax != null">
+        #{thresholdMax,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null" >
+        #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="activate != null" >
+        #{activate,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="uniqueCode != null" >
+        #{uniqueCode},
+      </if>
+      <if test="onlyId != null" >
+        #{onlyId}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.approval.entity.Approval" >
+    update approval_manage
+    <set >
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionName != null" >
+        action_name = #{actionName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="submitter != null" >
+        submitter = #{submitter,jdbcType=VARCHAR},
+      </if>
+      <if test="subTime != null" >
+        sub_time = #{subTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="objName != null" >
+        obj_name = #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="appStatus != null" >
+        app_status = #{appStatus,jdbcType=INTEGER},
+      </if>
+      <if test="threshold != null" >
+        threshold = #{threshold,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null" >
+        scene = #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="activate != null" >
+        activate = #{activate,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.approval.entity.Approval" >
+    update approval_manage
+    set action_type = #{actionType,jdbcType=VARCHAR},
+      action_name = #{actionName,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=INTEGER},
+      submitter = #{submitter,jdbcType=VARCHAR},
+      sub_time = #{subTime,jdbcType=TIMESTAMP},
+      obj_name = #{objName,jdbcType=VARCHAR},
+      app_status = #{appStatus,jdbcType=INTEGER},
+      threshold = #{threshold,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      scene = #{scene,jdbcType=VARCHAR},
+      activate = #{activate,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 分页查询 -->
+  <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.approval.entity.Approval">
+    select
+    am.*,er.name as rule_set_name,ebt.type_name,ot.obj_name,ate.action_name from approval_manage am left join engine_business_type ebt  on am.business_id = ebt.id left join approval_object_type ot on am.obj_id = ot.id left join approval_action_type ate on ate.id = am.action_type left join engine_rules er on er.id = am.only_id
+    where 1=1
+    <if test="actionType != null">
+      and am.action_type = #{actionType}
+    </if>
+    <if test="businessId != null">
+      and am.business_id = #{businessId}
+    </if>
+    <if test="description != null">
+      and am.description = #{description}
+    </if>
+    <if test="actionName != null">
+      and am.action_name = #{actionName}
+    </if>
+    <if test="submitter != null">
+      and am.submitter like '%${submitter}%'
+    </if>
+    <if test="appStatus != null">
+      and am.app_status = 0
+    </if>
+    and am.unique_code = #{uniqueCode} order by am.sub_time desc
+  </select>
+  <select id="findUnByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.approval.entity.Approval">
+    select
+    am.*,ebt.type_name,ot.obj_name,ate.action_name from approval_manage am left join engine_business_type ebt  on am.business_id = ebt.id left join approval_object_type ot on am.obj_id = ot.id left join approval_action_type ate on ate.id = am.action_type
+    where 1=1
+    <if test="actionType != null">
+      and action_type = #{actionType}
+    </if>
+    <if test="businessId != null">
+      and business_id = #{businessId}
+    </if>
+    <if test="actionName != null">
+      and action_name = #{actionName}
+    </if>
+    <if test="submitter != null">
+      and submitter like '%${submitter}%'
+    </if>
+    <if test="description != null">
+      and description = #{description}
+    </if>
+    and am.app_status !=0 and am.unique_code = #{uniqueCode} order by am.sub_time desc
+  </select>
+  <select id="queryByName" resultType="com.geo.rcs.modules.approval.entity.Approval">
+    select
+    <include refid="Base_Column_List" />
+    from approval_manage where name = #{name}
+  </select>
+  <select id="getStaffById" resultType="com.geo.rcs.modules.approval.entity.Approval">
+    select
+    <include refid="Base_Column_List" />
+    from approval_manage where id = #{id}
+  </select>
+  <update id="updateAppStatus" parameterType="com.geo.rcs.modules.approval.entity.Approval">
+    update approval_manage
+    set
+    app_status = #{appStatus,jdbcType=INTEGER},
+    app_person = #{appPerson},
+    app_time = #{appTime},
+    record_id = #{recordId}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getObjList" resultType="com.geo.rcs.modules.approval.entity.ObjectType">
+      select * from approval_object_type
+  </select>
+  <select id="getActionList" resultType="com.geo.rcs.modules.approval.entity.ActionType">
+      select * from approval_action_type
+  </select>
+  <update id="updateRemarksById" parameterType="com.geo.rcs.modules.approval.entity.Approval">
+    update approval_manage set remarks = #{remarks} where id = #{id}
+  </update>
+</mapper>

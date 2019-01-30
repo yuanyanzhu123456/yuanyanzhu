@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.ruleset.dao.RecordRulesLogMapper" >
+
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.template.entity.RuleTemplate">
+        select
+        *
+        from engine_history_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insertBySelective" parameterType="com.geo.rcs.modules.rule.ruleset.entity.EngineHistoryLog" useGeneratedKeys="true" keyProperty="id">
+        insert into engine_history_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="rulesMap != null" >
+                rules_map,
+            </if>
+            <if test="ruleSetId != null" >
+                rules_id,
+            </if>
+            <if test="uniqueCode != null" >
+                unique_code,
+            </if>
+            <if test="recordTime != null" >
+                record_time,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="actionType != null" >
+                action_type,
+            </if>
+            <if test="name != null" >
+                rules_name,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="rulesMap != null" >
+                #{rulesMap},
+            </if>
+            <if test="ruleSetId != null" >
+                #{ruleSetId},
+            </if>
+            <if test="uniqueCode != null" >
+                #{uniqueCode},
+            </if>
+            <if test="recordTime != null" >
+                #{recordTime},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="actionType != null" >
+                #{actionType},
+            </if>
+            <if test="name!= null" >
+                #{name},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.template.entity.RuleTemplate" >
+        update engine_history_log
+        <set >
+            <if test="rulesetJson != null" >
+                ruleset_json = #{rulesetJson},
+            </if>
+            <if test="describ != null" >
+                describ = #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null" >
+                version = #{version,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.template.entity.RuleTemplate" parameterType="com.geo.rcs.modules.template.entity.RuleTemplate">
+        select  * from templates
+
+         WHERE 1=1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from templates where id = #{id}
+    </delete>
+    <insert id="saveLog" parameterType="com.geo.rcs.modules.template.entity.TemplateLog">
+        insert into template_import_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="modelId != null" >
+                model_id,
+            </if>
+            <if test="importTime != null" >
+                import_time,
+            </if>
+            <if test="importStatus != null" >
+                import_status,
+            </if>
+            <if test="expendTime != null" >
+                expend_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="modelId != null" >
+                #{modelId},
+            </if>
+            <if test="importTime != null" >
+                #{importTime},
+            </if>
+            <if test="importStatus != null" >
+                #{importStatus},
+            </if>
+            <if test="expendTime != null" >
+                #{expendTime},
+            </if>
+        </trim>
+    </insert>
+    <select id="getRecordById" resultType="com.geo.rcs.modules.rule.ruleset.entity.EngineHistoryLog" parameterType="com.geo.rcs.modules.rule.ruleset.entity.EngineHistoryLog">
+        select * from engine_history_log
+
+        WHERE 1=1
+        <if test="name != null">
+            and rules_name  like '%${name}%'
+        </if>
+        <if test="actionType != null">
+            and action_type = #{actionType}
+        </if>
+         and unique_code = #{uniqueCode} and rules_id = #{ruleSetId}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from engine_history_log where id = #{logId}
+    </delete>
+</mapper>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geo.rcs.modules.sys.dao.SysVersionMapper">
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.sys.entity.SysVersion">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="day" property="day" jdbcType="INTEGER"/>
+        <result column="active" property="active" jdbcType="INTEGER"/>
+        <result column="entry_num" property="entryNum" jdbcType="INTEGER"/>
+        <result column="erupt_num" property="eruptNum" jdbcType="INTEGER"/>
+        <result column="rules_num" property="rulesNum" jdbcType="INTEGER"/>
+        <result column="decision_num" property="decisionNum" jdbcType="INTEGER"/>
+        <result column="model_num" property="modelNum" jdbcType="INTEGER"/>
+        <result column="user_num" property="userNum" jdbcType="INTEGER"/>
+        <result column="event" property="event" jdbcType="INTEGER"/>
+        <result column="ab_status" property="abStatus" jdbcType="INTEGER"/>
+        <result column="service" property="service" jdbcType="VARCHAR" />
+        <result column="customizable" property="customizable" jdbcType="INTEGER"/>
+        <result column="usage_amount" property="usageAmount" jdbcType="INTEGER"/>
+        <result column="createtime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updatetime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="creater" property="creater" jdbcType="VARCHAR" />
+        <result column="updater" property="updater" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--版本名-->
+    <select id="queryVersionName" resultType="com.geo.rcs.modules.sys.entity.SysVersion">
+        select
+        *
+        from sys_version where name = #{name}
+    </select>
+
+    <!--根据id查询版本信息-->
+    <select id="getVerInfoById" resultType="com.geo.rcs.modules.sys.entity.SysVersion">
+        select
+        *
+        from sys_version where id = #{id}
+    </select>
+
+    <!--模糊查询-->
+    <select id="getVersionInfoByPage" resultType="com.geo.rcs.modules.sys.entity.SysVersion" parameterType="com.geo.rcs.modules.sys.entity.SysVersion">
+        select sv.id,sv.name,sv.day,sv.price,sv.active,sv.model_num,sv.decision_num,sv.rules_num,sv.entry_num,sv.erupt_num,sv.event,sv.ab_status,sv.service,sv.customizable,sv.user_num,
+        sv.createtime,sv.updatetime,sv.creater,sv.updater, IFNULL(scv.usageAmount,0)as usageAmount from sys_version as sv left join
+        (select *,count(*) as usageAmount from sys_customer_version group by version_id)
+        as scv on scv.version_id=sv.id where 1=1
+        <if test="name != null">
+            and name like '%${name}%'
+        </if>
+        <if test="active != null">
+            and active = #{active}
+        </if>
+    </select>
+
+    <!--增加版本-->
+    <insert id="save" parameterType="com.geo.rcs.modules.sys.entity.SysVersion" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_version
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="day != null">
+                day,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="abStatus != null">
+                ab_status,
+            </if>
+            <if test="event != null">
+                event,
+            </if>
+            <if test="customizable != null">
+                customizable,
+            </if>
+            <if test="active != null">
+                active,
+            </if>
+            <if test="modelNum != null">
+                model_num,
+            </if>
+            <if test="decisionNum != null">
+                decision_num,
+            </if>
+            <if test="entryNum != null">
+                entry_num,
+            </if>
+            <if test="eruptNum != null">
+                erupt_num,
+            </if>
+            <if test="createTime != null">
+                createtime,
+            </if>
+            <if test="updateTime != null">
+                updatetime,
+            </if>
+            <if test="creater != null">
+                creater,
+            </if>
+            <if test="updater != null">
+                updater,
+            </if>
+            <if test="service != null">
+                service,
+            </if>
+            <if test="userNum != null">
+                user_num,
+            </if>
+            <if test="rulesNum != null">
+                rules_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null">
+                #{day,jdbcType=BIGINT},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="abStatus != null">
+                #{abStatus,jdbcType=INTEGER},
+            </if>
+            <if test="event != null">
+                #{event,jdbcType=INTEGER},
+            </if>
+            <if test="customizable != null">
+                #{customizable,jdbcType=INTEGER},
+            </if>
+            <if test="active != null">
+                #{active,jdbcType=INTEGER},
+            </if>
+            <if test="modelNum != null">
+                #{modelNum,jdbcType=INTEGER},
+            </if>
+            <if test="decisionNum != null">
+                #{decisionNum,jdbcType=INTEGER},
+            </if>
+            <if test="entryNum != null">
+                #{entryNum,jdbcType=INTEGER},
+            </if>
+            <if test="eruptNum != null">
+                #{eruptNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null">
+                #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="updater != null">
+                #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="service != null">
+                #{service,jdbcType=VARCHAR},
+            </if>
+            <if test="userNum != null">
+                #{userNum,jdbcType=INTEGER},
+            </if>
+            <if test="rulesNum != null">
+                #{rulesNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <!--修改版本-->
+    <update id="updateVersion" parameterType="com.geo.rcs.modules.sys.entity.SysVersion">
+        update sys_version
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null">
+               day = #{day,jdbcType=BIGINT},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="abStatus != null">
+                ab_status = #{abStatus,jdbcType=INTEGER},
+            </if>
+            <if test="event != null">
+                event = #{event,jdbcType=INTEGER},
+            </if>
+            <if test="customizable != null">
+                customizable = #{customizable,jdbcType=INTEGER},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=INTEGER},
+            </if>
+            <if test="modelNum != null">
+               model_num = #{modelNum,jdbcType=INTEGER},
+            </if>
+            <if test="decisionNum != null">
+               decision_num = #{decisionNum,jdbcType=INTEGER},
+            </if>
+            <if test="entryNum != null">
+               entry_num = #{entryNum,jdbcType=INTEGER},
+            </if>
+            <if test="eruptNum != null">
+               erupt_num = #{eruptNum,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updatetime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null">
+               updater = #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="service != null">
+            service = #{service,jdbcType=VARCHAR},
+            </if>
+            <if test="userNum != null">
+                user_num = #{userNum,jdbcType=VARCHAR},
+            </if>
+            <if test="rulesNum != null">
+                rules_num = #{rulesNum,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--删除版本-->
+    <delete id="deleteVersion" parameterType="java.lang.Long">
+        delete from sys_version
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <!--版本数量和用户数量-->
+    <select id="verUserSum" resultType="java.util.Map" parameterType="java.util.Map">
+       SELECT b.versionNum,a.userNum FROM (SELECT COUNT(DISTINCT customer_id) userNum from sys_customer_version) as a,(SELECT COUNT(*) as versionNum from sys_version) as b
+    </select>
+
+    <select id="queryDayById" resultType="java.lang.Integer">
+        select sv.`day` from sys_version as sv  where id = #{id}
+    </select>
+
+    <select id="findCustomOfVersion" resultType="com.geo.rcs.modules.sys.entity.SysUser" parameterType="com.geo.rcs.modules.sys.entity.SysVersion">
+       select
+        su.id,su.contact,su.creater,su.email,su.mobilephone,su.name, su.password,su.role_id,su.salt,su.status,su.username,su.unique_code,date_format(su.create_time,"%Y-%m-%d %H:%i:%s") as createTime,sr.role_name
+        from sys_user su left join sys_role sr on su.role_id = sr.id WHERE 1=1 and
+         su.id in (select customer_id as id from sys_customer_version where version_id = #{id})
+    </select>
+
+    <select id="getPriceById" resultType="java.lang.Double">
+        SELECT price from sys_version where id = #{versionId}
+    </select>
+</mapper>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.monitor.dao.TaskLogMapper">
+    <select id="queryObjectByUserId" resultType="com.geo.rcs.modules.monitor.entity.TaskLog">
+		select * from ${tableName} where log_id = #{id} and userId = #{userId}
+	</select>
+
+    <select id="queryList" resultType="com.geo.rcs.modules.monitor.entity.TaskLog">
+        select * from ${tableName}
+        <where>
+            <if test="jobId != null">
+                and job_id = #{jobId}
+            </if>
+        </where>
+        order by log_id desc
+        <if test="offset != null and limit != null ">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(1) from ${tableName}
+        <where>
+            <if test="jobId != null">
+                and job_id = #{jobId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.geo.rcs.modules.monitor.entity.TaskLog" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into ${tableName}
+		(
+			`task_id`,
+			`create_time`,
+			`result_map`,
+			`cycle_num`,
+			`status`,
+			`user_id`,
+			`remark`,
+			`job_id`
+
+		)
+		values
+		(
+			#{taskId},
+			#{createTime},
+			#{resultMap},
+			#{cycleNum},
+			#{status},
+			#{userId},
+			#{remark},
+			#{jobId}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.geo.rcs.modules.monitor.entity.TaskLog">
+
+        UPDATE ${tableName}
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="resultMap != null">`result_map` = #{resultMap},</if>
+            <if test="cycleNum != null">`cycle_num` = #{cycleNum},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="jobId != null">`job_id` = #{jobId},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="queryTableIFExists" resultType="java.lang.String" parameterType="java.lang.String">
+		select t.table_name from information_schema.TABLES t where t.TABLE_SCHEMA ="rcs2" and t.TABLE_NAME ="${tableName}";
+	</select>
+
+    <update id="createTaskLogTable" parameterType="java.lang.String">
+		CREATE TABLE IF NOT EXISTS `${tableName}` (
+      `id` bigint(11) NOT NULL AUTO_INCREMENT,
+      `task_id` bigint(20) DEFAULT NULL COMMENT '名单编号',
+      `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+      `job_id` bigint(11) DEFAULT NULL COMMENT '任务编号',
+      `result_map` text DEFAULT NULL COMMENT '结果',
+      `cycle_num` int(11) DEFAULT '1' COMMENT '期数',
+      `status` int(11) DEFAULT NULL COMMENT '0失败,1成功,2执行中',
+      `remark` text COMMENT '备注',
+      `user_id` bigint(20) DEFAULT NULL COMMENT '客户编号',
+      `operator` varchar(10) DEFAULT NULL COMMENT '操作人',
+      `operate_time` datetime DEFAULT NULL COMMENT '操作时间',
+      `description` varchar(255) DEFAULT NULL COMMENT '描述',
+      `audit_status` int(11) DEFAULT NULL COMMENT '审核状态(0: 重试；1:报警；2:正常；3:误报)',
+      PRIMARY KEY (`id`),
+      KEY `gather_index` (`create_time`,`job_id`),
+      KEY `task_index` (`task_id`),
+      KEY `status_index` (`status`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	</update>
+
+    <select id="getAlarmData" resultType="com.geo.rcs.modules.monitor.entity.TaskLog">
+        select mt.name,mt.cid,mt.id_number,mtl.result_map,mtl.create_time
+        from ${logTableName} mtl
+        left join ${taskTableName} mt
+        on mtl.task_id = mt.id
+        where mt.job_id = #{jobId}
+        and mt.user_id = #{userId}
+        and mtl.status = 3
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND mtl.create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+    <select id="getTrendTotal" parameterType="map" resultType="java.util.Date">
+        select mtl.create_time from ${logTableName} mtl where
+        mtl.task_id in
+        (select mt.id from ${taskTableName} mt where mt.job_id = #{jobId})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and mtl.create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+
+    </select>
+    <select id="getTrendException" parameterType="map" resultType="java.util.Date">
+        select mtl.create_time from ${logTableName} mtl where
+        mtl.status = 3 and mtl.task_id in
+        (select mt.id from ${taskTableName} mt where mt.job_id = #{jobId})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and mtl.create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+    </select>
+
+    <select id="getTaskDetail" resultType="com.geo.rcs.modules.monitor.entity.TaskLog">
+		select * from ${tableName} where task_id = #{id}
+	</select>
+
+    <update id="updateReadStatus" parameterType="map">
+        UPDATE ${tableName}
+        set read_status = 1
+        where id = #{id}
+    </update>
+
+    <!-- 批量更新状态 -->
+    <update id="updateReadStatusBatch">
+        update ${taskTableName} set read_status = 1 where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="map">
+        UPDATE ${tableName}
+        <set>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="resultMap != null">`result_map` = #{resultMap},</if>
+            <if test="cycleNum != null">`cycle_num` = #{cycleNum},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="operator != null">`operator` = #{operator},</if>
+            <if test="operateTime != null">`operate_time` = #{operateTime},</if>
+            <if test="description != null">`description` = #{description},</if>
+            <if test="auditStatus != null">`audit_status` = #{auditStatus},</if>
+        </set>
+        where id = #{logId}
+    </update>
+    <select id="getTrendByDay" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d') as create_time,count(id) as count FROM ${tableName} where status = 3 and job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} DAY)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by DAY(create_time)
+    </select>
+    <select id="getTrendByHour" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time,count(id) as count FROM ${tableName} where status = 3 and job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} HOUR)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by HOUR(create_time)
+    </select>
+    <select id="getTrendByMonth" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m') as create_time, count(id) as count FROM ${tableName} where status = 3 and job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} MONTH)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by MONTH(create_time)
+    </select>
+    <select id="getTrendTotalByDay" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d') as create_time,count(id) as count FROM ${tableName} where  job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} DAY)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by DAY(create_time)
+    </select>
+    <select id="getTrendTotalByHour" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time,count(id) as count FROM ${tableName} where  job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} HOUR)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by HOUR(create_time)
+    </select>
+    <select id="getTrendTotalByMonth" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m') as create_time, count(id) as count FROM ${tableName} where job_id = #{jobId} and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} MONTH)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by MONTH(create_time)
+    </select>
+
+    <delete id="deleteByJobId" parameterType="map">
+        delete from ${logTableName} where job_id = #{jobId}
+    </delete>
+</mapper>

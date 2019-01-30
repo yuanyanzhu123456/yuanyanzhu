@@ -1,0 +1,316 @@
+package com.geo.rcs.modules.engine.drools;
+
+import com.geo.rcs.modules.engine.entity.Rules;
+import java.text.SimpleDateFormat;
+import static java.lang.Math.*;
+import java.util.Collections;
+import java.util.List
+import java.util.Date;
+function int Not(int res) {
+    if(res==1){
+        res = 0;
+    }else{
+        res = 1;
+    }
+    return res;
+}
+
+function int compareDate( String startDate, String endDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date start = sdf.parse(startDate);
+    Date end = sdf.parse(endDate);
+
+    return start.compareTo(end);
+}
+
+function int compareDatetime( String startDate, String endDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    Date start = sdf.parse(startDate);
+    Date end = sdf.parse(endDate);
+
+    return start.compareTo(end);
+}
+
+function int diffToday( String recentDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date today = new Date();
+    Date end = sdf.parse(recentDate);
+
+    long diff = today.getTime() - end.getTime();
+    return (int)(diff/(1000*60*60*24));
+}
+
+function int diffTodayTime( String recentDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    Date today = new Date();
+    Date end = sdf.parse(recentDate);
+
+    long diff = today.getTime() - end.getTime();
+    return (int)(diff/(1000*60*60*24));
+}
+
+dialect "mvel"
+
+//declare any global variables here
+// [ruleSetId]:10001
+rule "rs10001"
+//no-loop
+ salience 1
+ when
+  $rs:Rules($rsid:id, $s:status==0);
+ then
+  System.out.println("[ruleSetId]：" + $rsid);
+  System.out.println("[ruleSet10001 Score]：" + $rs.score);
+  System.out.println("[ruleSet10001 Status]：" + $rs.status);
+  $rs.score = $rs.ruleList[0].score + $rs.ruleList[1].score;
+  $rs.status = ($rs.ruleList[0].score>0 ? $rs.ruleList[0].level:0) > $rs.status?($rs.ruleList[0].score>0 ? $rs.ruleList[0].level:0):$rs.status;
+  $rs.status = ($rs.ruleList[1].score>0 ? $rs.ruleList[1].level:0) > $rs.status?($rs.ruleList[1].score>0 ? $rs.ruleList[1].level:0):$rs.status;
+
+  $rs.status = $rs.status==0?1:$rs.status;
+  System.out.println("[ruleSet10001 Status]：" + $rs.status);
+  System.out.println("[ruleSet10001 Score]：" + $rs.score);
+//  update($rs);
+end
+
+
+// RuleIndex:0, RuleId:10001
+rule "r10001"
+//no-loop
+ salience 100
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001 threshold]：" + $r.ruleList[0].threshold);
+  System.out.println("[ruleSet10001-rule10001 level]：" + $r.ruleList[0].level);
+  // Notice：ruleScore = threshold * conditionResult（true/false ==> 1/0 ）
+  $r.ruleList[0].score = $r.ruleList[0].conditionsList[0].result||$r.ruleList[0].conditionsList[1].result  ;
+  $r.ruleList[0].score = $r.ruleList[0].threshold * $r.ruleList[0].score;
+  System.out.println("[ruleSet10001-rule10001 end score]：" + $r.ruleList[0].score);
+  System.out.println("[ruleSet10001-rule10001 end level]：" + $r.ruleList[0].level);
+//  update($r);
+end
+
+// conditionIndex：0, conditionId: 10001,
+rule "c10001"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10001-Start]：" + $r.ruleList[0].conditionsList[0].result);
+  $r.ruleList[0].conditionsList[0].result = $r.ruleList[0].conditionsList[0].fieldList[0].result||$r.ruleList[0].conditionsList[0].fieldList[1].result;
+    System.out.println("[ruleSet10001-rule10001-condition10001-Result]：" + $r.ruleList[0].conditionsList[0].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10001
+rule "field10001"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10001-Value]：" + $r.ruleList[0].conditionsList[0].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10001-Operator]：" + $r.ruleList[0].conditionsList[0].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10001-Parameter]：" + $r.ruleList[0].conditionsList[0].fieldList[0].parameter);
+  $r.ruleList[0].conditionsList[0].fieldList[0].result=!($r.ruleList[0].conditionsList[0].fieldList[0].value.equals($r.ruleList[0].conditionsList[0].fieldList[0].parameter));
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10001-Result]：" + $r.ruleList[0].conditionsList[0].fieldList[0].result);
+//  update($r);
+end
+
+// fieldIndex：1, fieldId: 10002
+rule "field10002"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10002-Value]：" + $r.ruleList[0].conditionsList[0].fieldList[1].value);
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10002-Operator]：" + $r.ruleList[0].conditionsList[0].fieldList[1].operator);
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10002-Parameter]：" + $r.ruleList[0].conditionsList[0].fieldList[1].parameter);
+  $r.ruleList[0].conditionsList[0].fieldList[1].result=$r.ruleList[0].conditionsList[0].fieldList[1].value == null || $r.ruleList[0].conditionsList[0].fieldList[1].value.length == 0? false:(Integer.valueOf($r.ruleList[0].conditionsList[0].fieldList[1].value) >= Integer.valueOf($r.ruleList[0].conditionsList[0].fieldList[1].parameter) );
+  System.out.println("[ruleSet10001-rule10001-condition10001-field10002-Result]：" + $r.ruleList[0].conditionsList[0].fieldList[1].result);
+//  update($r);
+end
+
+// conditionIndex：1, conditionId: 10002,
+rule "c10002"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10002-Start]：" + $r.ruleList[0].conditionsList[1].result);
+  $r.ruleList[0].conditionsList[1].result = $r.ruleList[0].conditionsList[1].fieldList[0].result||$r.ruleList[0].conditionsList[1].fieldList[1].result;
+    System.out.println("[ruleSet10001-rule10001-condition10002-Result]：" + $r.ruleList[0].conditionsList[1].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10003
+rule "field10003"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10003-Value]：" + $r.ruleList[0].conditionsList[1].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10003-Operator]：" + $r.ruleList[0].conditionsList[1].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10003-Parameter]：" + $r.ruleList[0].conditionsList[1].fieldList[0].parameter);
+  $r.ruleList[0].conditionsList[1].fieldList[0].result=($r.ruleList[0].conditionsList[1].fieldList[0].value.equals($r.ruleList[0].conditionsList[1].fieldList[0].parameter));
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10003-Result]：" + $r.ruleList[0].conditionsList[1].fieldList[0].result);
+//  update($r);
+end
+
+// fieldIndex：1, fieldId: 10004
+rule "field10004"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10004-Value]：" + $r.ruleList[0].conditionsList[1].fieldList[1].value);
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10004-Operator]：" + $r.ruleList[0].conditionsList[1].fieldList[1].operator);
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10004-Parameter]：" + $r.ruleList[0].conditionsList[1].fieldList[1].parameter);
+  $r.ruleList[0].conditionsList[1].fieldList[1].result=$r.ruleList[0].conditionsList[1].fieldList[1].value == null || $r.ruleList[0].conditionsList[1].fieldList[1].value.length == 0? false:($r.ruleList[0].conditionsList[1].fieldList[1].value <= $r.ruleList[0].conditionsList[1].fieldList[1].parameter );
+  System.out.println("[ruleSet10001-rule10001-condition10002-field10004-Result]：" + $r.ruleList[0].conditionsList[1].fieldList[1].result);
+//  update($r);
+end
+
+// RuleIndex:1, RuleId:10002
+rule "r10002"
+//no-loop
+ salience 100
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002 threshold]：" + $r.ruleList[1].threshold);
+  System.out.println("[ruleSet10001-rule10002 level]：" + $r.ruleList[1].level);
+  // Notice：ruleScore = threshold * conditionResult（true/false ==> 1/0 ）
+  $r.ruleList[1].score = $r.ruleList[1].conditionsList[0].result||$r.ruleList[1].conditionsList[1].result||$r.ruleList[1].conditionsList[2].result||$r.ruleList[1].conditionsList[3].result  ;
+  $r.ruleList[1].score = $r.ruleList[1].threshold * $r.ruleList[1].score;
+  System.out.println("[ruleSet10001-rule10002 end score]：" + $r.ruleList[1].score);
+  System.out.println("[ruleSet10001-rule10002 end level]：" + $r.ruleList[1].level);
+//  update($r);
+end
+
+// conditionIndex：0, conditionId: 10003,
+rule "c10003"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10003-Start]：" + $r.ruleList[1].conditionsList[0].result);
+  $r.ruleList[1].conditionsList[0].result = $r.ruleList[1].conditionsList[0].fieldList[0].result;
+    System.out.println("[ruleSet10001-rule10002-condition10003-Result]：" + $r.ruleList[1].conditionsList[0].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10005
+rule "field10005"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10003-field10005-Value]：" + $r.ruleList[1].conditionsList[0].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10002-condition10003-field10005-Operator]：" + $r.ruleList[1].conditionsList[0].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10002-condition10003-field10005-Parameter]：" + $r.ruleList[1].conditionsList[0].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[0].fieldList[0].result=$r.ruleList[1].conditionsList[0].fieldList[0].value == null || $r.ruleList[1].conditionsList[0].fieldList[0].value.length == 0? false:compareDate($r.ruleList[1].conditionsList[0].fieldList[0].value, $r.ruleList[1].conditionsList[0].fieldList[0].parameter) > 0;
+  System.out.println("[ruleSet10001-rule10002-condition10003-field10005-Result]：" + $r.ruleList[1].conditionsList[0].fieldList[0].result);
+//  update($r);
+end
+
+// conditionIndex：1, conditionId: 10004,
+rule "c10004"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10004-Start]：" + $r.ruleList[1].conditionsList[1].result);
+  $r.ruleList[1].conditionsList[1].result = $r.ruleList[1].conditionsList[1].fieldList[0].result;
+    System.out.println("[ruleSet10001-rule10002-condition10004-Result]：" + $r.ruleList[1].conditionsList[1].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10006
+rule "field10006"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10004-field10006-Value]：" + $r.ruleList[1].conditionsList[1].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10002-condition10004-field10006-Operator]：" + $r.ruleList[1].conditionsList[1].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10002-condition10004-field10006-Parameter]：" + $r.ruleList[1].conditionsList[1].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[1].fieldList[0].result=$r.ruleList[1].conditionsList[1].fieldList[0].value == null || $r.ruleList[1].conditionsList[1].fieldList[0].value.length == 0? false:(diffTodayTime($r.ruleList[1].conditionsList[1].fieldList[0].value) >= $r.ruleList[1].conditionsList[1].fieldList[0].parameter);
+  System.out.println("[ruleSet10001-rule10002-condition10004-field10006-Result]：" + $r.ruleList[1].conditionsList[1].fieldList[0].result);
+//  update($r);
+end
+
+// conditionIndex：2, conditionId: 10005,
+rule "c10005"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10005-Start]：" + $r.ruleList[1].conditionsList[2].result);
+  $r.ruleList[1].conditionsList[2].result = $r.ruleList[1].conditionsList[2].fieldList[0].result;
+    System.out.println("[ruleSet10001-rule10002-condition10005-Result]：" + $r.ruleList[1].conditionsList[2].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10007
+rule "field10007"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10005-field10007-Value]：" + $r.ruleList[1].conditionsList[2].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10002-condition10005-field10007-Operator]：" + $r.ruleList[1].conditionsList[2].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10002-condition10005-field10007-Parameter]：" + $r.ruleList[1].conditionsList[2].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[2].fieldList[0].result=$r.ruleList[1].conditionsList[2].fieldList[0].value == null || $r.ruleList[1].conditionsList[2].fieldList[0].value.length == 0? false:(diffToday($r.ruleList[1].conditionsList[2].fieldList[0].value) >= $r.ruleList[1].conditionsList[2].fieldList[0].parameter);
+  System.out.println("[ruleSet10001-rule10002-condition10005-field10007-Result]：" + $r.ruleList[1].conditionsList[2].fieldList[0].result);
+//  update($r);
+end
+
+// conditionIndex：3, conditionId: 10006,
+rule "c10006"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10006-Start]：" + $r.ruleList[1].conditionsList[3].result);
+  $r.ruleList[1].conditionsList[3].result = $r.ruleList[1].conditionsList[3].fieldList[0].result;
+    System.out.println("[ruleSet10001-rule10002-condition10006-Result]：" + $r.ruleList[1].conditionsList[3].result);
+//  update($r);
+end
+
+// fieldIndex：0, fieldId: 10008
+rule "field10008"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("[ruleSet10001-rule10002-condition10006-field10008-Value]：" + $r.ruleList[1].conditionsList[3].fieldList[0].value);
+  System.out.println("[ruleSet10001-rule10002-condition10006-field10008-Operator]：" + $r.ruleList[1].conditionsList[3].fieldList[0].operator);
+  System.out.println("[ruleSet10001-rule10002-condition10006-field10008-Parameter]：" + $r.ruleList[1].conditionsList[3].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[3].fieldList[0].result=$r.ruleList[1].conditionsList[3].fieldList[0].value == null || $r.ruleList[1].conditionsList[3].fieldList[0].value.length == 0? false:(diffToday($r.ruleList[1].conditionsList[3].fieldList[0].value) <= $r.ruleList[1].conditionsList[3].fieldList[0].parameter);
+  System.out.println("[ruleSet10001-rule10002-condition10006-field10008-Result]：" + $r.ruleList[1].conditionsList[3].fieldList[0].result);
+//  update($r);
+end
+
+

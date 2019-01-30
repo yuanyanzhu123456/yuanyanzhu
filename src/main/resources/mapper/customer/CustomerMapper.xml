@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.sys.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.sys.entity.Customer" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="server" property="server" jdbcType="VARCHAR" />
+    <result column="encrypted" property="encrypted" jdbcType="INTEGER" />
+    <result column="encryption_type" property="encryptionType" jdbcType="VARCHAR" />
+    <result column="encryption_key" property="encryptionKey" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="uno" property="uno" jdbcType="VARCHAR" />
+    <result column="etype" property="etype" jdbcType="VARCHAR" />
+    <result column="dsign" property="dsign" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, server, encrypted, encryption_type, encryption_key, username, password, uno, 
+    etype, dsign, user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_customer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_customer
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.geo.rcs.modules.sys.entity.Customer" >
+    insert into sys_customer (id, server, encrypted, 
+      encryption_type, encryption_key, username, 
+      password, uno, etype, 
+      dsign, user_id)
+    values (#{id,jdbcType=BIGINT}, #{server,jdbcType=VARCHAR}, #{encrypted,jdbcType=INTEGER}, 
+      #{encryptionType,jdbcType=VARCHAR}, #{encryptionKey,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{uno,jdbcType=VARCHAR}, #{etype,jdbcType=VARCHAR}, 
+      #{dsign,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.geo.rcs.modules.sys.entity.Customer" >
+    insert into sys_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="server != null" >
+        server,
+      </if>
+      <if test="encrypted != null" >
+        encrypted,
+      </if>
+      <if test="encryptionType != null" >
+        encryption_type,
+      </if>
+      <if test="encryptionKey != null" >
+        encryption_key,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="uno != null" >
+        uno,
+      </if>
+      <if test="etype != null" >
+        etype,
+      </if>
+      <if test="dsign != null" >
+        dsign,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="server != null" >
+        #{server,jdbcType=VARCHAR},
+      </if>
+      <if test="encrypted != null" >
+        #{encrypted,jdbcType=INTEGER},
+      </if>
+      <if test="encryptionType != null" >
+        #{encryptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionKey != null" >
+        #{encryptionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="uno != null" >
+        #{uno,jdbcType=VARCHAR},
+      </if>
+      <if test="etype != null" >
+        #{etype,jdbcType=VARCHAR},
+      </if>
+      <if test="dsign != null" >
+        #{dsign,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.sys.entity.Customer" >
+    update sys_customer
+    <set >
+      <if test="server != null" >
+        server = #{server,jdbcType=VARCHAR},
+      </if>
+      <if test="encrypted != null" >
+        encrypted = #{encrypted,jdbcType=INTEGER},
+      </if>
+      <if test="encryptionType != null" >
+        encryption_type = #{encryptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptionKey != null" >
+        encryption_key = #{encryptionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="uno != null" >
+        uno = #{uno,jdbcType=VARCHAR},
+      </if>
+      <if test="etype != null" >
+        etype = #{etype,jdbcType=VARCHAR},
+      </if>
+      <if test="dsign != null" >
+        dsign = #{dsign,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.sys.entity.Customer" >
+    update sys_customer
+    set server = #{server,jdbcType=VARCHAR},
+      encrypted = #{encrypted,jdbcType=INTEGER},
+      encryption_type = #{encryptionType,jdbcType=VARCHAR},
+      encryption_key = #{encryptionKey,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      uno = #{uno,jdbcType=VARCHAR},
+      etype = #{etype,jdbcType=VARCHAR},
+      dsign = #{dsign,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findByUserId" resultType="com.geo.rcs.modules.sys.entity.Customer">
+    SELECT * FROM `sys_customer` WHERE `user_id` = ${value}
+  </select>
+</mapper>

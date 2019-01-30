@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.batchtest.batchTask.dao.BatchTaskMapper" >
+ <resultMap id="BaseResultMap" type="com.geo.rcs.modules.batchtest.batchTask.entity.BatchTask" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="rules_id" property="rulesId" jdbcType="VARCHAR" />
+    <result column="rules_name" property="rulesName" jdbcType="VARCHAR" />
+    <result column="test_count" property="testCount" jdbcType="SMALLINT" />
+    <result column="complete" property="complete" jdbcType="SMALLINT" />
+    <result column="submit_user" property="submitUser" jdbcType="VARCHAR" />
+    <result column="submit_time" property="submitTimeTamp" jdbcType="BIGINT" />
+    <result column="unicode" property="uniqueCode" jdbcType="BIGINT" />
+    <result column="time_long" property="timeLong" jdbcType="VARCHAR" />
+    <result column="priority_level" property="priorityLevel" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap> 
+ 
+  <sql id="Base_Column_List" >
+    id,rules_id,rules_name,test_count,complete,submit_user,submit_time,unicode,time_long,priority_level,status
+  </sql>
+  <insert id="insertBatch" parameterType="com.geo.rcs.modules.batchtest.batchTask.entity.BatchTask"  useGeneratedKeys="true" keyProperty="id">
+    insert into batch_test 
+       (<include refid="Base_Column_List"></include>)
+    values (#{id,jdbcType=BIGINT}, #{rulesId,jdbcType=VARCHAR}, #{rulesName,jdbcType=VARCHAR}, 
+      #{testCount,jdbcType=SMALLINT}, #{complete,jdbcType=SMALLINT}, #{submitUser,jdbcType=VARCHAR}, 
+      #{submitTimeTamp,jdbcType=BIGINT}, #{uniqueCode,jdbcType=BIGINT}, #{timeLong,jdbcType=VARCHAR}, 
+      #{priorityLevel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT})
+    </insert>
+    
+    <update id="updateBatchByPrimaryKey" parameterType="com.geo.rcs.modules.batchtest.batchTask.entity.BatchTask" >
+    update batch_test
+    <set >
+      <if test="rulesId != null" >
+        rules_id = #{rulesId,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesName != null" >
+        rules_name = #{rulesName,jdbcType=INTEGER},
+      </if>
+      <if test="testCount != null" >
+        test_count = #{testCount,jdbcType=SMALLINT},
+      </if>
+      <if test="complete != null" >
+        complete = #{complete,jdbcType=SMALLINT},
+      </if>
+      <if test="submitUser != null" >
+        submit_user = #{submitUser,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTimeTamp != null" >
+        submit_time = #{submitTimeTamp,jdbcType=BIGINT},
+      </if>
+      <if test="uniqueCode != null" >
+        unicode = #{uniqueCode,jdbcType=BIGINT},
+      </if>
+      <if test="timeLong != null" >
+        time_long = #{timeLong,jdbcType=VARCHAR},
+      </if>
+      <if test="priorityLevel != null" >
+        priority_level = #{priorityLevel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from batch_test
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+</mapper>

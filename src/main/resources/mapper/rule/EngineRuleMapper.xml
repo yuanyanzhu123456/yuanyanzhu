@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.dao.EngineRuleMapper">
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.rule.entity.EngineRule">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="rules_id" jdbcType="INTEGER" property="rulesId" />
+        <result column="decision" jdbcType="VARCHAR" property="decision" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="threshold" jdbcType="INTEGER" property="threshold" />
+        <result column="condition_number" jdbcType="INTEGER" property="conditionNumber" />
+        <result column="describ" jdbcType="VARCHAR" property="describ" />
+        <result column="active" jdbcType="INTEGER" property="active" />
+        <result column="verify" jdbcType="INTEGER" property="verify" />
+        <result column="rules_name" jdbcType="VARCHAR" property="rulesName" />
+        <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+        <result column="condition_relationship" jdbcType="VARCHAR" property="conditionRelationship" />
+        <result column="unique_code" jdbcType="BIGINT" property="uniqueCode" />
+        <result column="rules_name" jdbcType="VARCHAR" property="rulesName" />
+    </resultMap>
+
+    <!-- ***************************************** 前方高能 之 华丽的分割线 ******************************************** -->
+
+    <resultMap id="RuleMap" type="com.geo.rcs.modules.rule.entity.EngineRule">
+        <id column="rid" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="rules_id" jdbcType="INTEGER" property="rulesId"/>
+        <result column="decision" jdbcType="VARCHAR" property="decision"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="threshold" jdbcType="INTEGER" property="threshold"/>
+        <result column="condition_number" jdbcType="INTEGER" property="conditionNumber"/>
+        <result column="describ" jdbcType="VARCHAR" property="describ"/>
+        <result column="active" jdbcType="INTEGER" property="active"/>
+        <result column="verify" jdbcType="INTEGER" property="verify"/>
+        <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime"/>
+        <result column="condition_relationship" jdbcType="VARCHAR" property="conditionRelationship"/>
+        <result column="unique_code" jdbcType="BIGINT" property="uniqueCode"/>
+        <result column="rule_code" jdbcType="VARCHAR" property="ruleCode"/>
+
+        <collection property="conditionsList" ofType="com.geo.rcs.modules.rule.condition.entity.Conditions"
+                    resultMap="ConditionMap"/>
+    </resultMap>
+    <resultMap id="ConditionMap" type="com.geo.rcs.modules.rule.condition.entity.Conditions">
+        <id column="cid" property="id" jdbcType="BIGINT"/>
+        <result column="c_name" property="name" jdbcType="VARCHAR"/>
+        <result column="rule_id" property="ruleId" jdbcType="INTEGER"/>
+        <result column="rules_id" property="rulesId" jdbcType="INTEGER"/>
+        <result column="field_relationship" property="fieldRelationship" jdbcType="VARCHAR"/>
+        <result column="c_describ" property="describ" jdbcType="VARCHAR"/>
+        <result column="active" property="active" jdbcType="INTEGER"/>
+        <result column="verify" property="verify" jdbcType="INTEGER"/>
+        <result column="add_user" property="addUser" jdbcType="VARCHAR"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="unique_code" property="uniqueCode" jdbcType="BIGINT"/>
+
+        <collection property="fieldList" ofType="com.geo.rcs.modules.rule.field.entity.EngineRawField"
+                    resultMap="FieldMap"/>
+    </resultMap>
+
+
+    <resultMap id="FieldMap" type="com.geo.rcs.modules.rule.field.entity.EngineField">
+        <id column="fid" jdbcType="BIGINT" property="id"/>
+        <result column="show_name" jdbcType="VARCHAR" property="showName"/>
+        <result column="field_id" jdbcType="INTEGER" property="fieldId"/>
+        <result column="field_name" jdbcType="VARCHAR" property="fieldName"/>
+        <result column="rules_id" jdbcType="BIGINT" property="rulesId"/>
+        <result column="condition_id" jdbcType="INTEGER" property="conditionId"/>
+        <result column="operator" jdbcType="VARCHAR" property="operator"/>
+        <result column="describ" jdbcType="VARCHAR" property="describ"/>
+        <result column="active" jdbcType="INTEGER" property="active"/>
+        <result column="verify" jdbcType="INTEGER" property="verify"/>
+        <result column="add_user" jdbcType="VARCHAR" property="addUser"/>
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="value_desc" jdbcType="VARCHAR" property="valueDesc"/>
+        <result column="unique_code" jdbcType="BIGINT" property="uniqueCode"/>
+        <result column="field_type" jdbcType="VARCHAR" property="fieldType"/>
+        <result column="parameter" jdbcType="VARCHAR" property="parameter"/>
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+    id, name, rules_id, decision, level, threshold, condition_number, describ, active,
+    verify, add_user, add_time, condition_relationship, unique_code,rules_name
+  </sql>
+    <sql id="Base_Column_RuleList">
+        er.name, er.rules_id, er.decision, er.level, er.threshold, er.condition_number, er.describ, er.active,
+    er.verify, er.add_user, er.add_time, er.condition_relationship, er.unique_code,er.rule_code
+    </sql>
+    <sql id="Base_Column_ConList" >
+        ec.name as c_name, ec.rule_id, ec.rules_id as c_rules_id, ec.field_relationship, ec.describ as c_describ, ec.active as c_active, ec.verify as c_verify, ec.add_user as c_add_user,
+        ec.add_time as c_add_time, ec.unique_code as c_unique_code
+    </sql>
+    <sql id="Base_Column_FieList" >
+        ef.show_name, ef.field_id, ef.field_name, ef.rules_id, ef.condition_id, ef.operator, ef.describ, ef.active, ef.verify,
+        ef.add_user, ef.add_time, ef.value, ef.value_desc, ef.unique_code, ef.field_type, ef.parameter
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.rule.entity.EngineRule" parameterType="java.lang.Long">
+        select
+        *
+        from engine_rule
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from engine_rule
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+    insert into engine_rule (id, name, rules_id, 
+      decision, level, threshold,
+      condition_number, describ, active,
+      verify, add_user, add_time,
+      condition_relationship, unique_code)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{rulesId,jdbcType=INTEGER},
+      #{decision,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{threshold,jdbcType=INTEGER},
+      #{conditionNumber,jdbcType=INTEGER}, #{describ,jdbcType=VARCHAR}, #{active,jdbcType=INTEGER},
+      #{verify,jdbcType=INTEGER}, #{addUser,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP},
+      #{conditionRelationship,jdbcType=VARCHAR}, #{uniqueCode,jdbcType=BIGINT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.rule.entity.EngineRule" useGeneratedKeys="true" keyProperty="id">
+        insert into engine_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="ruleCode != null">
+                rule_code,
+            </if>
+            <if test="rulesId != null">
+                rules_id,
+            </if>
+            <if test="decision != null">
+                decision,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="threshold != null">
+                threshold,
+            </if>
+            <if test="conditionNumber != null">
+                condition_number,
+            </if>
+            <if test="describ != null">
+                describ,
+            </if>
+            <if test="active != null">
+                active,
+            </if>
+            <if test="verify != null">
+                verify,
+            </if>
+            <if test="addUser != null">
+                add_user,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+            <if test="conditionRelationship != null">
+                condition_relationship,
+            </if>
+            <if test="uniqueCode != null">
+                unique_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleCode != null">
+                #{ruleCode,jdbcType=BIGINT},
+            </if>
+            <if test="rulesId != null">
+                #{rulesId,jdbcType=INTEGER},
+            </if>
+            <if test="decision != null">
+                #{decision,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="threshold != null">
+                #{threshold,jdbcType=INTEGER},
+            </if>
+            <if test="conditionNumber != null">
+                #{conditionNumber,jdbcType=INTEGER},
+            </if>
+            <if test="describ != null">
+                #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="active != null">
+                #{active,jdbcType=INTEGER},
+            </if>
+            <if test="verify != null">
+                #{verify,jdbcType=INTEGER},
+            </if>
+            <if test="addUser != null">
+                #{addUser,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="conditionRelationship != null">
+                #{conditionRelationship,jdbcType=VARCHAR},
+            </if>
+            <if test="uniqueCode != null">
+                #{uniqueCode,jdbcType=BIGINT},
+            </if>
+
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+        update engine_rule
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="rulesId != null">
+                rules_id = #{rulesId,jdbcType=INTEGER},
+            </if>
+            <if test="decision != null">
+                decision = #{decision,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleCode != null">
+                rule_code = #{ruleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="threshold != null">
+                threshold = #{threshold,jdbcType=INTEGER},
+            </if>
+            <if test="conditionNumber != null">
+                condition_number = #{conditionNumber,jdbcType=INTEGER},
+            </if>
+            <if test="describ != null">
+                describ = #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=INTEGER},
+            </if>
+            <if test="verify != null">
+                verify = #{verify,jdbcType=INTEGER},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="conditionRelationship != null">
+                condition_relationship = #{conditionRelationship,jdbcType=VARCHAR},
+            </if>
+            <if test="uniqueCode != null">
+                unique_code = #{uniqueCode,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+    update engine_rule
+    set name = #{name,jdbcType=VARCHAR},
+      rules_id = #{rulesId,jdbcType=INTEGER},
+      decision = #{decision,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      threshold = #{threshold,jdbcType=INTEGER},
+      condition_number = #{conditionNumber,jdbcType=INTEGER},
+      describ = #{describ,jdbcType=VARCHAR},
+      active = #{active,jdbcType=INTEGER},
+      verify = #{verify,jdbcType=INTEGER},
+      add_user = #{addUser,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      condition_relationship = #{conditionRelationship,jdbcType=VARCHAR},
+      unique_code = #{uniqueCode,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.rule.entity.EngineRule" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+        select
+        es.*,eb.name as rules_name
+        from engine_rule es left join engine_rules eb on es.rules_id = eb.id  WHERE 1=1
+        <if test="name != null">
+            AND CONCAT(es.id,es.name,es.add_user) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="verify != null">
+            and es.verify = #{verify}
+        </if>
+        <if test="rulesId != null">
+            and es.rules_id = #{rulesId}
+        </if>
+        <if test="active != null">
+            and es.active = #{active}
+        </if>
+        and es.unique_code = #{uniqueCode} order by add_time desc
+    </select>
+    <select id="queryByName" resultType="com.geo.rcs.modules.rule.entity.EngineRule">
+        select
+        *
+        from engine_rule where name = #{name}
+    </select>
+    <select id="findByRulesId" resultType="com.geo.rcs.modules.rule.entity.EngineRule">
+        select * from engine_rule where rules_id = #{id}
+    </select>
+    <update id="updateEngineRuleVerify" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+        update engine_rule set verify = #{verify} where id = #{id}
+    </update>
+    <update id="updateRuleSelect" parameterType="com.geo.rcs.modules.approval.entity.PatchData">
+        update engine_rule
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleCode != null">
+                rule_code = #{ruleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="rulesId != null">
+                rules_id = #{rulesId,jdbcType=INTEGER},
+            </if>
+            <if test="decision != null">
+                decision = #{decision,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="threshold != null">
+                threshold = #{threshold,jdbcType=INTEGER},
+            </if>
+            <if test="describ != null">
+                describ = #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=INTEGER},
+            </if>
+            <if test="verify != null">
+                verify = #{verify,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{onlyId,jdbcType=BIGINT}
+    </update>
+    <update id="addConditionsRs" parameterType="com.geo.rcs.modules.rule.entity.EngineRule">
+        update engine_rule set condition_relationship = #{conditionRelationship} where id = #{id}
+    </update>
+    <select id="getAllRuleName" resultType="com.geo.rcs.modules.rule.entity.EngineRule">
+        select id,name from engine_rule
+    </select>
+    <select id="selectByFieldTypeId" resultType="com.geo.rcs.modules.rule.field.entity.FieldType">
+        select * from engine_field_type where id = #{fieldTypeId}
+    </select>
+    <select id="selectById" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select name from engine_raw_fields where id = #{fieldId}
+    </select>
+    <select id="getRuleAndConInfo" resultMap="RuleMap">
+        select er.id as rid,
+        <include refid="Base_Column_RuleList" />
+        ,ec.id as cid,
+        <include refid="Base_Column_ConList" />
+         from engine_rule er left join engine_conditions ec on er.id = ec.rule_id where er.id = #{id}
+    </select>
+    <select id="selectRulesById" resultType="com.geo.rcs.modules.rule.ruleset.entity.EngineRules">
+        select * from engine_rule where rules_id = #{id}
+    </select>
+    <select id="selectRulesByRuleId" resultType="com.geo.rcs.modules.rule.ruleset.entity.EngineRules">
+        select * from engine_rules ers left join engine_rule er on ers.id = er.rules_id where er.id= #{id}
+    </select>
+    <select id="deleteByRulesId" parameterType="java.lang.Long">
+        delete from engine_rule where rules_id = #{id}
+    </select>
+    <select id="getRuleInfoById" parameterType="java.lang.Long" resultMap="RuleMap">
+        select er.id as rid,
+        <include refid="Base_Column_RuleList" />
+        ,ec.id as cid,
+        <include refid="Base_Column_ConList" />,
+        ef.id as fid,
+        <include refid="Base_Column_RuleList" /> from engine_rule er left join engine_conditions ec on er.id = ec.rule_id left join engine_fields ef on ef.condition_id = ec.id where er.id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.sys.dao.CusVersionMapper">
+    <insert id="save" parameterType="com.geo.rcs.modules.sys.entity.CusVersion" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_customer_version
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              <if test="id != null">
+                  id,
+              </if>
+              <if test="creater != null">
+                  creater,
+              </if>
+              <if test="createTime != null">
+                  createtime,
+              </if>
+              <if test="expireTime != null">
+                  expiretime,
+              </if>
+              <if test="updater != null">
+                  updater,
+              </if>
+              <if test="updateTime != null">
+                  updatetime,
+              </if>
+              <if test="versionId != null">
+                  version_id,
+              </if>
+              <if test="customerId != null">
+                  customer_id,
+              </if>
+          </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="creater != null">
+                #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expireTime != null">
+                #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null">
+                #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="versionId != null">
+                #{versionId,jdbcType=BIGINT},
+            </if>
+            <if test="customerId != null">
+                #{customerId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryVersionId" resultType="java.lang.Long">
+        SELECT version_id as versionId FROM `sys_customer_version` where customer_id = #{customerId};
+    </select>
+
+    <update id="update" parameterType="com.geo.rcs.modules.sys.entity.CusVersion" >
+        update sys_customer_version
+        <set>
+            <if test="versionId != null">
+                version_id=#{versionId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updatetime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expireTime != null">
+                expiretime = #{expireTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where customer_id = #{customerId};
+    </update>
+
+    <update id="updateById" parameterType="com.geo.rcs.modules.sys.entity.CusVersion" >
+        update sys_customer_version
+        <set>
+            <if test="customerId != null">
+                customer_id=#{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="versionId != null">
+                version_id=#{versionId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updatetime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expireTime != null">
+                expiretime = #{expireTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="getCusVersionInfo" resultType="java.util.Map">
+        select scv.expiretime, sv.name
+          from sys_customer_version scv
+          left join sys_version sv on scv.version_id = sv.id
+            where scv.customer_id=#{customerId};
+    </select>
+
+    <select id="getAllCusVerInfo" resultType="com.geo.rcs.modules.sys.entity.CusVersion">
+        select expiretime from sys_customer_version where customer_id = #{customerId}
+    </select>
+
+    <select id="getExpireTime" resultType="java.util.Date">
+       select expiretime
+        from sys_customer_version where customer_id = #{customerId}
+    </select>
+
+    <select id="findAllByVersionId" resultType="com.geo.rcs.modules.sys.entity.CusVersion">
+        select * from sys_customer_version where version_id = #{versionId}
+    </select>
+
+    <select id="selectByCustomId" resultType="com.geo.rcs.modules.sys.entity.CusVersion">
+        select * from sys_customer_version where customer_id = #{customId};
+    </select>
+
+
+
+    <!--根据客户id查询客户版本信息-->
+    <select id="getCusInfoById" resultType="com.geo.rcs.modules.sys.entity.CusVersion">
+       SELECT * from sys_customer_version WHERE customer_id = #{customerId};
+    </select>
+
+    <!--续期-->
+    <update id="renewal" parameterType="com.geo.rcs.modules.sys.entity.CusVersion">
+        update sys_customer_version
+        <set>
+            <if test="expireTime != null">
+                expiretime = #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null">
+                updater = #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updatetime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="versionId != null">
+                version_id = #{versionId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </update>
+
+    <delete  id="delete">
+        delete from sys_customer_version where id = #{id}
+    </delete>
+
+
+</mapper>

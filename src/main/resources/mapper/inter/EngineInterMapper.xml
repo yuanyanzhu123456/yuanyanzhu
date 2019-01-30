@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.inter.dao.EngineInterMapper" >
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.rule.inter.entity.EngineInter" >
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="describ" jdbcType="VARCHAR" property="describ" />
+        <result column="active" jdbcType="INTEGER" property="active" />
+        <result column="verify" jdbcType="INTEGER" property="verify" />
+        <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+        <result column="parser_type" jdbcType="VARCHAR" property="parserType" />
+        <result column="parameters" jdbcType="VARCHAR" property="parameters"/>
+        <result column="request_type" jdbcType="VARCHAR" property="requestType"/>
+        <result column="parameters_desc" jdbcType="VARCHAR" property="parametersDesc"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, show_name, field_id, field_name, rules_id, condition_id, operator, describ, active, verify,
+        add_user, add_time, value, value_desc, unique_code, field_type, parameter,request_type,parameters_desc
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+       SELECT a.*,COUNT(b.id) AS fieldCount FROM engine_raw_inter  a
+		        LEFT JOIN engine_raw_fields  b
+				ON a.id = b.inter_id
+        where a.id = #{id,jdbcType=BIGINT} GROUP BY a.id
+    </select>
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.rule.inter.entity.EngineInter" useGeneratedKeys="true" keyProperty="id" >
+        insert into engine_raw_inter
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="active != null" >
+                active,
+            </if>
+            <if test="verify != null" >
+                verify,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="parserType != null" >
+                parser_type,
+            </if>
+            <if test="parameters != null" >
+                parameters,
+            </if>
+            <if test="requestType != null" >
+                request_type,
+            </if>
+            <if test="parametersDesc != null" >
+                parameters_desc,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                #{name},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="active != null" >
+                #{active,jdbcType=INTEGER},
+            </if>
+            <if test="verify != null" >
+                #{verify,jdbcType=INTEGER},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="addTime != null" >
+                #{addTime},
+            </if>
+            <if test="parserType != null" >
+                #{parserType},
+            </if>
+            <if test="parameters != null" >
+                #{parameters},
+            </if>
+            <if test="requestType != null" >
+                #{requestType},
+            </if>
+            <if test="parametersDesc != null" >
+                #{parametersDesc},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.rule.inter.entity.EngineInter" useGeneratedKeys="true" keyProperty="id">
+        update engine_raw_inter
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="describ != null">
+                describ = #{describ},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=INTEGER},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="parserType != null">
+                parser_type = #{parserType},
+            </if>
+            <if test="parameters != null">
+                parameters = #{parameters},
+            </if>
+            <if test="requestType != null">
+                request_type = #{requestType},
+            </if>
+            <if test="parametersDesc != null">
+                parameters_desc = #{parametersDesc},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <!-- 分页查询 -->
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        SELECT a.*,COUNT(b.id) AS fieldCount FROM engine_raw_inter  a
+        LEFT JOIN engine_raw_fields  b
+        ON a.id = b.inter_id WHERE 1=1
+        <if test="active != null">
+            and a.active = #{active}
+        </if>
+        <if test="interType != null and interType != ''">
+            and a.inter_type = #{interType}
+        </if>
+        <if test="name != null and name != ''">
+            AND CONCAT(a.id,a.name,a.add_user,a.describ) LIKE CONCAT('%',#{name},'%')
+        </if>
+        group by a.id
+    </select>
+
+    <select id="findInterById" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select DISTINCT eri.* from engine_raw_inter eri left join engine_raw_inter erf on erf.`inter_id` = eri.id where erf.id in (
+        select ef.field_id from engine_raw_inter ef where ef.id in
+        <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        )
+    </select>
+    <select id="findInterParmById" resultType="java.lang.String">
+        select eri.parameters from engine_raw_inter eri left join `engine_raw_inter` erf on erf.inter_id = eri.id where erf.id = #{id}
+    </select>
+    <select id="getFieldType" resultType="com.geo.rcs.modules.rule.field.entity.FieldType">
+        select * from engine_field_type
+    </select>
+    <select id="getInterName" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select id,describ from engine_raw_inter
+    </select>
+
+    <insert id="addFieldBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into engine_raw_inter
+        (rules_id,condition_id,describ,operator,add_user,add_time,field_id,parameter,field_name)
+        values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.rulesId},#{item.conditionId},#{item.describ},#{item.operator},#{item.addUser},#{item.addTime},#{item.fieldType},#{item.parameter},#{item.fieldName})
+        </foreach>
+    </insert>
+
+    <select id="selectByConditionId" parameterType="java.lang.Long">
+        select id from engine_raw_inter where condition_id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from engine_raw_inter
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteBatch" parameterType="Long">
+        delete from engine_raw_inter where id in
+        <foreach item="item" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="selectFieldForCon"  resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select ef.*,ft.id as field_type from engine_raw_inter ef left join engine_raw_inter erf on ef.field_id = erf.id  left join engine_field_type ft on erf.field_type = ft.id where condition_id = #{id}
+    </select>
+    <select id="queryByTypeAndName" parameterType="com.geo.rcs.modules.rule.inter.entity.EngineInter" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select * from engine_raw_inter where name = #{name}
+    </select>
+    <select id="getInterList" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select id,DESCRIB from engine_raw_inter
+    </select>
+    <select id="getInterParams" resultType="java.lang.String">
+        SELECT  eri.parameters FROM `engine_rules` ers
+      LEFT JOIN `engine_rule` er
+      ON ers.id = er.rules_id
+      LEFT JOIN `engine_conditions` ec
+      ON er.id = ec.rule_id
+      LEFT JOIN `engine_fields` ef
+      ON ec.id = ef.condition_id
+      LEFT JOIN `engine_raw_fields` erf on erf.id = ef.field_id
+      LEFT JOIN `engine_raw_inter` eri on eri.id = erf.inter_id
+      WHERE ers.id = #{rulesId} AND er.active = 1 AND ec.active = 1 AND ef.active = 1
+    </select>
+
+    <select id="getAllInter" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select name,request_type from engine_raw_inter where active = 1
+    </select>
+
+
+    <select id="getInterType" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInterType">
+        select * from engine_inter_type
+    </select>
+
+    <select id="getIntersByNameList" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter" parameterType="java.util.List">
+        SELECT * FROM `engine_raw_inter` where name in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

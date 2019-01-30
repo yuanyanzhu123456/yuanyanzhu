@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.decision.dao.EngineDecisionLogMapper" >
+
+    <sql id="Base_Column_List" >
+        id, channel,create_time,result_map,expend_time,user_id,app_status,sys_status,decision_id,real_name,mobile,id_card,add_user,business_id,scene_id,score,excute_flow,parameters,remark
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.decision.entity.EngineDecisionLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_event
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getEngineDecisionLogByUserId" resultType="com.geo.rcs.modules.decision.entity.EngineDecisionLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_event
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <insert id="save" parameterType="com.geo.rcs.modules.decision.entity.EngineDecisionLog" useGeneratedKeys="true" keyProperty="id">
+        insert into decision_event
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="channel != null" >
+                channel,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="resultMap != null" >
+                result_map,
+            </if>
+            <if test="expendTime != null" >
+                expend_time,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="appStatus != null" >
+                app_status,
+            </if>
+            <if test="sysStatus != null" >
+                sys_status,
+            </if>
+            <if test="decisionId != null" >
+                decision_id,
+            </if>
+            <if test="realName != null" >
+                real_name,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="idCard != null" >
+                id_card,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="businessId != null" >
+                business_id,
+            </if>
+            <if test="sceneId != null" >
+                scene_id,
+            </if>
+            <if test="score != null" >
+                score,
+            </if>
+            <if test="excuteFlow != null" >
+                excute_flow,
+            </if>
+            <if test="parameters != null" >
+                parameters,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="channel != null" >
+                #{channel},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="resultMap != null" >
+                #{resultMap},
+            </if>
+            <if test="expendTime != null" >
+                #{expendTime},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="appStatus != null" >
+               #{appStatus},
+            </if>
+            <if test="sysStatus != null" >
+                #{sysStatus},
+            </if>
+            <if test="decisionId != null" >
+                #{decisionId},
+            </if>
+            <if test="realName != null" >
+                #{realName},
+            </if>
+            <if test="mobile != null" >
+                #{mobile},
+            </if>
+            <if test="idCard != null" >
+                #{idCard},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="businessId != null" >
+                #{businessId},
+            </if>
+            <if test="sceneId != null" >
+                #{sceneId},
+            </if>
+            <if test="score != null" >
+                #{score},
+            </if>
+            <if test="excuteFlow != null" >
+                #{excuteFlow},
+            </if>
+            <if test="parameters != null" >
+                #{parameters},
+            </if>
+            <if test="remark != null" >
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.decision.entity.EngineDecisionLog" >
+        update decision_event
+        <set >
+            <if test="createTime != null" >
+                create_time = #{createTime},
+            </if>
+            <if test="resultMap != null" >
+                result_map = #{resultMap,jdbcType=VARCHAR},
+            </if>
+            <if test="expendTime != null" >
+                update_time = #{expendTime},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="appStatus != null" >
+                app_status = #{appStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=Long}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.decision.entity.EngineDecisionLog" parameterType="com.geo.rcs.modules.decision.entity.EngineDecisionLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_event
+        WHERE
+        1=1 and user_id = #{userId}
+        <if test="channel != null and channel != ''">
+            AND `channel` = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND `scene_id` = #{sceneId}
+        </if>
+        <if test="sysStatus != null and sysStatus != ''">
+            AND `sys_status` = #{sysStatus}
+        </if>
+        <if test="realName != null and realName != ''">
+            AND `real_name` = #{realName}
+        </if>
+        <if test="decisionId != null and decisionId != ''">
+            AND `decision_id` = #{decisionId}
+        </if>
+        <if test="idCard != null and idCard != ''">
+            AND `id_card` = #{idCard}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND `mobile` = #{mobile}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND `remark` = #{remark}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        order by create_time desc
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from decision_event where id = #{id}
+    </delete>
+
+    <insert id="saveToUserModel" parameterType="com.geo.rcs.modules.decision.entity.UserDecision">
+        insert into decision_user_model
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="decisionId != null" >
+                decision_id,
+            </if>
+            <if test="logId != null" >
+                log_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="decisionId != null" >
+                #{decisionId},
+            </if>
+            <if test="logId != null" >
+                #{logId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getEventCountBySelective" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.decision.entity.DecisionAnalyse">
+        SET @row_num = 0;
+        SELECT
+        COUNT(id) eventTotal,
+        SUM(CASE WHEN sys_status = 1 THEN 1 ELSE 0 END) passEventCount,
+        SUM(CASE WHEN sys_status = 2 THEN 1 ELSE 0 END) manualReviewCount,
+        SUM(CASE WHEN sys_status = 3 THEN 1 ELSE 0 END) refuseEventCount,
+        SUM(CASE WHEN sys_status = 4 THEN 1 ELSE 0 END) invalidEventCount,
+        SUM(CASE WHEN sys_status = 5 THEN 1 ELSE 0 END) failEventCount
+        FROM decision_event
+        <where>
+            user_id = #{userId} and sys_status != 0
+            <if test="sysStatus != null and sysStatus != ''">
+                AND sys_status = #{sysStatus}
+            </if>
+            <if test="channel != null and channel != ''">
+                AND channel = #{channel}
+            </if>
+            <if test="sceneId != null and sceneId != ''">
+                AND scene_id = #{sceneId}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <!-- by hour -->
+    <select id="getCountTrendByHour" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time,count(id) as count FROM decision_event where  user_id = #{userId}
+        and sys_status != 0
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND scene_id = #{sceneId}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} HOUR)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by HOUR(create_time)
+    </select>
+    <!-- by day -->
+    <select id="getCountTrendByDay" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time,count(id) as count FROM decision_event where  user_id = #{userId}
+        and sys_status != 0
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND scene_id = #{sceneId}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} DAY)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by DAY(create_time)
+    </select>
+    <!-- by month -->
+    <select id="getCountTrendByMonth" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status != 0
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND scene_id = #{sceneId}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} MONTH)
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by MONTH(create_time)
+    </select>
+    <!-- statusTrend -->
+    <select id="getStatusCountTrendByType" parameterType="map" resultType="java.util.Map">
+        select  t.create_time ,sys_status, sum(t.count) as total from (
+        select sys_status, count(id) as count, date_format(create_time,'%Y-%m-%d 00:00:00') as create_time from decision_event where sys_status != 0 and  create_time >=DATE_SUB(CURDATE(), INTERVAL #{parm} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by create_time, sys_status
+        ) t GROUP BY t.create_time, sys_status;
+    </select>
+    <!-- pass -->
+    <select id="getPassCountTrendByType" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status = 1 and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by ${type}(create_time)
+    </select>
+    <!-- manual -->
+    <select id="getManualCountTrendByType" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status = 2 and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by ${type}(create_time)
+    </select>
+    <!-- refuse -->
+    <select id="getRefuseCountTrendByType" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status = 3 and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by ${type}(create_time)
+    </select>
+    <!-- invalid -->
+    <select id="getInvalidCountTrendByType" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status = 4 and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by ${type}(create_time)
+    </select>
+    <!-- fail -->
+    <select id="getFailCountTrendByType" parameterType="map" resultType="java.util.Map">
+        SELECT date_format(create_time,'%Y-%m-%d %H:00:00') as create_time, count(id) as count FROM decision_event where user_id = #{userId}
+        and sys_status = 5 and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        group by ${type}(create_time)
+    </select>
+
+    <!--  分数分析-->
+    <select id="getEventScoreTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        score,create_time
+        FROM decision_event
+        <where>
+            user_id = #{userId} and sys_status != 0
+            <if test="appStatus != null and appStatus != ''">
+                AND sys_status = #{appStatus}
+            </if>
+            <if test="channel != null and channel != ''">
+                AND channel = #{channel}
+            </if>
+            <if test="sceneId != null and sceneId != ''">
+                AND scene_id = #{sceneId}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <!--  耗时分析-->
+    <select id="getEventCostTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        select  t.create_time ,t.expend_level, sum(t.count) as total from (
+        select(
+        CASE
+        WHEN expend_time <![CDATA[ <= ]]> 500 THEN 1
+        WHEN expend_time > 500  and expend_time <![CDATA[ <= ]]> 1000 THEN 2
+        WHEN expend_time > 1000  and expend_time <![CDATA[ <= ]]> 2000 THEN 3
+        WHEN expend_time > 2000  and expend_time <![CDATA[ <= ]]> 5000 THEN 4
+        WHEN expend_time > 5000  and expend_time <![CDATA[ <= ]]> 10000 THEN 5
+        ELSE 6 END
+        ) as expend_level,
+        count(id) as count,
+        <if test='type == "HOUR"'>
+            date_format(create_time,'%Y-%m-%d %H:00:00') as create_time
+        </if>
+        <if test='type != "HOUR"'>
+            date_format(create_time,'%Y-%m-%d') as create_time
+        </if>
+        from decision_event
+        where
+        user_id = #{userId}
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND scene_id = #{sceneId}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})  group by create_time, expend_level
+        ) t GROUP BY t.create_time, t.expend_level
+    </select>
+    <!-- 导出excel 查询 -->
+    <select id="findByPageAll" resultType="java.util.Map"
+            parameterType="com.geo.rcs.modules.decision.entity.EngineDecisionLog">
+        select
+        concat((@rowNum:=@rowNum+1),'')
+        AS id,
+        s.* from
+        ( select
+        de.id, de.channel,DATE_FORMAT(de.create_time,'%Y-%m-%d %H:%i:%s')
+        createTime,de.expend_time,de.user_id,
+        (case de.sys_status
+        when 0 then '-'
+        when 1 then '通过'
+        when 2 then '人工审核'
+        when 3 then '拒绝'
+        when 4 then '失效'
+        end
+        )
+        sysStatus,dm.name
+        decisionId,de.real_name realName,de.mobile,de.id_card idCard,de.add_user,ebt.type_name businessId,es.name
+        senceName
+        from decision_event de
+        left JOIN engine_business_type ebt ON de.business_id=ebt.id
+        left JOIN decision_model dm ON de.decision_id=dm.id
+        left JOIN engine_scenes es ON de.scene_id=es.id
+        WHERE
+        1=1 and de.user_id = #{userId}
+        <if test="channel != null and channel != ''">
+            AND de.channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND de.scene_id = #{sceneId}
+        </if>
+        <if test="sysStatus != null and sysStatus != ''">
+            AND de.sys_status = #{sysStatus}
+        </if>
+        <if test="realName != null and realName != ''">
+            AND de.real_name = #{realName}
+        </if>
+        <if test="decisionId != null and decisionId != ''">
+            AND de.decision_id = #{decisionId}
+        </if>
+        <if test="idCard != null and idCard != ''">
+            AND de.id_card = #{idCard}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND de.remark = #{remark}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND de.mobile = #{mobile}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND de.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND de.create_time &lt;= #{endTime}
+        </if>
+        order by id ) s,(Select (@rowNum :=0) ) b
+    </select>
+    <!-- 导出pdf 查询-->
+    <select id="findAllPdfDataList" resultType="java.util.Map" parameterType="com.geo.rcs.modules.decision.entity.EngineDecisionLog">
+        select
+        id,result_map as resultMap,excute_flow as excuteFlow
+        from decision_event
+        WHERE
+        1=1 and user_id = #{userId}
+        <if test="channel != null and channel != ''">
+            AND `channel` = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND `scene_id` = #{sceneId}
+        </if>
+        <if test="sysStatus != null and sysStatus != ''">
+            AND `sys_status` = #{sysStatus}
+        </if>
+        <if test="realName != null and realName != ''">
+            AND `real_name` = #{realName}
+        </if>
+        <if test="decisionId != null and decisionId != ''">
+            AND `decision_id` = #{decisionId}
+        </if>
+        <if test="idCard != null and idCard != ''">
+            AND `id_card` = #{idCard}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND `mobile` = #{mobile}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+    <!-- 导出excel 查询 -->
+    <select id="findByPageIds" resultType="java.util.Map" parameterType="java.lang.Integer">
+        select
+        concat((@rowNum:=@rowNum+1),'')
+        AS id,
+        s.* from
+        (select
+        de.id, de.channel,DATE_FORMAT(de.create_time,'%Y-%m-%d %H:%i:%s')
+        createTime,de.expend_time,de.user_id,
+        (case de.sys_status
+        when 0 then '-'
+        when 1 then '通过'
+        when 2 then '人工审核'
+        when 3 then '拒绝'
+        when 4 then '失效'
+        end
+        )
+        sysStatus,dm.name
+        decisionId,de.real_name realName,de.mobile,de.id_card idCard,de.add_user,ebt.type_name businessId,es.name
+        senceName
+        from decision_event de
+        left JOIN engine_business_type ebt ON de.business_id=ebt.id
+        left JOIN decision_model dm ON de.decision_id=dm.id
+        left JOIN engine_scenes es ON de.scene_id=es.id
+        WHERE
+        1=1 and de.id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by createTime ) s,(Select (@rowNum :=0) ) b
+    </select>
+
+</mapper>

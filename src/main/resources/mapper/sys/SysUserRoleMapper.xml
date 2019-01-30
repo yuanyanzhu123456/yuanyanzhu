@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.sys.dao.SysUserRoleMapper">
+
+	<select id="queryList" resultType="com.geo.rcs.modules.sys.entity.SysUserRole">
+		select * from sys_user_role 
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+		</where>
+	</select>
+ 
+	<insert id="save" parameterType="map">
+		insert into sys_user_role
+		(
+			`u_id`,
+			`role_id`
+		)
+		values
+
+		(
+			#{userId}, 
+			#{roleId}
+		)
+	</insert>
+    <!--员工角色添加 -->
+    <insert id="add" parameterType="map">
+        insert into geo_user_role
+        (
+        `role_id`,
+        `geo_id`
+        )
+        values
+
+        (
+        #{roleId},
+        #{staffId}
+        )
+    </insert>
+    <!-- 修改员工权限 -->
+    <update id="updateStaffRole" parameterType="map">
+        update  sys_user_role set role_id = #{roleId}
+        where u_id = #{staffId}
+    </update>
+	
+	<delete id="delete">
+		delete from sys_user_role where u_id = #{value}
+	</delete>
+    <delete id="deleteStaff">
+		delete from geo_user_role where geo_id = #{staffId}
+	</delete>
+	
+	<select id="queryRoleIdList" resultType="long">
+		select role_id from sys_user_role where u_id = #{value}
+	</select>
+</mapper>

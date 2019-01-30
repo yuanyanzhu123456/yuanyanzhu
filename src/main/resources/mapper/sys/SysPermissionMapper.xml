@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.sys.dao.SysPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.sys.entity.SysPermission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="permission" property="permission" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="resourcetype" property="resourcetype" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, description, permission, pid, resourcetype, url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.geo.rcs.modules.sys.entity.SysPermission" >
+    insert into sys_permission (id, description, permission, 
+      pid, resourcetype, url
+      )
+    values (#{id,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
+      #{pid,jdbcType=INTEGER}, #{resourcetype,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.geo.rcs.modules.sys.entity.SysPermission" >
+    insert into sys_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="permission != null" >
+        permission,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="resourcetype != null" >
+        resourcetype,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null" >
+        #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="resourcetype != null" >
+        #{resourcetype,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.sys.entity.SysPermission" >
+    update sys_permission
+    <set >
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null" >
+        permission = #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="resourcetype != null" >
+        resourcetype = #{resourcetype,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.sys.entity.SysPermission" >
+    update sys_permission
+    set description = #{description,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      resourcetype = #{resourcetype,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryList" resultType="com.geo.rcs.modules.sys.entity.SysMenu">
+    SELECT *  FROM `sys_menu`
+  </select>
+
+  <select id="queryListOutOfDate" resultType="com.geo.rcs.modules.sys.entity.SysMenu">
+     SELECT *  FROM `sys_menu` where filter_type = 0 or filter_type = 2;
+  </select>
+
+</mapper>

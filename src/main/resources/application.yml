@@ -1,0 +1,87 @@
+####################  服务端口相关配置  ########################
+server:
+  port: 8020
+  context-path: /
+  tomcat:
+      basedir: /data/apps/temp
+      maxPostSize: 0
+      uri-encoding: UTF-8
+      max-threads: 1000
+      max-connections: 20000
+####################  启动参数相关配置  ########################
+app: web
+workname:
+quenenames:
+taskrole:
+
+####################  Spring相关配置  ########################
+spring:
+    profiles:
+        active: gray  # 环境 dev|test|pro
+
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss  # jackson时间格式化
+    http:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+        encoding:
+            charset: UTF-8
+            force: true
+            enabled: true
+    freemarker:
+        cache: false  # 禁用模板引擎缓存
+    thymeleaf:
+        content-type: application/octet-stream
+        cache: false
+        mode: LEGACYHTML5
+
+####################  Mybatis相关配置  ########################
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  type-aliases-package: com.geo.rcs.modules.sys.entity
+  configuration:
+       mapUnderscoreToCamelCase: true
+  #mybatis.config ：mybatis-config.xml #配置文件的路径
+  #mybatis.typeHandlersPackage：#扫描typeHandlers的包
+  #mybatis.checkConfigLocation：#检查配置文件是否存在
+  #mybatis.executorType：#设置执行模式（SIMPLE, REUSE, BATCH），默认为SIMPLE
+
+####################  pagehelper分页插件  ########################
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+####################  全局开关相关配置  ########################
+geo:
+    redis:
+        open: true  # 是否开启redis缓存  true开启   false关闭
+    rabbitmq:
+        open: true  # 是否开启rabbitmq缓存  true开启   false关闭
+        upperLimit: 10000
+    shiro:
+        redis: false  # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】（session共享）
+    quartz:
+        open: true  # 设置定时任务自动启动，true表示开启自启，false表示不开启(开发阶段，生产阶段默认为true)
+    event:
+        upperDownload : 10
+###################   rabbitmq合法队列,合法任务类型配置   ######################
+rabbitmq:
+         mailqueues: Mail-super,Mail-high,Mail-mid,Mail-low
+         apiqueues: Monitor-super,Monitor-high,Monitor-mid,Monitor-low
+         rulesqueues: Rules-super
+         abEventqueues: AbEvent-super,AbEvent-high,AbEvent-mid,AbEvent-low
+         taskroles: api,mail,abEvent
+
+###################   log   ######################
+logging:
+      config:
+            class-path: logback-spring.xml
+monitor:
+      email:
+            task:
+                time: "0 0 0 * * ?"

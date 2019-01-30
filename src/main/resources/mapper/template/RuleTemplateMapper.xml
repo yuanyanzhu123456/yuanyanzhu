@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.template.dao.RuleTemplateMapper" >
+
+    <sql id="Base_Column_List" >
+        id, ruleset_json,export_num,user_num,add_user,add_time,describ,type,version,name
+    </sql>
+    <sql id="Template_Type_List" >
+        id, name
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.template.entity.RuleTemplate">
+        select
+        *
+        from templates
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="save" parameterType="com.geo.rcs.modules.template.entity.RuleTemplate" >
+        insert into templates
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="rulesetJson != null" >
+                ruleset_json,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="version != null" >
+                version,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="rulesetJson != null" >
+                #{rulesetJson},
+            </if>
+            <if test="addTime != null" >
+                #{addTime},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="name != null" >
+                #{name},
+            </if>
+            <if test="version != null" >
+                #{version},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.template.entity.RuleTemplate" >
+        update templates
+        <set >
+            <if test="rulesetJson != null" >
+                ruleset_json = #{rulesetJson},
+            </if>
+            <if test="exportNum != null" >
+                export_num = #{exportNum,jdbcType=INTEGER},
+            </if>
+            <if test="describ != null" >
+                describ = #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null" >
+                version = #{version,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.template.entity.RuleTemplate" parameterType="com.geo.rcs.modules.template.entity.RuleTemplate">
+        select  
+        <include refid="Base_Column_List"/>
+        from templates
+        WHERE 1=1
+        <if test="name != null">
+            AND CONCAT(name) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from templates where id = #{id}
+    </delete>
+    <insert id="saveLog" parameterType="com.geo.rcs.modules.template.entity.TemplateLog">
+        insert into template_import_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="modelId != null" >
+                model_id,
+            </if>
+            <if test="importTime != null" >
+                import_time,
+            </if>
+            <if test="importStatus != null" >
+                import_status,
+            </if>
+            <if test="expendTime != null" >
+                expend_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="modelId != null" >
+                #{modelId},
+            </if>
+            <if test="importTime != null" >
+                #{importTime},
+            </if>
+            <if test="importStatus != null" >
+                #{importStatus},
+            </if>
+            <if test="expendTime != null" >
+                #{expendTime},
+            </if>
+        </trim>
+    </insert>
+    <select id="getTemplateType" resultType="com.geo.rcs.modules.template.entity.TemplateType">
+        select
+        <include refid="Template_Type_List"/>
+        from template_type
+    </select>
+</mapper>

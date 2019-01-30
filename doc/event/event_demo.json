@@ -1,0 +1,118 @@
+{
+  "msg": "成功",
+  "code": 2000,
+  "data": {
+    "score": 0,
+    "thresholdMin": 300,
+    "matchType": 0,
+    "ruleList": [
+      {
+        "conditionRelationShip": "10001&&10002",
+        "conditionsList": [
+          {
+            "fieldList": [
+              {
+                "fieldId": "10004",
+                "fieldName": "onlineTime",
+                "fieldType": "string",
+                "id": 10001,
+                "operator": "==",
+                "parameter": "(24,+)",
+                "result": false,
+                "value": "3",
+                "valueDesc": "(24,+)"
+              },
+              {
+                "fieldId": "10005",
+                "fieldName": "onlineStatus",
+                "fieldType": "string",
+                "id": 10002,
+                "operator": "!=",
+                "parameter": "0",
+                "result": true,
+                "value": "0",
+                "valueDesc": "正常在用"
+              }
+            ],
+            "fieldRelationShip": "10001&&10002",
+            "id": 10001,
+            "name": "在网时长大于24个月",
+            "result": false
+          },
+          {
+            "fieldList": [
+              {
+                "fieldId": "10008",
+                "fieldName": "outOfServiceTimes",
+                "fieldType": "int",
+                "id": 10003,
+                "operator": "==",
+                "parameter": "0",
+                "result": true,
+                "value": "0",
+                "valueDesc": "0"
+              }
+            ],
+            "fieldRelationShip": "10003",
+            "id": 10002,
+            "name": "三个月内手机停机次数等于0",
+            "result": true
+          }
+        ],
+        "id": 10001,
+        "level": 3,
+        "name": "手机在网时长大于2个月",
+        "score": 0,
+        "threshold": 90
+      }
+    ],
+    "name": "验证个人信息",
+    "id": 10001,
+    "sourceData": {
+      "outOfServiceTimes": {
+        "field": "outOfServiceTimes",
+        "valueDesc": "0",
+        "inter": "B13",
+        "value": "0"
+      },
+      "province": {
+        "field": "province",
+        "valueDesc": "",
+        "inter": "",
+        "value": "山东"
+      },
+      "city": {
+        "field": "city",
+        "valueDesc": "",
+        "inter": "",
+        "value": "枣庄"
+      },
+      "isp": {
+        "field": "isp",
+        "valueDesc": "",
+        "inter": "",
+        "value": "电信"
+      },
+      "onlineStatus": {
+        "field": "onlineStatus",
+        "valueDesc": "正常在用",
+        "inter": "A4",
+        "value": "0"
+      },
+      "onlineTime": {
+        "field": "onlineTime",
+        "valueDesc": "(24,+)",
+        "inter": "A3",
+        "value": "3"
+      }
+    },
+    "thresholdMax": 600,
+    "parameters": {
+      "cid": "13306328903",
+      "encrypted": 0,
+      "idNumber": "370404196212262212",
+      "realName": "赵玉柏"
+    },
+    "status": 1
+  }
+}

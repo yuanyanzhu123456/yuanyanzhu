@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.sys.dao.LoginLogMapper">
+
+	<select id="queryObject" resultType="com.geo.rcs.modules.sys.entity.LoginLog">
+		select * from sys_login_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.geo.rcs.modules.sys.entity.LoginLog">
+		select * from sys_login_log
+		<where>
+			<if test="key != null and key.trim() != ''">
+				`username` like concat('%',#{key},'%') or `logname` like concat('%',#{key},'%')
+			</if>
+		</where>
+		order by id desc 
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_login_log
+		<where>
+			<if test="key != null and key.trim() != ''">
+				`username` like concat('%',#{key},'%') or `logname` like concat('%',#{key},'%')
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.geo.rcs.modules.sys.entity.LoginLog" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_login_log
+		(
+			`logname`,
+			`userid`,
+			`username`,
+			`createtime`,
+			`succeed`,
+			`ip`,
+			`message`
+		)
+		values
+		(
+			#{logname},
+			#{userId},
+			#{username},
+			#{createtime},
+			#{succeed},
+			#{ip},
+			#{message}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.geo.rcs.modules.sys.entity.LoginLog">
+		update sys_login_log
+		<set>
+			<if test="logname != null">`logname` = #{logname}, </if>
+			<if test="userid != null">`userid` = #{userId}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="createtime != null">`createtime` = #{createtime}, </if>
+			<if test="message != null">`message` = #{message}, </if>
+			<if test="ip != null">`ip` = #{ip} </if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_login_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_login_log where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 前台分页查询用户管理 -->
+	<select id="findLoginLogByPage" resultType="com.geo.rcs.modules.sys.entity.LoginLog" parameterType="com.geo.rcs.modules.sys.entity.LoginLog">
+		select
+		*
+		from sys_login_log su WHERE 1=1
+		<if test="username != null">
+			and username like '%${username}%'
+		</if>
+		<if test="beginTime != null and endTime != null">
+			and createtime between #{beginTime} and #{endTime}
+		</if>
+		and userid = #{userId} order by createtime desc
+	</select>
+
+	<!--wzq-->
+
+
+	<!--员工登录次数排行查询-->
+	<select id="logRankByEmp" resultType="java.util.Map" parameterType="java.util.Map">
+		select a.name,count(*) as num from (SELECT  sl.userid,sl.createtime,su.name from sys_login_log sl
+		LEFT JOIN sys_user as su on sl.userid = su.id where unique_code=#{id}) as a
+		where createtime between DATE_SUB(NOW(),INTERVAL #{num} DAY) and NOW() group by a.userid order by num desc limit 10
+	</select>
+
+
+	<!--员工登录总数查询-->
+	<select id="logTotalByEmp" resultType="java.util.Map" parameterType="java.util.Map">
+		select count(distinct slu.id) as userNum
+		from (select sl.userid as id,sl.createtime as time from sys_login_log as sl left join sys_user as su on su.id=sl.userid where su.unique_code = #{id}) as slu
+		where slu.time > DATE_SUB(NOW(),INTERVAL #{num} DAY)
+	</select>
+
+</mapper>

@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.sys.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.sys.entity.SysUser">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="contact" property="contact" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creater" property="creater" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="role_id" property="roleId" jdbcType="INTEGER"/>
+        <result column="salt" property="salt" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="unique_code" property="uniqueCode" jdbcType="VARCHAR"/>
+        <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        <result column="version_id" property="versionId" jdbcType="INTEGER"/>
+        <result column="version_createtime" property="versionCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="version_updatetime" property="versionUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="version_expiretime" property="versionExpireTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, contact, create_time, creater, email, mobilephone, name, password, role_id, salt, 
+    status, username,unique_code
+  </sql>
+    <sql id="Safe_Column_List">
+        id, contact, create_time, creater, email, mobilephone, name, role_id,
+        status, username,unique_code
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        <include refid="Safe_Column_List"/>
+        from sys_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+    insert into sys_user (id, contact, create_time, 
+      creater, email, mobilephone, 
+      name, password, role_id, 
+      salt, status, username
+      )
+    values (#{id,jdbcType=BIGINT}, #{contact,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creater,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, 
+      #{salt,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.sys.entity.SysUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="contact != null">
+                contact,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creater != null">
+                creater,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="mobilephone != null">
+                mobilephone,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="salt != null">
+                salt,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="uniqueCode != null">
+                unique_code,
+            </if>
+            <if test="company != null">
+                company
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="contact != null">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null">
+                #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilephone != null">
+                #{mobilephone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="uniqueCode != null">
+                #{uniqueCode,jdbcType=BIGINT},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        update sys_user
+        <set>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null">
+                creater = #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilephone != null">
+                mobilephone = #{mobilephone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="uniqueCode != null">
+                unique_code = #{uniqueCode}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateCustomerByPrimaryKey" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        update sys_user
+        <set>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null">
+                creater = #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilephone != null">
+                mobilephone = #{mobilephone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            unique_code = #{id}
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+    update sys_user
+    set contact = #{contact,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mobilephone = #{mobilephone,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      salt = #{salt,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="queryUserByUserName" resultType="com.geo.rcs.modules.sys.entity.SysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user
+        WHERE username = #{username}
+    </select>
+    <!--根据用户名查询用户id-->
+    <select id="queryByUserNameForId" resultType="java.lang.Long">
+        select id from sys_user where username = #{username}
+    </select>
+    <select id="queryByName" resultType="com.geo.rcs.modules.sys.entity.SysUser" parameterType="string">
+        SELECT
+        <include refid="Safe_Column_List"/>
+        FROM sys_user
+        WHERE name = #{name}
+    </select>
+
+    <!-- 查询所有 -->
+    <select id="findAll" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        <include refid="Safe_Column_List"/>
+        from sys_user
+        <if test="username!=null">
+            WHERE username like '%${username}%'
+        </if>
+
+    </select>
+    <!-- 前台分页查询用户管理 -->
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,sr.role_name
+        from sys_user su left join sys_role sr on su.role_id = sr.id WHERE 1=1
+        <if test="username != null">
+            and su.username like '%${username}%'
+        </if>
+        <if test="contact != null">
+            and su.contact like '%${contact}%'
+        </if>
+        <if test="roleId != null">
+            and su.role_id =#{roleId}
+        </if>
+        <if test="mobilephone != null">
+            and su.mobilephone like '%${mobilephone}%'
+        </if>
+        <if test="status != null">
+            and su.status = #{status}
+        </if>
+        and su.unique_code = #{uniqueCode}
+    </select>
+    <!-- 后台分页查询客户主账号 -->
+    <select id="findCustomerByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,sr.role_name
+        from sys_user su left join sys_role sr on su.role_id = sr.id WHERE 1=1 and su.unique_code = su.id
+        <if test="username != null">
+            and su.username like '%${username}%'
+        </if>
+        <if test="contact != null">
+            and su.contact like '%${contact}%'
+        </if>
+        <if test="mobilephone != null">
+            and su.mobilephone like '%${mobilephone}%'
+        </if>
+        <if test="status != null">
+            and su.status = #{status}
+        </if>
+    </select>
+
+    <!-- 后台分页查询客户主账号 -->
+    <select id="findCustomerByPageNew" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.sys.entity.SysUser">
+        select cus.*,scv.version_id,scv.createtime as version_createtime,scv.updatetime as
+        version_updatetime,scv.expiretime as version_expiretime
+        from
+        (select su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,sr.role_name
+        from sys_user su
+        left join sys_role sr on su.role_id = sr.id WHERE su.unique_code = su.id) as cus
+        left join sys_customer_version
+        as scv on scv.customer_id=cus.id
+        where 1=1
+        <if test="username != null">
+            and su.username like '%${username}%'
+        </if>
+        <if test="contact != null">
+            and su.contact like '%${contact}%'
+        </if>
+        <if test="mobilephone != null">
+            and su.mobilephone like '%${mobilephone}%'
+        </if>
+        <if test="status != null">
+            and su.status = #{status}
+        </if>
+    </select>
+
+    <!--后台查询客户下的用户列表-->
+    <select id="findEmployerListByPage" parameterType="com.geo.rcs.modules.sys.entity.SysUser"
+            resultType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        su.id,su.contact,su.creater,su.email,su.mobilephone,su.name,
+        su.password,su.role_id,su.salt,su.status,su.username,su.unique_code,date_format(su.create_time,"%Y-%m-%d
+        %H:%i:%s") as createTime,sr.role_name
+        from sys_user su left join sys_role sr on su.role_id = sr.id WHERE 1=1 and su.unique_code = #{uniqueCode}
+        <if test="username != null">
+            and su.username like '%${username}%'
+        </if>
+        <if test="contact != null">
+            and su.contact like '%${contact}%'
+        </if>
+        <if test="mobilephone != null">
+            and su.mobilephone like '%${mobilephone}%'
+        </if>
+        <if test="status != null">
+            and su.status = #{status}
+        </if>
+    </select>
+    <!-- 批量删除 -->
+    <delete id="deleteNotes">
+        delete from sys_user
+        where cn_note_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 查询用户的所有权限 -->
+    <select id="queryAllPerms" resultType="string">
+     SELECT DISTINCT(p.perms) FROM sys_user_role ur
+    LEFT JOIN sys_role_menu rp ON ur.role_id = rp.role_id
+    LEFT JOIN sys_menu p ON rp.menu_id = p.id
+    WHERE ur.u_id = #{userId}
+  </select>
+
+    <!-- 查询用户的所有权限 -->
+    <select id="queryPermissionOutOfDate" resultType="com.geo.rcs.modules.sys.entity.SysMenu">
+         select sm.* from sys_menu sm left join sys_role_menu srm on srm.menu_id = sm.id
+           where srm.user_id = #{id}  and srm.role_id = #{roleId} and sm.open = 1 and sm.filter_type = 0 or sm.filter_type = 2
+    </select>
+
+    <!-- 查询用户的所有权限 -->
+    <select id="queryAllPermsOutOfDate" resultType="string">
+        SELECT DISTINCT(p.perms) FROM sys_user_role ur
+        LEFT JOIN sys_role_menu rp ON ur.role_id = rp.role_id
+        LEFT JOIN sys_menu p ON rp.menu_id = p.id
+        WHERE ur.u_id = #{userId} and p.filter_type = 0 or p.filter_type = 2
+    </select>
+
+    <select id="queryObject" resultType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        <include refid="Safe_Column_List"/>
+        from sys_user where id = #{value}
+    </select>
+    <!-- 查询用户的所有菜单ID -->
+    <select id="queryAllMenuId" resultType="long">
+    select distinct rm.menu_id from sys_user_role ur
+    LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+    where ur.u_id = #{userId}
+  </select>
+
+    <select id="getRoleList" resultType="com.geo.rcs.modules.sys.entity.SysRole">
+      select r.* from sys_role r
+	left join sys_user_role sur on r.id=sur.role_id
+	left join sys_user u on sur.role_id=u.role_id
+	where u.id=#{id}
+  </select>
+
+    <select id="queryUserInfoById" resultType="map">
+    SELECT
+    su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,c.id as cid,c.server,c.encrypted,c.encryption_type,c.encryption_key,c.username as cusername,
+    c.password as cpassword,c.uno,c.etype,c.dsign,c.user_id
+    FROM
+    sys_user su left join sys_customer c on c.user_id = su.id
+    WHERE su.id = #{value}
+  </select>
+
+    <update id="disableAccount" parameterType="map">
+    update sys_user set status = #{status} where id = #{userId}
+  </update>
+
+    <update id="updatePassword" parameterType="map">
+    update sys_user set `password` = #{newPassword}
+    where id = #{userId} and password = #{password}
+  </update>
+
+    <!-- 更新登录信息，如登录IP、登录时间 -->
+    <update id="updateLoginInfo" parameterType="map">
+    update sys_user set
+    login_ip = #{loginIp},
+    login_Date = #{loginDate}
+    where id = #{userId}
+  </update>
+    <select id="selectUniqueCode" resultType="com.geo.rcs.modules.sys.entity.SysUser">
+        select
+        <include refid="Safe_Column_List"/>
+        from sys_user where id = #{uniqueCode}
+    </select>
+
+    <select id="queryTableIFExists" resultType="java.lang.String" parameterType="java.lang.String">
+    select t.table_name from information_schema.TABLES t where t.TABLE_SCHEMA ="rcs2" and t.TABLE_NAME ="${tableName}";
+  </select>
+    <update id="createTaskTable" parameterType="java.lang.String">
+    CREATE TABLE `${tableName}` (
+      `job_id` int(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+      `job_name` varchar(255) DEFAULT NULL COMMENT '任务名称',
+      `bean_name` varchar(255) DEFAULT NULL COMMENT '类名',
+      `method_name` varchar(255) DEFAULT NULL COMMENT '方法名',
+      `params` varchar(255) DEFAULT NULL COMMENT '参数',
+      `cron_expression` varchar(255) DEFAULT NULL COMMENT '表达式（频率）',
+      `status` varchar(255) DEFAULT NULL COMMENT '任务状态（0:运行中，1:暂停，2:--，3:结束，4:异常）',
+      `priority` int(255) DEFAULT NULL COMMENT '优先级（0:最低，1：中，2:高，3:最高）',
+      `group` varchar(255) DEFAULT NULL COMMENT '分组',
+      `upper_limit` int(20) DEFAULT NULL COMMENT '上限',
+      `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+      `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+      `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+      `user_id` bigint(20) DEFAULT NULL COMMENT '客户标识',
+      `rules_id` bigint(20) DEFAULT NULL COMMENT '规则集编号',
+      `cycle_num` int(11) DEFAULT NULL COMMENT '周期数',
+      PRIMARY KEY (`job_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  </update>
+
+    <update id="createTaskLogTable" parameterType="java.lang.String">
+    CREATE TABLE `${tableName}` (
+      `log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
+      `job_id` bigint(20) NOT NULL COMMENT '任务id',
+      `bean_name` varchar(200) DEFAULT NULL COMMENT 'spring bean名称',
+      `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
+      `params` varchar(2000) DEFAULT NULL COMMENT '参数',
+      `status` tinyint(4) NOT NULL COMMENT '任务状态    0：成功    1：失败',
+      `error` varchar(2000) DEFAULT NULL COMMENT '失败信息',
+      `times` int(11) NOT NULL COMMENT '耗时(单位：毫秒)',
+      `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+      PRIMARY KEY (`log_id`),
+      KEY `job_id` (`job_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时任务日志';
+  </update>
+    <!--首页数据概览客户统计-->
+    <select id="getCustomerStatistic" resultType="java.util.Map">
+      select t1.id total,t2.data onenum,t3.data sevennum
+      from
+     (select count(1) id  from sys_user su left join sys_role sr on su.role_id = sr.id WHERE 1=1 and su.unique_code = su.id) t1,
+      (select totb.today-yestb.yesterday data from(select count(1) yesterday from sys_user where  date_format(create_time,'%y-%m-%d')=date_format(DATE_SUB(curdate(),INTERVAL 1 DAY),'%y-%m-%d')) yestb , (select count(1)today from sys_user where  date_format(create_time,'%y-%m-%d')=date_format(now(),'%y-%m-%d')) totb
+      )t2,
+     (select t.data-y.data data from (select count(1) data from sys_user where  date_format(create_time,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 7 DAY),'%y-%m-%d')) t ,(select count(1) data from sys_user where  date_format(create_time,'%y-%m-%d')&lt;date_format(DATE_SUB(curdate(),INTERVAL 7 DAY),'%y-%m-%d') and  date_format(create_time,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 14 DAY),'%y-%m-%d'))y
+     )t3
+</select>
+
+    <!--员工数量-->
+    <select id="employeeCount" resultType="com.geo.rcs.modules.sys.entity.SysUser" parameterType="java.lang.Integer">
+        select company,count(id) as userNum from sys_user where create_time>DATE_SUB(CURDATE(), INTERVAL #{num} day) GROUP BY unique_code ORDER BY userNum desc limit 10
+    </select>
+
+    <!--客户员工数量排行-->
+    <select id="comEmpRank" resultType="java.util.Map" parameterType="java.util.Map">
+        select company,count(*) as num from sys_user group by unique_code ORDER BY num desc limit 10
+    </select>
+
+    <!--客户员工总数-->
+    <select id="comEmpSum" resultType="java.util.Map" parameterType="java.util.Map">
+        select a.companyNum as cmpNum,b.usersNum as userNum from (select count(*) as companyNum from sys_user where id = unique_code)
+        as a,(select count(*) as usersNum from sys_user) as b
+
+    </select>
+
+    <!--查询用户信息以及版本信息-->
+    <select id="queryUserInfoByIdNew" resultType="map">
+        SELECT
+        su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,c.id as cid,c.server,c.encrypted,c.encryption_type,c.encryption_key,c.username as cusername,
+        c.password as cpassword,c.uno,c.etype,c.dsign,c.user_id
+        FROM
+        sys_user su left join sys_customer c on c.user_id = su.id
+        WHERE su.id = #{value}
+    </select>
+    <!--查询所有用户信息-->
+    <select id="getUserAllInfo" resultType="map">
+        select su.id, su.contact, su.create_time, su.creater, su.email, su.mobilephone, su.name, su.role_id,
+        su.status, su.username,su.unique_code,scv.createtime as versionCreateTime,scv.expiretime as versionExpireTime,scv.version_id as versionId,scv.updatetime as versionUpdateTime
+        from sys_user su LEFT JOIN sys_customer_version scv on su.id = scv.customer_id where scv.customer_id = #{customerId}
+    </select>
+
+    <select id="getUniqueCodeById" resultType="java.lang.Long">
+        SELECT unique_code as uniqueCode FROM `sys_user` where id = #{id}
+    </select>
+</mapper>

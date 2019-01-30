@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.geo.dao.GeoUserMapper" >
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.geo.entity.GeoUser" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="contact" property="contact" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="creater" property="creater" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="role_id" property="roleId" jdbcType="INTEGER" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="login_date" property="loginDate" jdbcType="TIMESTAMP" />
+        <result column="unique_code" property="uniqueCode" jdbcType="BIGINT" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, contact, create_time, creater, email, mobilephone, name, password, role_id, salt,
+        status, username, login_ip, login_date,unique_code,company
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from geo_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from geo_user
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteTokenByPrimaryKey" parameterType="java.lang.Long" >
+        delete from geo_user_token
+        where geo_id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.geo.rcs.modules.geo.entity.GeoUser" >
+        insert into geo_user (id, contact, create_time,
+        creater, email, mobilephone,
+        name, password, role_id,
+        salt, status, username,
+        login_ip, login_date),unique_code
+        values (#{id,jdbcType=BIGINT}, #{contact,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{creater,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER},
+        #{salt,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
+        #{loginIp,jdbcType=VARCHAR}, #{loginDate,jdbcType=TIMESTAMP}), #{loginDate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.geo.entity.GeoUser" >
+        insert into geo_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="contact != null" >
+                contact,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="creater != null" >
+                creater,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="mobilephone != null" >
+                mobilephone,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="salt != null" >
+                salt,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="loginIp != null" >
+                login_ip,
+            </if>
+            <if test="loginDate != null" >
+                login_date,
+            </if>
+            <if test="uniqueCode != null" >
+                unique_code,
+            </if>
+            <if test="company != null" >
+                company,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="contact != null" >
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null" >
+                #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilephone != null" >
+                #{mobilephone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null" >
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="loginIp != null" >
+                #{loginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="loginDate != null" >
+                #{loginDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uniqueCode != null" >
+                #{uniqueCode,jdbcType=BIGINT},
+            </if>
+            <if test="company != null" >
+                #{company,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.geo.entity.GeoUser" >
+        update geo_user
+        <set >
+            <if test="contact != null" >
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creater != null" >
+                creater = #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilephone != null" >
+                mobilephone = #{mobilephone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="salt != null" >
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="loginIp != null" >
+                login_ip = #{loginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="loginDate != null" >
+                login_date = #{loginDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.geo.entity.GeoUser" >
+        update geo_user
+        set
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        creater = #{creater,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        mobilephone = #{mobilephone,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        role_id = #{roleId,jdbcType=INTEGER},
+        username = #{username,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <!-- 分页查询 -->
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.geo.entity.GeoUser">
+        select ms.*,sr.role_name from geo_user ms left join sys_role sr on ms.role_id = sr.id  WHERE 1=1
+        <if test="username != null">
+            and ms.username like '%${username}%'
+        </if>
+        <if test="mobilephone != null">
+            and ms.mobilephone like '%${mobilephone}%'
+        </if>
+        <if test="status != null">
+            and ms.status = #{status}
+        </if>
+        <if test="roleId != null">
+            and ms.role_id = #{roleId}
+        </if>
+        and ms.unique_code = #{uniqueCode} and ms.unique_code != ms.id order by ms.create_time desc
+    </select>
+    <select id="queryByName" resultType="com.geo.rcs.modules.geo.entity.GeoUser">
+        select
+        <include refid="Base_Column_List" />
+        from geo_user where username = #{username}
+    </select>
+    <update id="updateLoginInfo" parameterType="map">
+        update sys_user set
+        login_ip = #{loginIp},
+        login_Date = #{loginDate}
+        where id = #{userId}
+    </update>
+    <select id="queryByGeoId" resultType="com.geo.rcs.modules.geo.entity.GeoUserToken" parameterType="java.lang.Long">
+        select * from geo_user_token where geo_id = #{geoId}
+    </select>
+    <insert id="saveToken" parameterType="com.geo.rcs.modules.geo.entity.GeoUserToken">
+        insert into geo_user_token
+        (
+        `geo_id`,
+        `token`,
+        `expire_time`,
+        `update_time`
+        )
+        values
+        (
+        #{geoId},
+        #{token},
+        #{expireTime},
+        #{updateTime}
+        )
+    </insert>
+    <update id="updateToken" parameterType="com.geo.rcs.modules.geo.entity.GeoUserToken">
+        update geo_user_token
+        <set>
+            <if test="token != null">`token` = #{token}, </if>
+            <if test="expireTime != null">`expire_time` = #{expireTime}, </if>
+            <if test="updateTime != null">`update_time` = #{updateTime}</if>
+        </set>
+        where geo_id = #{geoId}
+    </update>
+    <select id="queryGeoUserByToken" resultType="com.geo.rcs.modules.geo.entity.GeoUserToken">
+        select * from geo_user_token where token = #{value}
+    </select>
+    <select id="getPermissionById" resultType="com.geo.rcs.modules.geo.entity.GeoRoleMenu">
+       select srp.*,sm.* from  sys_menu sm left join geo_role_menu srp  on sm.id = srp.menu_id left join geo_user_role sr on sr.role_id = srp.role_id and sr.geo_id = srp.geo_id where sr.geo_id = #{geoId}
+    </select>
+    <!-- 查询用户的所有权限 -->
+    <select id="queryAllPerms" resultType="string">
+        SELECT DISTINCT(p.perms) FROM geo_user_role ur
+        LEFT JOIN geo_role_menu rp ON ur.role_id = rp.role_id
+        LEFT JOIN sys_menu p ON rp.menu_id = p.id
+        WHERE ur.geo_id = #{geoId}
+    </select>
+    <!--首页数据概览用户总数统计-->
+    <select id="getUserStatistics" resultType="java.util.Map">
+         select  t1.num total,t2.data onenum,t3.data sevennum
+      from
+     ( select count(*)num from sys_user su left join sys_role sr on su.role_id = sr.id where su.id != su.unique_code ) t1,
+      (select totb.today-yestb.yesterday data from(select count(1) yesterday from geo_user where  date_format(create_time,'%y-%m-%d')=date_format(DATE_SUB(curdate(),INTERVAL 1 DAY),'%y-%m-%d')) yestb , (select count(1)today from geo_user where  date_format(create_time,'%y-%m-%d')=date_format(now(),'%y-%m-%d')) totb
+      )t2,
+     (select t.data-y.data data from (select count(1) data from geo_user where  date_format(create_time,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 7 DAY),'%y-%m-%d')) t ,(select count(1) data from geo_user where  date_format(create_time,'%y-%m-%d')&lt;date_format(DATE_SUB(curdate(),INTERVAL 7 DAY),'%y-%m-%d') and  date_format(create_time,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 14 DAY),'%y-%m-%d'))y
+     )t3
+    </select>
+    <!--首页数据概览活跃用户统计-->
+    <select id="getUserLoginStatistics" resultType="java.util.Map">
+        select z1.data total,
+        z2.data onenum,
+        z3.data sevennum
+        from
+        (select count(t.userid) data from (select distinct userid,username  from sys_login_log where date_format(createtime,'%Y-%m-%d')> date_format(DATE_SUB(curdate(),INTERVAL 31 DAY),'%Y-%m-%d')  )t)z1,
+        (select c1.data-c2.data  data from (select count(t.userid)data from (select distinct userid,username  from sys_login_log  where date_format(createtime,'%y-%m-%d')=date_format(now(),'%y-%m-%d'))t)c1,(select count(t.userid) data from (select distinct userid,username  from sys_login_log  where date_format(createtime,'%y-%m-%d')=date_format(DATE_SUB(curdate(),INTERVAL 1 DAY),'%y-%m-%d'))t)c2
+        )z2,
+        (select m1.data-m2.data data from (select count(t.userid) data from (select distinct userid,username from sys_login_log  where date_format(createtime,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 8 DAY),'%y-%m-%d')) t)m1, (select count(m.userid) data from (select distinct userid,username from sys_login_log  where date_format(createtime,'%y-%m-%d')&lt;date_format(DATE_SUB(curdate(),INTERVAL 7 DAY),'%y-%m-%d') and date_format(createtime,'%y-%m-%d')>date_format(DATE_SUB(curdate(),INTERVAL 15 DAY),'%y-%m-%d'))m
+        )m2)z3
+    </select>
+    <!--首页活跃用户数分析-->
+    <select id="getActiveUsersDay" resultType="java.util.Map" parameterType="map">
+      select DATE_FORMAT(a.createtime,"%Y-%m-%d") as date,count(DISTINCT a.userid,a.username) as num
+          from (select * from sys_login_log where createtime > DATE_SUB(CURDATE(),INTERVAL #{num} day)) as a
+            group by DATE_FORMAT(a.createtime,"%Y-%m-%d")
+    </select>
+
+    <select id="getActiveUsersMonth" resultType="java.util.Map" parameterType="map">
+         select DATE_FORMAT(a.createtime,"%Y-%m") as date,count(DISTINCT a.userid,a.username) as num
+          from (select * from sys_login_log where createtime > DATE_SUB(CURDATE(),INTERVAL #{num} day)) as a
+            group by DATE_FORMAT(a.createtime,"%Y-%m")
+    </select>
+</mapper>

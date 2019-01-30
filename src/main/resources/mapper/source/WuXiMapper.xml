@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.source.dao.WuXiMapper">
+
+
+    <select id="getWuXiById" resultType="com.geo.rcs.modules.source.entity.WuXi">
+        select * from wuxi where id = #{id}
+    </select>
+
+    <select id="getWuXiWhiteLists" parameterType="java.lang.String"  resultType="com.geo.rcs.modules.source.entity.WuXiWhiteList">
+        select * from wuxiwhitelist where username = #{name} and useridnumber=#{idNumber}
+    </select>
+
+    <select id="getReportNo" parameterType="java.lang.String"  resultType="java.lang.String">
+        select report_sn from tbl_per_result_info where  cert_type='身份证'  and cert_no=#{idNumber}
+    </select>
+
+    <select id="getBalance" parameterType="java.lang.String"  resultType="java.lang.Double">
+        select balance from tbl_per_loan_info where  cue like'%信贷交易信息%'  and report_id=#{reportId}
+    </select>
+
+    <select id="getLoanInfoCurroverdueamount" parameterType="java.lang.String"  resultType="java.lang.Integer">
+        select curroverdueamount from tbl_per_loan_info where  report_id=#{reportId}
+    </select>
+
+    <select id="getLoanCardInfoCurroverdueamount" parameterType="java.lang.String"  resultType="java.lang.Integer">
+        select curroverdueamount from tbl_per_loan_card_info where  report_id=#{reportId}
+    </select>
+
+    <select id="getOpendateAndEnddate" parameterType="java.lang.String"  resultType="java.util.HashMap">
+        select opendate AS o ,enddate AS e from tbl_per_loan_info where app_no=#{appNo}
+    </select>
+
+    <select id="getLoanCardInfoCurroverduecyc" parameterType="java.lang.String"  resultType="java.lang.String">
+        select curroverduecyc from tbl_per_loan_card_info where  app_no=#{appNo}
+    </select>
+
+    <select id="getUndestyryloancardUsedAvg6" parameterType="java.lang.String"  resultType="java.lang.String">
+        select undestyryloancard_used_avg_6 from tbl_per_info_sumarry where  report_id=#{reportId}
+    </select>
+
+    <select id="getUndestyrysloancardCreditlimit" parameterType="java.lang.String"  resultType="java.lang.String">
+        select undestyryloancard_credit_limit from tbl_per_info_sumarry where  report_id=#{reportId}
+    </select>
+
+    <select id="getAccount" parameterType="java.lang.String"  resultType="java.lang.Double">
+        select account from tbl_per_loan_info where (cue LIKE '%个人消费贷款%' OR cue LIKE '%其他贷款%' OR cue LIKE '%信用免担保个人经营性贷款%') AND report_id=#{reportId}
+    </select>
+
+    <select id="getEduLevel" parameterType="java.lang.String"  resultType="java.lang.String">
+        select edu_level from tbl_per_persional_info where  report_id=#{reportId}
+    </select>
+
+    <select id="getLoanInfoLatest24state" parameterType="java.lang.String"  resultType="java.lang.String">
+        select latest24state from tbl_per_loan_info where  report_id=#{reportId}
+    </select>
+
+    <select id="getLoanCardInfoLast24state" parameterType="java.lang.String"  resultType="java.lang.String">
+        select last_24state from tbl_per_loan_card_info where  report_id=#{reportId}
+    </select>
+
+    <select id="getLoanCardCount" parameterType="java.lang.String"  resultType="java.lang.String">
+        select loan_card_count from tbl_per_info_sumarry where   report_id=#{reportId}
+    </select>
+</mapper>

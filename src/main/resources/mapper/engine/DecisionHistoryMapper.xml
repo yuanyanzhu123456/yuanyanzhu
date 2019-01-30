@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.decision.dao.DecisionHistoryMapper" >
+
+    <sql id="Base_Column_List" >
+        id, decision_map,decision_id,decision_name,unique_code,record_time,action_type,remark
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_history_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getDecisionHistoryByUserId" resultType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_history_log
+        where unique_code = #{uniqueCode,jdbcType=BIGINT}
+    </select>
+    <insert id="insertBySelective" parameterType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog" >
+        insert into decision_history_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="decisionMap != null" >
+                decision_map,
+            </if>
+            <if test="decisionId != null" >
+                decision_id,
+            </if>
+            <if test="decisionName != null" >
+                decision_name,
+            </if>
+            <if test="uniqueCode != null" >
+                unique_code,
+            </if>
+            <if test="recordTime != null" >
+                record_time,
+            </if>
+            <if test="actionType != null" >
+                action_type,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="decisionMap != null" >
+                #{decisionMap},
+            </if>
+            <if test="decisionId != null" >
+                #{decisionId},
+            </if>
+            <if test="decisionName != null" >
+                #{decisionName},
+            </if>
+            <if test="uniqueCode != null" >
+                #{uniqueCode},
+            </if>
+            <if test="recordTime != null" >
+                #{recordTime},
+            </if>
+            <if test="actionType != null" >
+               #{actionType},
+            </if>
+            <if test="remark != null" >
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog" >
+        update decision_history_log
+        <set >
+            <if test="decisionMap != null" >
+                decision_map = #{decisionMap},
+            </if>
+            <if test="decisionId != null" >
+                decision_id = #{decisionId},
+            </if>
+            <if test="decisionName != null" >
+                decision_name = #{decisionName},
+            </if>
+            <if test="uniqueCode != null" >
+                unique_code = #{uniqueCode,jdbcType=BIGINT},
+            </if>
+            <if test="recordTime != null" >
+                record_time = #{recordTime},
+            </if>
+            <if test="actionType != null" >
+                action_type = #{actionType},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id,jdbcType=Long}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog" parameterType="com.geo.rcs.modules.decision.entity.DecisionHistoryLog">
+        select
+        <include refid="Base_Column_List" />
+        from decision_history_log
+        WHERE unique_code = #{uniqueCode}
+        <if test="decisionName != null">
+            AND CONCAT(decision_name) LIKE CONCAT('%',#{decisionName},'%')
+        </if>
+        <if test="decisionId != null">
+            AND decision_id = #{decisionId}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from decision_history_log where id = #{id}
+    </delete>
+
+</mapper>

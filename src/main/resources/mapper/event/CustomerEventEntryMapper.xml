@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.geo.rcs.modules.event.customerEvent.dao.CustomerEventEntryMapper">
+
+	<select id="findByPage"
+		resultType="com.geo.rcs.modules.event.customerEvent.entity.CustomerEventEntry"
+		parameterType="java.util.Map">
+		SELECT *,
+		CONCAT(FLOOR(CONVERT(z.pass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS passpercent,
+		CONCAT(FLOOR(CONVERT(z.mannual/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS mannualpercent,
+		CONCAT(FLOOR(CONVERT(z.notpass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS notpasspercent
+		FROM (
+		SELECT t.name,concat(t.hours,':00') DATE ,SUM(t.pass)PASS
+		,SUM(t.mannual)MANNUAL ,SUM(t.notpass) NOTPASS FROM (SELECT
+		m.name,m.hours,CASE WHEN m.sys_status=1 THEN m.num ELSE 0 END 'pass',
+		CASE WHEN m.sys_status=2 THEN m.num ELSE 0 END 'mannual',
+		CASE WHEN m.sys_status=3 THEN m.num ELSE 0 END 'notpass',
+		CASE WHEN m.sys_status=4 THEN m.num ELSE 0 END 'notUse'
+		FROM ( SELECT u.name NAME,DATE_FORMAT(e.create_time, '%H') hours,
+		e.sys_status ,COUNT(*) num
+		FROM api_event_entry e,sys_user u
+		<where>
+			e.user_id=u.id AND
+			e.sys_status!=0 AND e.sys_status!=4
+			<if test="id != null and id != '' ">
+				and e.user_id = #{id}
+			</if>
+			<if test="dateStart != null and dateStart != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') >=#{dateStart}
+			</if>
+			<if test="dateEnd != null and dateEnd != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') <![CDATA[<=]]>#{dateEnd}
+			</if>
+		</where>
+		GROUP BY hours,e.sys_status) m)t GROUP BY t.hours )z
+	</select>
+
+	<select id="findByPageday"
+		resultType="com.geo.rcs.modules.event.customerEvent.entity.CustomerEventEntry"
+		parameterType="java.util.Map">
+		SELECT *,
+		CONCAT(FLOOR(CONVERT(z.pass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS passpercent,
+		CONCAT(FLOOR(CONVERT(z.mannual/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS mannualpercent,
+		CONCAT(FLOOR(CONVERT(z.notpass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS notpasspercent
+		FROM (
+		SELECT t.name,t.day DATE ,SUM(t.pass)PASS ,SUM(t.mannual)MANNUAL
+		,SUM(t.notpass) NOTPASS FROM (SELECT m.name,m.day,
+		CASE WHEN m.sys_status=1 THEN m.num ELSE 0 END 'pass',
+		CASE WHEN m.sys_status=2 THEN m.num ELSE 0 END 'mannual',
+		CASE WHEN m.sys_status=3 THEN m.num ELSE 0 END 'notpass',
+		CASE WHEN m.sys_status=4 THEN m.num ELSE 0 END 'notUse'
+		FROM ( SELECT u.name NAME,DATE_FORMAT(e.create_time, '%m/%d') DAY,
+		e.sys_status ,COUNT(*) num
+		FROM api_event_entry e,sys_user u
+		<where>
+			e.user_id=u.id AND
+			e.sys_status!=0 AND e.sys_status!=4 
+			<if test="id != null and id != '' ">
+				and e.user_id = #{id}
+			</if>
+			<if test="dateStart != null and dateStart != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') >=#{dateStart}
+			</if>
+			<if test="dateEnd != null and dateEnd != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') <![CDATA[<=]]>#{dateEnd}
+			</if>
+		</where>
+		GROUP BY DAY,e.sys_status) m)t GROUP BY t.day ORDER BY DAY )z
+	</select>
+
+	<select id="findByPageweek"
+		resultType="com.geo.rcs.modules.event.customerEvent.entity.CustomerEventEntry"
+		parameterType="java.util.Map">
+		SELECT *,
+		CONCAT(FLOOR(CONVERT(z.pass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS passpercent,
+		CONCAT(FLOOR(CONVERT(z.mannual/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS mannualpercent,
+		CONCAT(FLOOR(CONVERT(z.notpass/(z.pass+z.mannual+z.notpass),DECIMAL(10,2))*100),
+		'% ') AS notpasspercent
+		FROM (
+		SELECT t.name,concat(t.day,'周') DATE ,SUM(t.pass)PASS ,SUM(t.mannual)MANNUAL
+		,SUM(t.notpass) NOTPASS FROM (SELECT m.name,m.day,
+		CASE WHEN m.sys_status=1 THEN m.num ELSE 0 END 'pass',
+		CASE WHEN m.sys_status=2 THEN m.num ELSE 0 END 'mannual',
+		CASE WHEN m.sys_status=3 THEN m.num ELSE 0 END 'notpass',
+		CASE WHEN m.sys_status=4 THEN m.num ELSE 0 END 'notUse'
+		FROM ( SELECT u.name NAME,WEEK(DATE_ADD(e.create_time, INTERVAL -1 DAY))
+		DAY, e.sys_status ,COUNT(*) num
+		FROM api_event_entry e,sys_user u
+		<where>
+			e.user_id=u.id AND
+			e.sys_status!=0 AND e.sys_status!=4 
+			<if test="id != null and id != '' ">
+				and e.user_id = #{id}
+			</if>
+			<if test="dateStart != null and dateStart != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') >=#{dateStart}
+			</if>
+			<if test="dateEnd != null and dateEnd != '' ">
+				and DATE_FORMAT(e.create_time, '%Y-%m-%d') <![CDATA[<=]]>#{dateEnd}
+			</if>
+		</where>
+		GROUP BY DAY,e.sys_status) m)t GROUP BY t.day ORDER BY DAY )z
+	</select>
+
+
+
+	<select id="getCustomerType" resultType="com.geo.rcs.modules.sys.entity.SysUser">
+		select
+		id,name
+		from sys_user
+	</select>
+</mapper>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.field.dao.EngineFieldMapper" >
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.rule.field.entity.EngineField" >
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="show_name" jdbcType="VARCHAR" property="showName"/>
+        <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+        <result column="rules_id" jdbcType="BIGINT" property="rulesId" />
+        <result column="condition_id" jdbcType="BIGINT" property="conditionId" />
+        <result column="operator" jdbcType="VARCHAR" property="operator" />
+        <result column="describ" jdbcType="VARCHAR" property="describ" />
+        <result column="active" jdbcType="INTEGER" property="active" />
+        <result column="verify" jdbcType="INTEGER" property="verify" />
+        <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+        <result column="value" jdbcType="VARCHAR" property="value" />
+        <result column="value_desc" jdbcType="VARCHAR" property="valueDesc"/>
+        <result column="unique_code" jdbcType="BIGINT" property="uniqueCode" />
+        <result column="field_type" jdbcType="INTEGER" property="fieldType" />
+        <result column="parameter" jdbcType="VARCHAR" property="parameter"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, show_name, field_id, field_name, rules_id, condition_id, operator, describ, active, verify,
+        add_user, add_time, value, value_desc, unique_code, field_type, parameter
+    </sql>
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField" useGeneratedKeys="true" keyProperty="id" >
+        insert into engine_fields
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="rulesId != null" >
+                rules_id,
+            </if>
+            <if test="conditionId != null" >
+                condition_id,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="operator != null" >
+                operator,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="fieldId != null" >
+                field_id,
+            </if>
+            <if test="fieldTypeId != null" >
+                field_type_id,
+            </if>
+            <if test="fieldRawName != null" >
+                field_type,
+            </if>
+            <if test="parameter != null" >
+                parameter,
+            </if>
+            <if test="field_name != null" >
+                fieldName,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="rulesId != null" >
+                #{rulesId},
+            </if>
+            <if test="conditionId != null" >
+                #{conditionId},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="operator != null" >
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="addTime != null" >
+                #{addTime},
+            </if>
+            <if test="fieldId != null" >
+                #{fieldId},
+            </if>
+            <if test="fieldTypeId != null" >
+                #{fieldTypeId},
+            </if>
+            <if test="fieldRawName != null" >
+                #{fieldRawName},
+            </if>
+            <if test="parameter != null" >
+                #{parameter},
+            </if>
+            <if test="fieldName != null" >
+                #{fieldName},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertSelectiveEn" parameterType="com.geo.rcs.modules.rule.field.entity.EngineField" useGeneratedKeys="true" keyProperty="id" >
+        insert into engine_fields
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="rulesId != null" >
+                rules_id,
+            </if>
+            <if test="conditionId != null" >
+                condition_id,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="operator != null" >
+                operator,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="fieldId != null" >
+                field_id,
+            </if>
+            <if test="fieldType != null" >
+                field_type,
+            </if>
+            <if test="fieldTypeId != null" >
+                field_type_id,
+            </if>
+            <if test="fieldRawName != null" >
+                field_type,
+            </if>
+            <if test="parameter != null" >
+                parameter,
+            </if>
+            <if test="fieldName != null" >
+                field_name,
+            </if>
+            <if test="uniqueCode != null" >
+                unique_code,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="rulesId != null" >
+                #{rulesId},
+            </if>
+            <if test="conditionId != null" >
+                #{conditionId},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="operator != null" >
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="addTime != null" >
+                #{addTime},
+            </if>
+            <if test="fieldId != null" >
+                #{fieldId},
+            </if>
+            <if test="fieldType != null" >
+                #{fieldType},
+            </if>
+            <if test="fieldTypeId != null" >
+                #{fieldTypeId},
+            </if>
+            <if test="fieldRawName != null" >
+                #{fieldRawName},
+            </if>
+            <if test="parameter != null" >
+                #{parameter},
+            </if>
+            <if test="fieldName != null" >
+                #{fieldName},
+            </if>
+            <if test="uniqueCode != null" >
+                #{uniqueCode},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField" useGeneratedKeys="true" keyProperty="id">
+        update engine_fields
+        <set>
+            <if test="rulesId != null">
+                rules_id = #{rulesId},
+            </if>
+            <if test="conditionId != null">
+                condition_id = #{conditionId},
+            </if>
+            <if test="describ != null">
+                describ = #{describ},
+            </if>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="fieldType != null">
+                field_id = #{fieldType},
+            </if>
+            <if test="parameter != null">
+                parameter = #{parameter},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeySelectiveEn" parameterType="com.geo.rcs.modules.rule.field.entity.EngineField" useGeneratedKeys="true" keyProperty="id">
+        update engine_fields
+        <set>
+            <if test="rulesId != null">
+                rules_id = #{rulesId},
+            </if>
+            <if test="conditionId != null">
+                condition_id = #{conditionId},
+            </if>
+            <if test="describ != null">
+                describ = #{describ},
+            </if>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="fieldId != null">
+                field_id = #{fieldId},
+            </if>
+            <if test="fieldType != null">
+                field_type = #{fieldType},
+            </if>
+            <if test="parameter != null">
+                parameter = #{parameter},
+            </if>
+            <if test="fieldName != null">
+                field_name = #{fieldName},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select ef.*,ft.type_name from engine_raw_fields ef  left join engine_field_type ft on ft.id = ef.field_type
+        WHERE 1=1
+        <if test="name != null">
+            AND CONCAT(ef.id,ef.name,ef.add_user) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="fieldType != null">
+            and ef.field_type =#{fieldType}
+        </if>
+        <if test="active != null">
+            and ef.active = #{active}
+        </if>
+        <if test="dataType != null">
+            and ef.data_type =#{dataType}
+        </if>
+        AND ef.verify > 0 order by ef.add_time desc
+    </select>
+
+    <select id="findInterById" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select DISTINCT eri.* from engine_raw_inter eri left join engine_raw_fields erf on erf.`inter_id` = eri.id where erf.id in (
+        select ef.field_id from engine_fields ef where ef.id in
+        <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        )
+    </select>
+    <select id="findInterParmById" resultType="java.lang.String">
+        select eri.parameters from engine_raw_inter eri left join `engine_raw_fields` erf on erf.inter_id = eri.id where erf.id = #{id}
+    </select>
+    <select id="getFieldType" resultType="com.geo.rcs.modules.rule.field.entity.FieldType">
+        select * from engine_field_type
+    </select>
+    <select id="getInterName" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select id,describ from engine_raw_inter
+    </select>
+
+    <insert id="addFieldBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into engine_fields
+        (rules_id,condition_id,describ,operator,add_user,add_time,field_id,parameter,field_name)
+        values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.rulesId},#{item.conditionId},#{item.describ},#{item.operator},#{item.addUser},#{item.addTime},#{item.fieldType},#{item.parameter},#{item.fieldName})
+        </foreach>
+    </insert>
+
+    <select id="selectByConditionId" parameterType="java.lang.Long">
+        select id from engine_fields where condition_id = #{id}
+    </select>
+    <delete id="deleteBatch" parameterType="Long">
+        delete from engine_fields where id in
+        <foreach item="item" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="selectFieldForCon"  resultType="com.geo.rcs.modules.rule.field.entity.EngineField">
+        select ef.*,ft.id as field_type from engine_fields ef left join engine_raw_fields erf on ef.field_id = erf.id  left join engine_field_type ft on erf.field_type = ft.id where condition_id = #{id}
+    </select>
+    <delete id="deleteByRulesId" parameterType="java.lang.Long">
+        delete from engine_fields where rules_id = #{id}
+    </delete>
+    <delete id="deleteByArray">
+       delete from engine_fields where id in
+        <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByConId" parameterType="java.lang.Long">
+        delete from engine_fields where condition_id = #{id}
+    </delete>
+    <select id="selectFieldByRuleId" parameterType="java.lang.Long" resultType="Long">
+        select ef.id from engine_fields ef left join engine_conditions ec on ef.condition_id = ec.id left join engine_rule er on ec.rule_id = er.id where er.id = #{id}
+    </select>
+    <select id="getAllEngineRawField" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select erf.*,eri.name as inter_name from engine_raw_fields erf left join engine_raw_inter eri on erf.inter_id = eri.id where erf.active = 1
+    </select>
+    <select id="getFieldById" resultType="com.geo.rcs.modules.rule.field.entity.EngineField">
+        select * from engine_fields where id = #{id}
+    </select>
+    <select id="findRulesByFieldId" resultType="com.geo.rcs.modules.rule.ruleset.entity.EngineRules">
+        select er.id,er.active,er.verify,er.parameters from engine_rules er left join engine_fields ef on ef.rules_id = er.id where ef.id = #{id}
+    </select>
+    <!-- 查询在用的字段 -->
+    <select id="selectRulesFieldUse" resultType="Long">
+        select field_id
+        from   engine_fields ef RIGHT join engine_rules er  ON ef.rules_id=er.id
+    </select>
+
+    <select id="getFieldNameFromInnerName" resultType="String">
+        select name from engine_raw_fields where inter_id = (SELECT id FROM `engine_raw_inter` where name = #{innerName})
+    </select>
+</mapper>

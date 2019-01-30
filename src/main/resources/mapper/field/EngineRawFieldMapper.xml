@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.field.dao.EngineRawFieldMapper" >
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.rule.field.entity.EngineRawField" >
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="inter_id" jdbcType="BIGINT" property="interId" />
+        <result column="field_type" jdbcType="INTEGER" property="fieldType" />
+        <result column="data_type" jdbcType="INTEGER" property="dataType" />
+        <result column="describ" jdbcType="VARCHAR" property="describ" />
+        <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+        <result column="data_type_name" jdbcType="VARCHAR" property="dataTypeName" />
+        <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+        <result column="active" jdbcType="INTEGER" property="active" />
+        <result column="verify" jdbcType="INTEGER" property="verify" />
+        <result column="inter_name" jdbcType="VARCHAR" property="interName" />
+        <result column="add_user" jdbcType="VARCHAR" property="addUser" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+        <result column="describtion" jdbcType="VARCHAR" property="describtion"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, name, inter_id, field_type, data_type, describ, active, verify,
+        add_user, add_time, describtion
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"  parameterType="java.lang.Long" >
+        select
+        ef.*,eft.type_name,edt.type_name as data_type_name
+        from engine_raw_fields ef left join engine_field_type eft on eft.id = ef.field_type left join engine_data_type edt on edt.id = ef.data_type
+        where ef.id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from engine_fields
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteFieldAdmin" parameterType="java.lang.Long" >
+        delete from engine_raw_fields
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insertToRawFields" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField" useGeneratedKeys="true" keyProperty="id" >
+        insert into engine_raw_fields
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="describ != null" >
+                describ,
+            </if>
+            <if test="active != null" >
+                active,
+            </if>
+            <if test="verify != null" >
+                verify,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="fieldType != null" >
+                field_type,
+            </if>
+            <if test="dataType != null" >
+                data_type,
+            </if>
+            <if test="parameter != null" >
+                parameter,
+            </if>
+            <if test="describtion != null" >
+                describtion,
+            </if>
+            <if test="interId != null" >
+                inter_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                #{name},
+            </if>
+            <if test="describ != null" >
+                #{describ},
+            </if>
+            <if test="active != null" >
+                #{active},
+            </if>
+            <if test="verify != null" >
+                #{verify},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="addTime != null" >
+                #{addTime},
+            </if>
+            <if test="fieldType != null" >
+                #{fieldType},
+            </if>
+            <if test="dataType != null" >
+                #{dataType},
+            </if>
+            <if test="describtion != null" >
+                #{describtion},
+            </if>
+            <if test="interId != null" >
+                #{interId},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        update engine_raw_fields
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="describ != null">
+                describ = #{describ},
+            </if>
+            <if test="active != null">
+                active = #{active},
+            </if>
+            <if test="addUser != null">
+                add_user = #{addUser},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="dataType != null">
+                data_type = #{dataType},
+            </if>
+            <if test="fieldType != null">
+                field_type = #{fieldType},
+            </if>
+            <if test="describtion != null">
+                describtion = #{describtion},
+            </if>
+            <if test="interId != null" >
+                inter_id = #{interId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField" >
+        update engine_raw_fields
+        set show_name = #{showName,jdbcType=VARCHAR},
+        field_name = #{fieldName,jdbcType=VARCHAR},
+        rules_id = #{rulesId,jdbcType=BIGINT},
+        condition_id = #{conditionId,jdbcType=BIGINT},
+        operator = #{operator,jdbcType=VARCHAR},
+        describ = #{describ,jdbcType=VARCHAR},
+        active = #{active,jdbcType=INTEGER},
+        verify = #{verify,jdbcType=INTEGER},
+        add_user = #{addUser,jdbcType=VARCHAR},
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+        value = #{value,jdbcType=VARCHAR},
+        value_desc = #{valueDesc,jdbcType=VARCHAR},
+        unique_code = #{uniqueCode,jdbcType=BIGINT},
+        field_type = #{fieldType},
+        parameter = #{parameter,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <!-- 分页查询
+    AND  ef.id LIKE CONCAT ('%',#{name},'%') OR ef.name  LIKE CONCAT ('%',#{name},'%') OR ef.add_user LIKE CONCAT ('%',#{name},'%')
+    -->
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select ef.*,ft.type_name,eri.describ as inter_name from engine_raw_fields ef  left join engine_data_type edt on ef.data_type = edt.id left join engine_field_type ft on ft.id = ef.field_type left join engine_raw_inter eri on eri.id = ef.inter_id
+        WHERE 1=1
+        <if test="name != null">
+            AND CONCAT(ef.id,ef.name,ef.add_user,ef.describ) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="fieldType != null">
+            and ef.field_type =#{fieldType}
+        </if>
+        <if test="interId != null">
+            and ef.inter_id =#{interId}
+        </if>
+        <if test="dataType != null">
+            and ef.data_type =#{dataType}
+        </if>
+         and ef.active  = 1 order by ef.add_time desc
+    </select>
+    <select id="getGeoFieldList" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select ef.*,ft.type_name,eri.describ as inter_name from engine_raw_fields ef  left join engine_field_type ft on ft.id = ef.field_type left join engine_raw_inter eri on eri.id = ef.inter_id
+        WHERE 1=1
+        <if test="name != null">
+            AND CONCAT(ef.id,ef.name,ef.add_user) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="fieldType != null">
+            and ef.field_type =#{fieldType}
+        </if>
+        <if test="interId != null">
+            and ef.inter_id =#{interId}
+        </if>
+        <if test="active != null">
+            and ef.active = #{active}
+        </if>
+        <if test="dataType != null">
+            and ef.data_type =#{dataType}
+        </if>
+        order by ef.id
+    </select>
+    <select id="queryByTypeAndName" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select * from engine_raw_fields where field_type = #{fieldType} and name = #{name} and add_user = #{addUser}
+    </select>
+
+    <!--查uniquecode-->
+    <select id="queryUniquecodeByAdduser" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        SELECT su.unique_code from sys_user su LEFT JOIN engine_raw_fields er on er.add_user =su.name where er.add_user = #{addUser}
+    </select>
+
+    <select id="findById" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select *  from  engine_raw_fields where condition_id = #{id}
+    </select>
+    <select id="findInterParById" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select eri.parameters from engine_raw_inter eri left join engine_raw_fields erf on erf.`inter_id` = eri.id where erf.id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="findInterById" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select DISTINCT eri.* from engine_raw_inter eri left join engine_raw_fields erf on erf.`inter_id` = eri.id where erf.id in (
+        select ef.field_id from engine_fields ef where ef.id in
+        <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        )
+    </select>
+    <select id="findInterParmById" resultType="java.lang.String">
+        select eri.parameters from engine_raw_inter eri left join `engine_raw_fields` erf on erf.inter_id = eri.id where erf.id = #{id}
+    </select>
+    <select id="getFieldType" resultType="com.geo.rcs.modules.rule.field.entity.FieldType">
+        select * from engine_field_type
+    </select>
+    <select id="getFieldName" resultType="com.geo.rcs.modules.rule.field.entity.FieldType">
+        select id,name from engine_raw_fields
+    </select>
+    <select id="getInterName" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select id,describ from engine_raw_inter
+    </select>
+    <update id="updateFieldVerify" parameterType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        update engine_raw_fields set verify = #{verify} where id = #{id}
+    </update>
+    <update id="updateFieldSelect" parameterType="com.geo.rcs.modules.approval.entity.PatchData" >
+        update engine_raw_fields
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="describ != null">
+                describ = #{describ,jdbcType=VARCHAR},
+            </if>
+            <if test="active != null">
+                active = #{active,jdbcType=INTEGER},
+            </if>
+            <if test="verify != null">
+                verify = #{verify,jdbcType=INTEGER},
+            </if>
+            <if test="fieldType != null">
+                field_type = #{fieldType,jdbcType=VARCHAR},
+            </if>
+            <if test="parameter">
+                parameter = #{parameter,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{onlyId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getFieldNameById" resultType="com.geo.rcs.modules.rule.field.entity.EngineRawField">
+        select id,describ from engine_raw_fields where field_type = #{fieldType} and  verify = 1 and active = 1
+    </select>
+
+    <select id="selectFieldForCon"  resultType="com.geo.rcs.modules.rule.field.entity.EngineField">
+        select ef.*,ft.id as field_type from engine_fields ef left join engine_raw_fields erf on ef.field_id = erf.id  left join engine_field_type ft on erf.field_type = ft.id where condition_id = #{id}
+    </select>
+    <select id="selectInterByFieldId" resultType="com.geo.rcs.modules.rule.inter.entity.EngineInter">
+        select eri.* from engine_raw_inter eri left join engine_raw_fields erf on erf.inter_id = eri.id where erf.id = #{id}
+    </select>
+    <select id="getFieldDataType" resultType="com.geo.rcs.modules.rule.field.entity.FieldDataType">
+        select * from engine_data_type
+    </select>
+</mapper>

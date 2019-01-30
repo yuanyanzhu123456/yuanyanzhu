@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.monitor.dao.ScheduleJobMapper">
+    <select id="queryObjectByUserId" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+		select * from monitor_jobs where job_id = #{id} and user_id = #{userId}
+	</select>
+
+    <select id="queryObject" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select * from monitor_jobs where job_id = #{id}
+    </select>
+
+    <select id="queryList" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob" >
+        select * from monitor_jobs
+        <where>
+            user_id = #{userId} AND status != 3 AND status != 5
+            <if test="beanName != null and beanName.trim() != ''">
+                bean_name like concat('%', #{beanName}, '%')
+            </if>
+        </where>
+        <if test="offset != null and limit != null ">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="getAllDimension" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select dimension from monitor_jobs where status = 0
+    </select>
+
+
+    <select id="queryListByUserId" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select mj.*,count(mtp.id) as taskCount,sum(mtp.execute_status =3) as alarmCount
+        from monitor_jobs mj
+        left join ${taskTableName} mtp
+        on mtp.job_id = mj.job_id
+        where mj.user_id = #{userId} and mj.status !=3
+        and mj.status !=5 and mj.status != 6 group by mj.job_id
+        order by mj.job_id desc
+        <if test="offset != null and limit != null ">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryOverList" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select * from monitor_jobs
+        <where>
+            user_id = #{userId}
+            AND
+            status = #{status}
+            <if test="beanName != null and beanName.trim() != ''">
+                and bean_name like concat('%', #{beanName}, '%')
+            </if>
+        </where>
+        <if test="offset != null and limit != null ">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="queryTotal" resultType="int">
+        select count(1) from monitor_jobs
+        <where>
+            user_id = #{userId}
+            AND
+            status !=3
+            and status !=5 and status != 6
+            <if test="beanName != null and beanName.trim() != ''">
+                and bean_name like concat('%', #{beanName}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="queryOverTotal" resultType="int">
+        select count(1) from monitor_jobs
+        <where>
+            user_id = #{userId}
+            AND
+            status = #{status}
+            <if test="beanName != null and beanName.trim() != ''">
+                and bean_name like concat('%', #{beanName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.geo.rcs.modules.monitor.entity.ScheduleJob" useGeneratedKeys="true"
+            keyProperty="jobId">
+		insert into monitor_jobs
+		(
+			`bean_name`, 
+			`job_name`,
+			`method_name`,
+			`cron_expression`,
+			`status`,
+			`priority`,
+			`group`,
+			`upper_limit`,
+			`create_time`,
+			`update_time`,
+			`remark`,
+			`user_id`,
+			`dimension`,
+			`cycle_num`,
+			`monitor_unit`,
+			`interval`,
+			`hit_policy`,
+			`alarm_email`
+		)
+		values
+		(
+			#{beanName},
+			#{jobName},
+			#{methodName},
+			#{cronExpression},
+			#{status},
+			#{priority},
+			#{group},
+			#{upperLimit},
+			#{createTime},
+			#{updateTime},
+			#{remark},
+			#{userId},
+			#{dimension},
+			#{cycleNum},
+			#{monitorUnit},
+			#{interval},
+			#{hitPolicy},
+			#{alarmEmail}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        update monitor_jobs
+        <set>
+            <if test="jobName != null">`job_name` = #{jobName},</if>
+            <if test="beanName != null">`bean_name` = #{beanName},</if>
+            <if test="methodName != null">`method_name` = #{methodName},</if>
+            <if test="cronExpression != null">`cron_expression` = #{cronExpression},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="priority != null">`priority` = #{priority},</if>
+            <if test="group != null">`group` = #{group},</if>
+            <if test="upperLimit != null">`upper_limit` = #{upperLimit},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="cycleNum != null">`cycle_num` = #{cycleNum},</if>
+            <if test="dimension != null">`dimension` = #{dimension},</if>
+            <if test="cycleNum != null">`cycle_num` = #{cycleNum},</if>
+            <if test="monitorUnit != null">`monitor_unit` = #{monitorUnit},</if>
+            <if test="monitoredNum != null">`monitored_num` = #{monitoredNum},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="interval != null">`interval` = #{interval},</if>
+            <if test="hitPolicy != null">`hit_policy` = #{hitPolicy},</if>
+            <if test="alarmEmail != null">`alarm_email` = #{alarmEmail},</if>
+        </set>
+        where job_id = #{jobId} AND user_id = #{userId}
+
+    </update>
+
+    <!-- 批量更新状态 -->
+    <update id="updateBatch">
+        update monitor_jobs set status = #{status} where job_id in
+        <foreach item="jobId" collection="list" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBatch">
+        delete from monitor_jobs where job_id in
+        <foreach item="jobId" collection="array" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+
+    <select id="queryJobStatusNum" parameterType="java.lang.Long" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+		SELECT job_id,
+		COUNT(job_id) jobTotal,
+		SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) ingJobCount,
+		SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) overJobCount,
+		SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) stopJobCount,
+		SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) failJobCount
+		FROM monitor_jobs
+		WHERE user_id = #{userId} AND status != 6
+	</select>
+    <select id="beforeDelete" parameterType="map" resultType="com.geo.rcs.modules.monitor.entity.ScheduleTask">
+        select * from ${taskTableName} where job_id = #{jobId} and user_id = #{userId} and distribute_status = 1 and  #{cycleNum} > distribute_num
+    </select>
+
+    <select id="scanOutOfDateJobs" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select job_id,user_id from monitor_jobs where status = 5
+    </select>
+
+    <select id="selectAllUsedJobs" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+        select job_id,user_id from monitor_jobs where status = 0
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="map">
+        delete from
+        monitor_jobs
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </delete>
+
+    <!--查询报警数及任务名-->
+    <select id="queryAlarm" resultType="com.geo.rcs.modules.monitor.entity.ScheduleJob">
+       SELECT * from monitor_jobs WHERE job_id = #{jobId}
+    </select>
+
+    <!--处理时长-->
+    <select id="queryHandleTime" resultType="java.lang.Long">
+        SELECT TIME_TO_SEC(TIMEDIFF(max_time,min_time)) FROM  (
+        SELECT MIN(create_time) min_time,MAX(create_time) max_time FROM ${taskTableName}
+        WHERE user_id = #{userId} AND job_id = #{jobId}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{yesterday}) a
+    </select>
+
+    <!--获取条数字典-->
+    <select id="getCountMap" resultType="java.util.Map">
+        SELECT IFNULL(SUM(CASE WHEN STATUS = 0 THEN 1 ELSE 0 END),0) failCount,
+        IFNULL(SUM(CASE WHEN STATUS = 1 THEN 1 ELSE 0 END),0) normalCount,
+        IFNULL(SUM(CASE WHEN STATUS = 3 THEN 1 ELSE 0 END),0) exceptionCount
+        FROM monitor_task_log_0_part
+        WHERE user_id = #{userId} AND job_id = #{jobId}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{yesterday}
+    </select>
+
+    <!--报警清单-->
+    <select id="getAlarmData" resultType="java.util.Map">
+        select mt.name,mt.id_number,mt.cid,IFNULL(mt.task_status, 0) task_status,mt.update_time,mtl.status execute_status,mt.distribute_num,mj.cycle_num
+        from monitor_jobs mj
+        left join ${taskTableName} mt
+        on mj.job_id = mt.job_id
+        LEFT JOIN ${taskLogTableName} mtl
+        on mt.id = mtl.task_id
+        where mtl.job_id = #{jobId}
+        and mtl.user_id = #{userId} and mtl.status = 3
+        AND DATE_FORMAT(mtl.create_time, '%Y-%m-%d') = #{yesterday}
+    </select>
+
+</mapper>

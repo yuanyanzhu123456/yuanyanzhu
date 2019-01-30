@@ -1,0 +1,1222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geo.rcs.modules.event.dao.EventEntryMapper">
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.event.entity.EventEntry">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="channel" jdbcType="VARCHAR" property="channel"/>
+        <result column="business_id" jdbcType="BIGINT" property="businessId"/>
+        <result column="sence_id" jdbcType="BIGINT" property="senceId"/>
+        <result column="rules_id" jdbcType="BIGINT" property="rulesId"/>
+        <result column="rules_name" jdbcType="VARCHAR" property="rulesName"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="acct_no" jdbcType="VARCHAR" property="acctNo"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="approver_id" jdbcType="BIGINT" property="approverId"/>
+        <result column="approver_name" jdbcType="VARCHAR" property="approverName"/>
+        <result column="sys_approval_time" jdbcType="TIMESTAMP" property="sysApprovalTime"/>
+        <result column="man_approval_time" jdbcType="TIMESTAMP" property="manApprovalTime"/>
+        <result column="sys_status" jdbcType="TINYINT" property="sysStatus"/>
+        <result column="man_status" jdbcType="TINYINT" property="manStatus"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="result_map" jdbcType="VARCHAR" property="resultMap"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="isp" jdbcType="VARCHAR" property="isp"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, channel, business_id, sence_id, rules_id, user_id, rules_name, nickname, user_name, id_card,
+    acct_no, mobile, approver_id, approver_name, sys_approval_time, man_approval_time, 
+    sys_status, man_status, status, remark, result_map, create_time, province, city, isp,type
+  </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from api_event_entry
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from api_event_entry
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <insert id="insert" parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+    insert into api_event_entry (
+      id,
+      channel,
+      business_id,
+      sence_id,
+      rules_id,
+      rules_name,
+      user_id,
+      nickname,
+      user_name,
+      id_card,
+      acct_no,
+      mobile,
+      approver_id,
+      approver_name,
+      sys_approval_time,
+      man_approval_time,
+      sys_status,
+      man_status,
+      status,
+      remark,
+      result_map,
+      create_time,
+      province,
+      city,
+      isp,
+      type,
+      expend_time,
+      source_time,
+      engine_time
+    )
+    values (
+      #{id,jdbcType=BIGINT},
+      #{channel,jdbcType=VARCHAR},
+      #{businessId,jdbcType=BIGINT},
+      #{senceId,jdbcType=BIGINT},
+      #{rulesId,jdbcType=BIGINT},
+      #{rulesName,jdbcType=VARCHAR},
+      #{userId,jdbcType=BIGINT},
+      #{nickname,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR},
+      #{idCard,jdbcType=VARCHAR},
+      #{acctNo,jdbcType=VARCHAR},
+      #{mobile,jdbcType=VARCHAR},
+      #{approverId,jdbcType=BIGINT},
+      #{approverName,jdbcType=VARCHAR},
+      #{sysApprovalTime,jdbcType=TIMESTAMP},
+      #{manApprovalTime,jdbcType=TIMESTAMP},
+      #{sysStatus,jdbcType=TINYINT},
+      #{manStatus,jdbcType=TINYINT},
+      #{status,jdbcType=TINYINT},
+      #{remark,jdbcType=VARCHAR},
+      #{resultMap,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{province,jdbcType=VARCHAR},
+      #{city,jdbcType=VARCHAR},
+      #{isp,jdbcType=VARCHAR},
+      #{type,jdbcType=INTEGER},
+      #{expendTime,jdbcType=INTEGER},
+      #{sourceTime,jdbcType=INTEGER},
+      #{engineTime,jdbcType=INTEGER}
+    )
+  </insert>
+    <insert id="saveForDecision" parameterType="com.geo.rcs.modules.event.entity.EventEntry" useGeneratedKeys="true" keyProperty="id"> >
+        insert into decision_event
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="channel != null" >
+                channel,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="resultMap != null" >
+                result_map,
+            </if>
+            <if test="expendTime != null" >
+                expend_time,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="appStatus != null" >
+                app_status,
+            </if>
+            <if test="sysStatus != null" >
+                sys_status,
+            </if>
+            <if test="decisionId != null" >
+                decision_id,
+            </if>
+            <if test="realName != null" >
+                real_name,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="idCard != null" >
+                id_card,
+            </if>
+            <if test="addUser != null" >
+                add_user,
+            </if>
+            <if test="businessId != null" >
+                business_id,
+            </if>
+            <if test="sceneId != null" >
+                scene_id,
+            </if>
+            <if test="score != null" >
+                score,
+            </if>
+            <if test="excuteFlow != null" >
+                excute_flow,
+            </if>
+            <if test="parameters != null" >
+                parameters,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="channel != null" >
+                #{channel},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="resultMap != null" >
+                #{resultMap},
+            </if>
+            <if test="expendTime != null" >
+                #{expendTime},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="appStatus != null" >
+                #{appStatus},
+            </if>
+            <if test="sysStatus != null" >
+                #{sysStatus},
+            </if>
+            <if test="decisionId != null" >
+                #{decisionId},
+            </if>
+            <if test="realName != null" >
+                #{realName},
+            </if>
+            <if test="mobile != null" >
+                #{mobile},
+            </if>
+            <if test="idCard != null" >
+                #{idCard},
+            </if>
+            <if test="addUser != null" >
+                #{addUser},
+            </if>
+            <if test="businessId != null" >
+                #{businessId},
+            </if>
+            <if test="sceneId != null" >
+                #{sceneId},
+            </if>
+            <if test="score != null" >
+                #{score},
+            </if>
+            <if test="excuteFlow != null" >
+                #{excuteFlow},
+            </if>
+            <if test="parameters != null" >
+                #{parameters},
+            </if>
+            <if test="remark != null" >
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.geo.rcs.modules.event.entity.EventEntry" useGeneratedKeys="true" keyProperty="id">
+        insert into api_event_entry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="businessId != null">
+                business_id,
+            </if>
+            <if test="senceId != null">
+                sence_id,
+            </if>
+            <if test="rulesId != null">
+                rules_id,
+            </if>
+            <if test="rulesName != null">
+                rules_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="idCard != null">
+                id_card,
+            </if>
+            <if test="acctNo != null">
+                acct_no,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="approverId != null">
+                approver_id,
+            </if>
+            <if test="approverName != null">
+                approver_name,
+            </if>
+            <if test="sysApprovalTime != null">
+                sys_approval_time,
+            </if>
+            <if test="manApprovalTime != null">
+                man_approval_time,
+            </if>
+            <if test="sysStatus != null">
+                sys_status,
+            </if>
+            <if test="manStatus != null">
+                man_status,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="resultMap != null">
+                result_map,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="isp != null">
+                isp,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="expendTime != null">
+                expend_time,
+            </if>
+            <if test="sourceTime != null">
+                source_time,
+            </if>
+            <if test="engineTime != null">
+                engine_time,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="channel != null">
+                #{channel,jdbcType=VARCHAR},
+            </if>
+            <if test="businessId != null">
+                #{businessId,jdbcType=BIGINT},
+            </if>
+            <if test="senceId != null">
+                #{senceId,jdbcType=BIGINT},
+            </if>
+            <if test="rulesId != null">
+                #{rulesId,jdbcType=BIGINT},
+            </if>
+            <if test="rulesName != null">
+                #{rulesName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="acctNo != null">
+                #{acctNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="approverId != null">
+                #{approverId,jdbcType=BIGINT},
+            </if>
+            <if test="approverName != null">
+                #{approverName,jdbcType=VARCHAR},
+            </if>
+            <if test="sysApprovalTime != null">
+                #{sysApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="manApprovalTime != null">
+                #{manApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sysStatus != null">
+                #{sysStatus,jdbcType=TINYINT},
+            </if>
+            <if test="manStatus != null">
+                #{manStatus,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="resultMap != null">
+                #{resultMap,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="isp != null">
+                #{isp,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="expendTime != null">
+                #{expendTime,jdbcType=INTEGER},
+            </if>
+            <if test="sourceTime != null">
+                #{sourceTime,jdbcType=INTEGER},
+            </if>
+            <if test="engineTime != null">
+                #{engineTime,jdbcType=INTEGER},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+        update api_event_entry
+        <set>
+            <if test="channel != null">
+                channel = #{channel,jdbcType=VARCHAR},
+            </if>
+            <if test="businessId != null">
+                business_id = #{businessId,jdbcType=BIGINT},
+            </if>
+            <if test="senceId != null">
+                sence_id = #{senceId,jdbcType=BIGINT},
+            </if>
+            <if test="rulesId != null">
+                rules_id = #{rulesId,jdbcType=BIGINT},
+            </if>
+            <if test="rulesName != null">
+                rulesName = #{rulesName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="acctNo != null">
+                acct_no = #{acctNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="approverId != null">
+                approver_id = #{approverId,jdbcType=BIGINT},
+            </if>
+            <if test="approverName != null">
+                approver_name = #{approverName,jdbcType=VARCHAR},
+            </if>
+            <if test="sysApprovalTime != null">
+                sys_approval_time = #{sysApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="manApprovalTime != null">
+                man_approval_time = #{manApprovalTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sysStatus != null">
+                sys_status = #{sysStatus,jdbcType=TINYINT},
+            </if>
+            <if test="manStatus != null">
+                man_status = #{manStatus,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="resultMap != null">
+                result_map = #{resultMap,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                #{province，jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="isp != null">
+                #{isp,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+    update api_event_entry
+    set channel = #{channel,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=BIGINT},
+      sence_id = #{senceId,jdbcType=BIGINT},
+      rules_id = #{rulesId,jdbcType=BIGINT},
+      rules_name = #{rulesName,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      acct_no = #{acctNo,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      approver_id = #{approverId,jdbcType=BIGINT},
+      approver_name = #{approverName,jdbcType=VARCHAR},
+      sys_approval_time = #{sysApprovalTime,jdbcType=TIMESTAMP},
+      man_approval_time = #{manApprovalTime,jdbcType=TIMESTAMP},
+      sys_status = #{sysStatus,jdbcType=TINYINT},
+      man_status = #{manStatus,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      result_map = #{resultMap,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      isp = #{isp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="findByPage" resultType="com.geo.rcs.modules.event.entity.EventEntry" parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+        SELECT
+        id, channel, business_id, sence_id, rules_id, user_id, rules_name, nickname, user_name, id_card,
+        acct_no, mobile, approver_id, approver_name, sys_approval_time, man_approval_time,
+        sys_status, man_status, status, remark, result_map, create_time, province, city, isp,type
+        FROM `api_event_entry`
+        WHERE
+        1=1 and user_id = #{userId}
+        <if test="channel != null and channel != ''">
+            AND `channel` = #{channel}
+        </if>
+        <if test="businessId != null and businessId != ''">
+            AND `business_id` = #{businessId}
+        </if>
+        <if test="senceId != null and senceId != ''">
+            AND `sence_id` = #{senceId}
+        </if>
+        <if test="sysStatus != null and sysStatus != ''">
+            AND `sys_status` = #{sysStatus}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND `user_name` = #{userName}
+        </if>
+        <if test="rulesId != null and rulesId != ''">
+            AND `rules_id` = #{rulesId}
+        </if>
+        <if test="idCard != null and idCard != ''">
+            AND `id_card` = #{idCard}
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND `mobile` = #{mobile}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND `remark` = #{remark}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        order by id desc
+    </select>
+
+    <select id="getJobInfo" resultType="com.geo.rcs.modules.event.entity.EventHistoryLog" parameterType="com.geo.rcs.modules.event.entity.EventHistoryLog">
+        SELECT
+        COUNT(id) jobCount,
+        SUM(CASE WHEN job_status = 3 THEN 1 ELSE 0 END) successCount,
+        SUM(CASE WHEN job_status = 1 THEN 1 ELSE 0 END) stopCount,
+        SUM(CASE WHEN job_status = 2 THEN 1 ELSE 0 END) abortCount,
+        SUM(CASE WHEN job_status = 0 THEN 1 ELSE 0 END) runningCount,
+        SUM(CASE WHEN job_status = 4 THEN 1 ELSE 0 END) exceptCount
+        FROM `event_history_log`
+        WHERE
+        unique_code = #{uniqueCode}
+        <if test="modelName != null and modelName != ''">
+            AND `model_name` = #{modelName}
+        </if>
+        <if test="identify != null and identify != ''">
+            AND `identify` = #{identify}
+        </if>
+        <if test="jobType != null and jobType != ''">
+            AND `job_type` = #{jobType}
+        </if>
+        <if test="jobStatus != null and jobStatus != ''">
+            AND `job_status` = #{jobStatus}
+        </if>
+        <if test="modelType != null and modelType != ''">
+            AND `model_type` = #{modelType}
+        </if>
+        order by id
+    </select>
+    <select id="findEventLogByPage" resultType="com.geo.rcs.modules.event.entity.EventHistoryLog" parameterType="com.geo.rcs.modules.event.entity.EventHistoryLog">
+        SELECT
+        id,model_id,model_name,model_type,identify,unique_code,pass_num,refuse_num,artificial_num,invalid_num,file_name,entry_time,job_type,job_progress,job_status,task_num
+        FROM `event_history_log`
+        WHERE
+        unique_code = #{uniqueCode}
+        <if test="modelType != null and modelType != ''">
+            AND `model_type` = #{modelType}
+        </if>
+        order by entry_time
+    </select>
+
+    <select id="findEventStatByParam" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.vo.EventStatEntry">
+        SET @row_num = 0;
+        SELECT
+        id,
+        (@row_num := @row_num + 1) eventId,
+        user_id userId,
+        user_name userName,
+        province, city, isp,result_map,sys_status,man_status,nickname,
+        DATE_FORMAT(create_time, '%Y-%m-%d') eventTime,
+        COUNT(id) eventTotal,
+        SUM(CASE WHEN sys_status = 1 THEN 1 ELSE 0 END) passEventCount,
+        SUM(CASE WHEN sys_status = 2 THEN 1 ELSE 0 END) manualReviewCount,
+        SUM(CASE WHEN sys_status = 3 THEN 1 ELSE 0 END) refuseEventCount,
+        SUM(CASE WHEN sys_status = 4 THEN 1 ELSE 0 END) invalidEventCount
+        FROM api_event_entry
+        <where>
+            user_id = #{userId} AND sys_status != 0
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="ruleSetId != null and ruleSetId != ''">
+                AND rules_id = #{ruleSetId}
+            </if>
+        </where>
+        <if test="type == 'time'">
+            GROUP BY create_time
+        </if>
+        <if test="type == 'map'">
+            GROUP BY province
+        </if>
+    </select>
+
+    <select id="findAllFiledKV" resultType="java.util.Map">
+    SELECT NAME, describ FROM `engine_raw_fields`
+  </select>
+
+    <select id="findCustEventStatByParam" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.vo.EventStatEntry">
+        SET @row_num = 0;
+        SELECT
+        (@row_num := @row_num + 1) eventId,
+        user_id userId,
+        user_name userName,
+        province, city, isp,
+        DATE_FORMAT(create_time, '%Y-%m-%d') eventTime,
+        COUNT(id) eventTotal,
+        SUM(CASE WHEN sys_status = 1 THEN 1 ELSE 0 END) passEventCount,
+        SUM(CASE WHEN sys_status = 2 THEN 1 ELSE 0 END) manualReviewCount,
+        SUM(CASE WHEN sys_status = 3 THEN 1 ELSE 0 END) refuseEventCount,
+        SUM(CASE WHEN sys_status = 4 THEN 1 ELSE 0 END) invalidEventCount
+        FROM api_event_entry
+        <where>
+            sys_status != 0
+            <if test="userName != null and userName != ''">
+                AND user_name = #{userName}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        GROUP BY user_id, eventTime
+    </select>
+
+    <select id="findYesterdayEventStat" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.vo.EventStatEntry">
+        SET @row_num = 0;
+        SELECT
+        (@row_num := @row_num + 1) eventId,
+        user_id userId,
+        user_name userName,
+        rules_id rulesId,
+        province, city, isp,
+        DATE_FORMAT(create_time, '%Y-%m-%d') eventTime,
+        COUNT(id) eventTotal,
+        SUM(CASE WHEN sys_status = 1 THEN 1 ELSE 0 END) passEventCount,
+        SUM(CASE WHEN sys_status = 2 THEN 1 ELSE 0 END) manualReviewCount,
+        SUM(CASE WHEN sys_status = 3 THEN 1 ELSE 0 END) refuseEventCount,
+        SUM(CASE WHEN sys_status = 4 THEN 1 ELSE 0 END) invalidEventCount,
+        SUM(CASE WHEN sys_status = 5 THEN 1 ELSE 0 END) failEventCount
+        FROM api_event_entry
+        <where>
+            sys_status != 0 and user_id = #{userId}
+            <if test="rulesIdList != null and rulesIdList.size() > 0">
+                AND rules_id IN
+                <foreach collection="rulesIdList" index="index" item="rulesId" open="(" separator="," close=")">
+                    #{rulesId}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="senceId != null and senceId != '' ">
+                AND sence_id  =  #{senceId}
+            </if>
+            <if test="matchType != null">
+                and match_type = #{matchType}
+            </if>
+        </where>
+        GROUP BY rules_id
+    </select>
+    <select id="thisRuleSetEventStat" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.vo.EventStatEntry">
+        SELECT
+        *
+        FROM api_event_entry
+        <where>
+            user_id = #{userId} AND rules_id = #{ruleSetId}
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+
+        <if test="type == 'map'">
+            GROUP BY province
+        </if>
+    </select>
+
+    <select id="thisRuleSetRecentStat" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.entity.EventEntry">
+        SELECT
+        *
+        FROM api_event_entry
+        <where>
+            user_id = #{userId} AND rules_id = #{ruleSetId}
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="thisRuleSetEventTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        sys_status,create_time
+        FROM api_event_entry
+        <where>
+            user_id = #{userId} AND rules_id = #{ruleSetId}
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="thisRuleSetResultMap" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT
+        result_map
+        FROM api_event_entry
+        <where>
+            user_id = #{userId} AND rules_id = #{ruleSetId} and sys_status != 5
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </where>
+    </select>
+    <select id="getEntryDetail" resultType="com.geo.rcs.modules.event.entity.EventEntry">
+        select
+        <include refid="Base_Column_List"/>
+        from api_event_entry where id = #{entryId}
+    </select>
+    <!--首页进件统计-->
+    <select id="getEntryStatistic" resultType="java.util.Map">
+        select count(t1.create_time) total,t2.data onenum,t3.data sevennum from
+        api_event_entry t1,
+        (select totb.today-yestb.yesterday data from(select count(1) yesterday from api_event_entry where  create_time >= DATE_SUB(CURDATE(),INTERVAL 1 day) and create_time &lt; curdate()) yestb , (select count(1)today from api_event_entry where  create_time >= CURDATE() ) totb
+        )t2,
+        ( select t.data-y.data data from (select count(1) data from api_event_entry where create_time >= DATE_SUB(curdate(),INTERVAL 6 DAY)) t ,(select count(1) data from api_event_entry where create_time  &lt; date_sub(curdate(),INTERVAL 7 DAY) and  create_time >= DATE_SUB(curdate(),INTERVAL 13 DAY))y
+        ) t3
+  </select>
+    <!--首页总数统计-->
+    <select id="getStatisticTotal" resultType="java.util.Map">
+    SELECT t1.events,t2.modles,t3.customers,t4.users,t5.activeUsers from
+    (select count(id)events from api_event_entry ) t1,
+    (select count(id)modles from engine_rules) t2,
+   (select count(1) customers from sys_user su left join sys_role sr on su.role_id = sr.id WHERE  su.unique_code = su.id) t3,
+   ( select count(*) users from sys_user su left join sys_role sr on su.role_id = sr.id where su.id != su.unique_code) t4,
+    (select count(t.userid)activeUsers from (select distinct userid,username  from sys_login_log where date_format(createtime,'%Y-%m-%d')> date_format(DATE_SUB(curdate(),INTERVAL 31 DAY),'%Y-%m-%d')  )t) t5
+  </select>
+
+    <!--首页进件分析-->
+    <select id="getEntryAnalysisDay" resultType="java.util.Map" parameterType="map">
+   select date_format(a.create_time,'%Y-%m-%d') date,count(1) num from
+   ( select * from api_event_entry where date_format(create_time,'%Y-%m-%d')> date_format(DATE_SUB(curdate(),INTERVAL #{num}+1 DAY),'%Y-%m-%d') )a
+   group by date_format(a.create_time,'%Y-%m-%d')
+  </select>
+
+    <select id="getEntryAnalysisMonth" resultType="java.util.Map" parameterType="map">
+   select date_format(a.create_time,'%Y-%m') date,count(1) num from
+   ( select * from api_event_entry where date_format(create_time,'%Y-%m-%d')> date_format(DATE_SUB(curdate(),INTERVAL #{num}+1 DAY),'%Y-%m-%d') )a
+   group by date_format(a.create_time,'%Y-%m')
+  </select>
+
+    <select id="getEntryAnalysisHour" resultType="java.util.Map" parameterType="map">
+        select date_format(a.create_time,'%Y-%m-%d %H:00:00') date,count(1) num from
+        ( select * from api_event_entry where date_format(create_time,'%Y-%m-%d %H:00:00')> date_format(DATE_SUB(curdate(),INTERVAL #{num}+1 DAY),'%Y-%m-%d %H:00:00') )a
+        group by date_format(a.create_time,'%Y-%m-%d %H:00:00')
+    </select>
+    <!-- 导出excel 查询 -->
+    <select id="findByPageAll" resultType="java.util.Map"
+            parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+        select
+        concat((@rowNum:=@rowNum+1),'')
+        AS id,
+        s.* from
+        ( select de.channel,DATE_FORMAT(de.create_time,'%Y-%m-%d %H:%i:%s')
+        createTime,
+        (case de.sys_status
+        when 0 then '-'
+        when 1 then '通过'
+        when 2 then
+        (case de.man_status
+        when 0 then '人工审核'
+        when 1 then '通过'
+        when 2 then '拒绝'
+        end
+        )
+        when 3 then '拒绝'
+        when 4 then '失效'
+        end
+        )
+        sysStatus,
+        (case de.type
+        when 0 then '正常进件'
+        when 1 then '测试'
+        end
+        )
+        type,de.user_name userName,de.mobile,de.id_card idCard,ebt.type_name businessId,es.name senceId,de.rules_name
+        rulesName, de.approver_name approverName
+        from api_event_entry de
+        left JOIN engine_business_type ebt ON de.business_id=ebt.id
+        left JOIN engine_scenes es ON de.sence_id=es.id
+        WHERE
+        1=1
+        <if test="channel != null">
+            and de.channel = #{channel}
+        </if>
+        <if test="remark != null">
+            and de.remark = #{remark}
+        </if>
+        <if test="businessId != null">
+            and de.business_id = #{businessId}
+        </if>
+        <if test="senceId != null">
+            and de.sence_id = #{senceId}
+        </if>
+        <if test="rulesId != null">
+            and de.rules_id = #{rulesId}
+        </if>
+        <if test="userId != null">
+            and de.user_id = #{userId}
+        </if>
+        <if test="userName != null">
+            and de.user_name = #{userName}
+        </if>
+        <if test="idCard != null">
+            and de.id_card = #{idCard}
+        </if>
+        <if test="mobile != null">
+            and de.mobile = #{mobile}
+        </if>
+        <if test="sysStatus != null">
+            and de.sys_status = #{sysStatus}
+        </if>
+        <if test="manStatus != null">
+            and de.man_status = #{manStatus}
+        </if>
+        <if test="status != null">
+            and de.status = #{status}
+        </if>
+        <if test="createTime != null">
+            and de.create_time = #{createTime}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND de.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND de.create_time &lt;= #{endTime}
+        </if>
+        order by createTime) s,(Select (@rowNum :=0) ) b
+    </select>
+    <!-- 导出excel 查询 -->
+    <select id="findByPageIds" resultType="java.util.Map" parameterType="java.lang.Integer">
+        select
+        concat((@rowNum:=@rowNum+1),'')
+        AS id,
+        s.* from
+        (select de.channel,DATE_FORMAT(de.create_time,'%Y-%m-%d %H:%i:%s')
+        createTime,
+        (case de.sys_status
+        when 0 then '-'
+        when 1 then '通过'
+        when 2 then
+        (case de.man_status
+        when 0 then '人工审核'
+        when 1 then '通过'
+        when 2 then '拒绝'
+        end
+        )
+        when 3 then '拒绝'
+        when 4 then '失效'
+        end
+        )
+        sysStatus,
+        (case de.type
+        when 0 then '正常进件'
+        when 1 then '测试'
+        end
+        )
+        type,de.user_name userName,de.mobile,de.id_card idCard,ebt.type_name businessId,es.name senceId,de.rules_name
+        rulesName, de.approver_name approverName
+        from api_event_entry de
+        left JOIN engine_business_type ebt ON de.business_id=ebt.id
+        left JOIN engine_scenes es ON de.sence_id=es.id
+        WHERE
+        1=1 and de.id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by createTime) s,(Select (@rowNum :=0) ) b
+    </select>
+
+    <!-- 规则集进件总量分析-->
+    <select id="getEventCountTrend" parameterType="map" resultType="java.util.Map">
+        SELECT
+        <if test='type == "HOUR"'>
+            date_format(create_time,'%Y-%m-%d %H:00:00') as create_time,
+        </if>
+        <if test='type == "DAY"'>
+            date_format(create_time,'%Y-%m-%d') as create_time,
+        </if>
+        <if test='type == "MONTH"'>
+            date_format(create_time,'%Y-%m') as create_time,
+        </if>
+         count(id) as count FROM api_event_entry where
+        user_id = #{userId}
+        and sys_status != 0
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND sence_id = #{sceneId}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        <if test="rulesId != null and rulesId != ''">
+            and rules_id = #{rulesId}
+        </if>
+        group by ${type}(create_time)
+    </select>
+
+    <!-- statusTrend -->
+    <select id="getEventStatusTrend" parameterType="map" resultType="java.util.Map">
+        select  t.create_time ,sys_status, sum(t.count) as total from (
+        select sys_status, count(id) as count,
+        <if test='type == "HOUR"'>
+            date_format(create_time,'%Y-%m-%d %H:00:00') as create_time
+        </if>
+        <if test='type == "DAY"'>
+            date_format(create_time,'%Y-%m-%d') as create_time
+        </if>
+        <if test='type == "MONTH"'>
+            date_format(create_time,'%Y-%m') as create_time
+        </if>
+        from api_event_entry where sys_status != 0 and  create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND sence_id = #{sceneId}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and create_time BETWEEN #{startTime} and #{endTime}
+        </if>
+        <if test="rulesId != null and rulesId != ''">
+            and rules_id = #{rulesId}
+        </if>
+        group by create_time, sys_status
+        ) t GROUP BY t.create_time, sys_status;
+    </select>
+
+    <!--  耗时分析-->
+    <select id="getEventCostTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        select  t.create_time ,t.expend_level, sum(t.count) as total from (
+        select(
+        CASE
+        WHEN expend_time <![CDATA[ <= ]]> 500 THEN 1
+        WHEN expend_time > 500  and expend_time <![CDATA[ <= ]]> 1000 THEN 2
+        WHEN expend_time > 1000  and expend_time <![CDATA[ <= ]]> 2000 THEN 3
+        WHEN expend_time > 2000  and expend_time <![CDATA[ <= ]]> 5000 THEN 4
+        WHEN expend_time > 5000  and expend_time <![CDATA[ <= ]]> 10000 THEN 5
+        ELSE 6 END
+        ) as expend_level,
+        count(id) as count,
+        <if test='type == "HOUR"'>
+            date_format(create_time,'%Y-%m-%d %H:00:00') as create_time
+        </if>
+        <if test='type != "HOUR"'>
+            date_format(create_time,'%Y-%m-%d') as create_time
+        </if>
+        from api_event_entry
+        where
+        user_id = #{userId}
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND sence_id = #{sceneId}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})  group by create_time, expend_level
+        ) t GROUP BY t.create_time, t.expend_level
+    </select>
+
+
+    <!--  分数分析-->
+    <select id="getEventScoreTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        select  t.create_time ,t.score_level, sum(t.count) as total from (
+        select(
+        CASE
+        WHEN score <![CDATA[ <= ]]> 50 THEN 1
+        WHEN score > 50  and score <![CDATA[ <= ]]> 100 THEN 2
+        WHEN score > 100  and score <![CDATA[ <= ]]> 150 THEN 3
+        WHEN score > 150  and score <![CDATA[ <= ]]> 200 THEN 4
+        WHEN score > 200  and score <![CDATA[ <= ]]> 300 THEN 5
+        ELSE 6 END
+        ) as score_level,
+        count(id) as count,
+        <if test='type == "HOUR"'>
+            date_format(create_time,'%Y-%m-%d %H:00:00') as create_time
+        </if>
+        <if test='type != "HOUR"'>
+            date_format(create_time,'%Y-%m-%d') as create_time
+        </if>
+        from api_event_entry
+        where
+        user_id = #{userId} and score != "null"
+        <if test="sysStatus != null and sysStatus != ''">
+            AND sys_status = #{sysStatus}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND channel = #{channel}
+        </if>
+        <if test="sceneId != null and sceneId != ''">
+            AND sence_id = #{sceneId}
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND create_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        and create_time >=DATE_SUB(CURDATE(), INTERVAL #{param} ${type})  group by create_time, score_level
+        ) t GROUP BY t.create_time, t.score_level
+    </select>
+
+    <select id="getCountTrend" parameterType="java.util.Map"
+            resultType="com.geo.rcs.modules.event.vo.EventStatEntry">
+        SET @row_num = 0;
+        SELECT
+        COUNT(id) eventTotal,
+        SUM(CASE WHEN sys_status = 1 THEN 1 ELSE 0 END) passEventCount,
+        SUM(CASE WHEN sys_status = 2 THEN 1 ELSE 0 END) manualReviewCount,
+        SUM(CASE WHEN sys_status = 3 THEN 1 ELSE 0 END) refuseEventCount,
+        SUM(CASE WHEN sys_status = 4 THEN 1 ELSE 0 END) invalidEventCount,
+        SUM(CASE WHEN sys_status = 5 THEN 1 ELSE 0 END) failEventCount
+        FROM api_event_entry
+        <where>
+            user_id = #{userId}
+            <if test="sysStatus != null and sysStatus != ''">
+                AND sys_status = #{sysStatus}
+            </if>
+            <if test="channel != null and channel != ''">
+                AND channel = #{channel}
+            </if>
+            <if test="sceneId != null and sceneId != ''">
+                AND sence_id = #{sceneId}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="ruleSetId != null and ruleSetId != ''">
+                AND rules_id = #{ruleSetId}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="saveLog" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into event_history_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelId != null">
+                model_id,
+            </if>
+            <if test="modelName != null">
+                model_name,
+            </if>
+            <if test="modelType != null">
+                model_type,
+            </if>
+            <if test="identify != null">
+                identify,
+            </if>
+            <if test="uniqueCode != null">
+                unique_code,
+            </if>
+            <if test="taskNum != null">
+                task_num,
+            </if>
+            <if test="passNum != null">
+                pass_num,
+            </if>
+            <if test="refuseNum != null">
+                refuse_num,
+            </if>
+            <if test="artificialNum != null">
+                artificial_num,
+            </if>
+            <if test="fileName != null">
+                file_name,
+            </if>
+            <if test="entryTime != null">
+                entry_time,
+            </if>
+            <if test="jobType != null">
+                job_type,
+            </if>
+            <if test="jobProgress != null">
+                job_progress,
+            </if>
+            <if test="jobStatus != null">
+                job_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelId != null">
+                #{modelId,jdbcType=BIGINT},
+            </if>
+            <if test="modelName != null">
+                #{modelName,jdbcType=VARCHAR},
+            </if>
+            <if test="modelType != null">
+                #{modelType,jdbcType=INTEGER},
+            </if>
+            <if test="identify != null">
+                #{identify,jdbcType=VARCHAR},
+            </if>
+            <if test="uniqueCode != null">
+                #{uniqueCode,jdbcType=BIGINT},
+            </if>
+            <if test="taskNum != null">
+                #{taskNum,jdbcType=INTEGER},
+            </if>
+            <if test="passNum != null">
+                #{passNum,jdbcType=INTEGER},
+            </if>
+            <if test="refuseNum != null">
+                #{refuseNum,jdbcType=INTEGER},
+            </if>
+            <if test="artificialNum != null">
+                #{artificialNum,jdbcType=INTEGER},
+            </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="entryTime != null">
+                #{entryTime,jdbcType=VARCHAR},
+            </if>
+            <if test="jobType != null">
+                #{jobType,jdbcType=INTEGER},
+            </if>
+            <if test="jobProgress != null">
+                #{jobProgress,jdbcType=INTEGER},
+            </if>
+            <if test="jobStatus != null">
+                #{jobStatus,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="getHistoryLog" parameterType="java.util.Map" resultType="com.geo.rcs.modules.event.entity.EventHistoryLog">
+        select id from event_history_log where identify = #{identify} and unique_code = #{uniqueCode} and model_id = #{modelId}
+    </select>
+    <update id="updateLog" parameterType="java.util.Map">
+        update event_history_log
+        <set>
+            <if test="passNum != null">
+                pass_num = #{passNum,jdbcType=INTEGER},
+            </if>
+            <if test="refuseNum != null">
+                refuse_num = #{refuseNum,jdbcType=INTEGER},
+            </if>
+            <if test="artificialNum != null">
+                artificial_num = #{artificialNum,jdbcType=INTEGER},
+            </if>
+            <if test="invalidNum != null">
+                invalid_num = #{invalidNum,jdbcType=INTEGER},
+            </if>
+            <if test="jobProgress != null">
+                job_progress = #{jobProgress,jdbcType=INTEGER},
+            </if>
+            <if test="jobStatus != null">
+                job_status = #{jobStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where identify = #{identify,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findInterNameAndFieldDesc" resultType="java.util.Map">
+       SELECT er.name as innerName,rf.describ as fieldDesc FROM `engine_raw_fields` rf left join engine_raw_inter er on rf.inter_id = er.id where rf.`name` =#{fieldName} and rf.active = 1
+    </select>
+</mapper>

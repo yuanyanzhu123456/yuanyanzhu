@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.approval.dao.PatchDataMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.approval.entity.PatchData" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="action_id" property="actionId" jdbcType="INTEGER" />
+    <result column="obj_id" property="objId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="field_type" property="fieldType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="describ" property="describ" jdbcType="VARCHAR" />
+    <result column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="rules_id" property="rulesId" jdbcType="BIGINT" />
+    <result column="scene_id" property="sceneId" jdbcType="BIGINT" />
+    <result column="active" property="active" jdbcType="INTEGER" />
+    <result column="threshold" property="threshold" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
+    <result column="black_filter" property="blackFilter" jdbcType="VARCHAR" />
+    <result column="white_filter" property="whiteFilter" jdbcType="VARCHAR" />
+    <result column="describtion" property="describtion" jdbcType="VARCHAR" />
+    <result column="only_id" property="onlyId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, action_id, obj_id, name, field_type, data_type, describ, business_id, rules_id, 
+    scene_id, active, threshold, level, rule_code, black_filter, white_filter, describtion, 
+    only_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from engine_patch_data
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from engine_patch_data
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.geo.rcs.modules.approval.entity.PatchData" >
+    insert into engine_patch_data (id, action_id, obj_id,
+      name, field_type, data_type, 
+      describ, business_id, rules_id, 
+      scene_id, active, threshold, 
+      level, rule_code, black_filter, 
+      white_filter, describtion, only_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{actionId,jdbcType=INTEGER}, #{objId,jdbcType=INTEGER},
+      #{name,jdbcType=VARCHAR}, #{fieldType,jdbcType=INTEGER}, #{dataType,jdbcType=INTEGER}, 
+      #{describ,jdbcType=VARCHAR}, #{businessId,jdbcType=INTEGER}, #{rulesId,jdbcType=BIGINT}, 
+      #{sceneId,jdbcType=BIGINT}, #{active,jdbcType=INTEGER}, #{threshold,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{ruleCode,jdbcType=VARCHAR}, #{blackFilter,jdbcType=VARCHAR}, 
+      #{whiteFilter,jdbcType=VARCHAR}, #{describtion,jdbcType=VARCHAR}, #{onlyId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.geo.rcs.modules.approval.entity.PatchData" >
+    insert into engine_patch_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="actionId != null" >
+        action_id,
+      </if>
+      <if test="objId != null" >
+        obj_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="fieldType != null" >
+        field_type,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="describ != null" >
+        describ,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="rulesId != null" >
+        rules_id,
+      </if>
+      <if test="sceneId != null" >
+        scene_id,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="matchType != null" >
+        match_type,
+      </if>
+      <if test="threshold != null" >
+        threshold,
+      </if>
+      <if test="thresholdMin != null">
+        threshold_min,
+      </if>
+      <if test="thresholdMax != null">
+        threshold_max,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="ruleCode != null" >
+        rule_code,
+      </if>
+      <if test="blackFilter != null" >
+        black_filter,
+      </if>
+      <if test="whiteFilter != null" >
+        white_filter,
+      </if>
+      <if test="describtion != null" >
+        describtion,
+      </if>
+      <if test="onlyId != null" >
+        only_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="actionId != null" >
+        #{actionId,jdbcType=INTEGER},
+      </if>
+      <if test="objId != null" >
+        #{objId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldType != null" >
+        #{fieldType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="describ != null" >
+        #{describ,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="rulesId != null" >
+        #{rulesId,jdbcType=BIGINT},
+      </if>
+      <if test="sceneId != null" >
+        #{sceneId,jdbcType=BIGINT},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=INTEGER},
+      </if>
+      <if test="matchType != null" >
+        #{matchType,jdbcType=INTEGER},
+      </if>
+      <if test="threshold != null" >
+        #{threshold,jdbcType=INTEGER},
+      </if>
+      <if test="thresholdMin != null">
+        #{thresholdMin,jdbcType=INTEGER},
+      </if>
+      <if test="thresholdMax != null">
+        #{thresholdMax,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="ruleCode != null" >
+        #{ruleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="blackFilter != null" >
+        #{blackFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="whiteFilter != null" >
+        #{whiteFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="describtion != null" >
+        #{describtion,jdbcType=VARCHAR},
+      </if>
+      <if test="onlyId != null" >
+        #{onlyId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.approval.entity.PatchData" >
+    update engine_patch_data
+    <set >
+      <if test="actionId != null" >
+        action_id = #{actionId,jdbcType=INTEGER},
+      </if>
+      <if test="objId != null" >
+        obj_id = #{objId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldType != null" >
+        field_type = #{fieldType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="describ != null" >
+        describ = #{describ,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="rulesId != null" >
+        rules_id = #{rulesId,jdbcType=BIGINT},
+      </if>
+      <if test="sceneId != null" >
+        scene_id = #{sceneId,jdbcType=BIGINT},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=INTEGER},
+      </if>
+      <if test="threshold != null" >
+        threshold = #{threshold,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="ruleCode != null" >
+        rule_code = #{ruleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="blackFilter != null" >
+        black_filter = #{blackFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="whiteFilter != null" >
+        white_filter = #{whiteFilter,jdbcType=VARCHAR},
+      </if>
+      <if test="describtion != null" >
+        describtion = #{describtion,jdbcType=VARCHAR},
+      </if>
+      <if test="onlyId != null" >
+        only_id = #{onlyId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.approval.entity.PatchData" >
+    update engine_patch_data
+    set action_id = #{actionId,jdbcType=INTEGER},
+      obj_id = #{objId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      field_type = #{fieldType,jdbcType=INTEGER},
+      data_type = #{dataType,jdbcType=INTEGER},
+      describ = #{describ,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=INTEGER},
+      rules_id = #{rulesId,jdbcType=BIGINT},
+      scene_id = #{sceneId,jdbcType=BIGINT},
+      active = #{active,jdbcType=INTEGER},
+      threshold = #{threshold,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      rule_code = #{ruleCode,jdbcType=VARCHAR},
+      black_filter = #{blackFilter,jdbcType=VARCHAR},
+      white_filter = #{whiteFilter,jdbcType=VARCHAR},
+      describtion = #{describtion,jdbcType=VARCHAR},
+      only_id = #{onlyId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByOnlyId" resultType="com.geo.rcs.modules.approval.entity.PatchData" parameterType="com.geo.rcs.modules.approval.entity.Approval">
+      select * from engine_patch_data where only_id = #{onlyId} and obj_id = #{objId}
+  </select>
+</mapper>

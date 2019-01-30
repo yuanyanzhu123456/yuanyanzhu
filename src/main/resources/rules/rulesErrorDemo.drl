@@ -1,0 +1,230 @@
+package com.geo.rcs.modules.engine.drools;
+
+import com.geo.rcs.modules.engine.entity.Rules;
+import java.text.SimpleDateFormat;
+import static java.lang.Math.*;
+import java.util.Collections;
+import java.util.List
+import java.util.Date;
+function int Not(int res) {
+    if(res==1){
+        res = 0;
+    }else{
+        res = 1;
+    }
+    return res;
+}
+
+function int compareDate( String startDate, String endDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date start = sdf.parse(startDate);
+    Date end = sdf.parse(endDate);
+
+    return start.compareTo(end);
+}
+
+function int compareDatetime( String startDate, String endDate ){
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    Date start = sdf.parse(startDate);
+    Date end = sdf.parse(endDate);
+
+    return start.compareTo(end);
+}
+
+dialect "mvel"
+
+//declare any global variables here
+// 规则集id:10001，规则集入口
+rule "rs10001"
+//no-loop
+ salience 1
+ when
+  $rs:Rules($rsid:id, $s:status==0);
+ then
+  System.out.println("规则集id：" + $rsid);
+  System.out.println("规则集10001评分：" + $rs.score);
+  System.out.println("规则集10001状态：" + $rs.status);
+  $rs.score = $rs.ruleList[0].score + $rs.ruleList[1].score;
+  $rs.status = ($rs.ruleList[0].score>0 ? $rs.ruleList[0].level:0) > $rs.status?($rs.ruleList[0].score>0 ? $rs.ruleList[0].level:0):$rs.status;
+  $rs.status = ($rs.ruleList[1].score>0 ? $rs.ruleList[1].level:0) > $rs.status?($rs.ruleList[1].score>0 ? $rs.ruleList[1].level:0):$rs.status;
+
+  $rs.status = $rs.status==0?1:$rs.status;
+  System.out.println("规则集10001状态：" + $rs.status);
+  System.out.println("规则集10001评分：" + $rs.score);
+//  update($rs);
+end
+
+
+// 规则编号:0, 规则id:10001
+rule "r10001"
+//no-loop
+ salience 100
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("规则10001阈值：" + $r.ruleList[0].threshold);
+  System.out.println("规则10001风险：" + $r.ruleList[0].level);
+  $r.ruleList[0].score = $r.ruleList[0].conditionsList[0].result|$r.ruleList[0].conditionsList[1].result  ;
+  $r.ruleList[0].score = $r.ruleList[0].threshold * $r.ruleList[0].score;
+  System.out.println("规则10001得分：" + $r.ruleList[0].score);
+  System.out.println("规则10001评估：" + $r.ruleList[0].level);
+//  update($r);
+end
+
+// 条件编号：0, 条件id: 10001,
+rule "c10001"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10001初始结果：" + $r.ruleList[0].conditionsList[0].result);
+  $r.ruleList[0].conditionsList[0].result = $r.ruleList[0].conditionsList[0].fieldList[0].result|$r.ruleList[0].conditionsList[0].fieldList[1].result;
+    System.out.println("条件10001运算结果：" + $r.ruleList[0].conditionsList[0].result);
+//  update($r);
+end
+
+// 字段编号：0, 字段id: 10001
+rule "field10001"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10001-字段10001-初始结果：" + $r.ruleList[0].conditionsList[0].fieldList[0].value);
+  System.out.println("条件10001-字段10001-初始参数：" + $r.ruleList[0].conditionsList[0].fieldList[0].parameter);
+  $r.ruleList[0].conditionsList[0].fieldList[0].result=($r.ruleList[0].conditionsList[0].fieldList[0].value < $r.ruleList[0].conditionsList[0].fieldList[0].parameter? 1 : 0);
+  System.out.println("条件10001-字段10001-运算结果：" + $r.ruleList[0].conditionsList[0].fieldList[0].result);
+//  update($r);
+end
+
+// 字段编号：1, 字段id: 10002
+rule "field10002"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10001-字段10002-初始结果：" + $r.ruleList[0].conditionsList[0].fieldList[1].value);
+  System.out.println("条件10001-字段10002-初始参数：" + $r.ruleList[0].conditionsList[0].fieldList[1].parameter);
+  $r.ruleList[0].conditionsList[0].fieldList[1].result=($r.ruleList[0].conditionsList[0].fieldList[1].value < $r.ruleList[0].conditionsList[0].fieldList[1].parameter? 1 : 0);
+  System.out.println("条件10001-字段10002-运算结果：" + $r.ruleList[0].conditionsList[0].fieldList[1].result);
+//  update($r);
+end
+
+// 条件编号：1, 条件id: 10002,
+rule "c10002"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10002初始结果：" + $r.ruleList[0].conditionsList[1].result);
+  $r.ruleList[0].conditionsList[1].result = $r.ruleList[0].conditionsList[1].fieldList[0].result|$r.ruleList[0].conditionsList[1].fieldList[1].result;
+    System.out.println("条件10002运算结果：" + $r.ruleList[0].conditionsList[1].result);
+//  update($r);
+end
+
+// 字段编号：0, 字段id: 10003
+rule "field10003"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10002-字段10003-初始结果：" + $r.ruleList[0].conditionsList[1].fieldList[0].value);
+  System.out.println("条件10002-字段10003-初始参数：" + $r.ruleList[0].conditionsList[1].fieldList[0].parameter);
+  $r.ruleList[0].conditionsList[1].fieldList[0].result=($r.ruleList[0].conditionsList[1].fieldList[0].value.equals($r.ruleList[0].conditionsList[1].fieldList[0].parameter)? 1 : 0);
+  System.out.println("条件10002-字段10003-运算结果：" + $r.ruleList[0].conditionsList[1].fieldList[0].result);
+//  update($r);
+end
+
+// 字段编号：1, 字段id: 10004
+rule "field10004"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10002-字段10004-初始结果：" + $r.ruleList[0].conditionsList[1].fieldList[1].value);
+  System.out.println("条件10002-字段10004-初始参数：" + $r.ruleList[0].conditionsList[1].fieldList[1].parameter);
+  $r.ruleList[0].conditionsList[1].fieldList[1].result=($r.ruleList[0].conditionsList[1].fieldList[1].value < $r.ruleList[0].conditionsList[1].fieldList[1].parameter? 1 : 0);
+  System.out.println("条件10002-字段10004-运算结果：" + $r.ruleList[0].conditionsList[1].fieldList[1].result);
+//  update($r);
+end
+
+// 规则编号:1, 规则id:10002
+rule "r10002"
+//no-loop
+ salience 100
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("规则10002阈值：" + $r.ruleList[1].threshold);
+  System.out.println("规则10002风险：" + $r.ruleList[1].level);
+  $r.ruleList[1].score = $r.ruleList[1].conditionsList[0].result|$r.ruleList[1].conditionsList[1].result  ;
+  $r.ruleList[1].score = $r.ruleList[1].threshold * $r.ruleList[1].score;
+  System.out.println("规则10002得分：" + $r.ruleList[1].score);
+  System.out.println("规则10002评估：" + $r.ruleList[1].level);
+//  update($r);
+end
+
+// 条件编号：0, 条件id: 10003,
+rule "c10003"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10003初始结果：" + $r.ruleList[1].conditionsList[0].result);
+  $r.ruleList[1].conditionsList[0].result = $r.ruleList[1].conditionsList[0].fieldList[0].result;
+    System.out.println("条件10003运算结果：" + $r.ruleList[1].conditionsList[0].result);
+//  update($r);
+end
+
+// 字段编号：0, 字段id: 10005
+rule "field10005"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10003-字段10005-初始结果：" + $r.ruleList[1].conditionsList[0].fieldList[0].value);
+  System.out.println("条件10003-字段10005-初始参数：" + $r.ruleList[1].conditionsList[0].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[0].fieldList[0].result=(compareDate($r.ruleList[1].conditionsList[0].fieldList[0].value, $r.ruleList[1].conditionsList[0].fieldList[0].parameter) > 0 ? 1 : 0);
+  System.out.println("条件10003-字段10005-运算结果：" + $r.ruleList[1].conditionsList[0].fieldList[0].result);
+//  update($r);
+end
+
+// 条件编号：1, 条件id: 10004,
+rule "c10004"
+// no-loop
+ salience 1000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10004初始结果：" + $r.ruleList[1].conditionsList[1].result);
+  $r.ruleList[1].conditionsList[1].result = $r.ruleList[1].conditionsList[1].fieldList[0].result;
+    System.out.println("条件10004运算结果：" + $r.ruleList[1].conditionsList[1].result);
+//  update($r);
+end
+
+// 字段编号：0, 字段id: 10006
+rule "field10006"
+// no-loop
+ salience 10000
+ when
+  $r:Rules(status==0);
+ then
+  System.out.println("条件10004-字段10006-初始结果：" + $r.ruleList[1].conditionsList[1].fieldList[0].value);
+  System.out.println("条件10004-字段10006-初始参数：" + $r.ruleList[1].conditionsList[1].fieldList[0].parameter);
+  $r.ruleList[1].conditionsList[1].fieldList[0].result=(compareDatetime($r.ruleList[1].conditionsList[1].fieldList[0].value , $r.ruleList[1].conditionsList[1].fieldList[0].parameter) > 0 ? 1 : 0);
+  System.out.println("条件10004-字段10006-运算结果：" + $r.ruleList[1].conditionsList[1].fieldList[0].result);
+//  update($r);
+end
+
+

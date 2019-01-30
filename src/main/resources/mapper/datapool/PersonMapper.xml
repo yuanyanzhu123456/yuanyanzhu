@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.datapool.dao.PersonMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.datapool.entity.Person" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="rid"  property="rid" jdbcType="VARCHAR" />
+    <result column="name"  property="name" jdbcType="VARCHAR" />
+    <result column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="id_number"  property="idNumber" jdbcType="VARCHAR" />
+    <result column="create_time"  property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time"  property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark"  property="remark" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, rid, name, cid, id_number, create_time, update_time, remark
+  </sql>
+
+  <insert id="addByRid" parameterType="java.util.Map">
+    INSERT INTO `${partTableName}` (rid, name, cid, id_number, create_time, update_time, remark)
+    VALUES(#{rid}, #{realName}, #{cid}, #{idNumber}, #{createTime}, #{updateTime}, #{remark})
+    ON DUPLICATE KEY UPDATE update_time= #{updateTime}
+  </insert>
+  <!-- ON DUPLICATE KEY UPDATE update_time= #{updateTime}   -->
+
+  <update id="updateByRid">
+     UPDATE `${partTableName}` SET `name` = #{name} WHERE `rid` = #{rid}
+  </update>
+
+  <select id="findByRid" resultType="com.geo.rcs.modules.datapool.entity.Person">
+    SELECT * FROM `${partTableName}` WHERE `rid` = #{rid}
+  </select>
+
+  <select id="deleteByRid" resultType="com.geo.rcs.modules.datapool.entity.Person">
+    DELETE FROM `${partTableName}` WHERE `rid` = #{rid}
+  </select>
+
+  <select id="isExists" resultType="java.lang.String" parameterType="java.lang.String">
+    select t.table_name from information_schema.TABLES t where t.TABLE_SCHEMA ="rcs2" and t.TABLE_NAME ="${partTableName}";
+  </select>
+
+  <update id="createPartTable" parameterType="java.lang.String">
+  CREATE TABLE IF NOT EXISTS `${partTableName}` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '存储ID',
+  `rid` varchar(32) NOT NULL DEFAULT '' COMMENT '数据全局ID',
+  `name` varchar(32) DEFAULT NULL COMMENT '姓名',
+  `cid` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `id_number` varchar(32) DEFAULT NULL COMMENT '身份证号',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`rid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  </update>
+</mapper>

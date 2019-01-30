@@ -1,0 +1,109 @@
+###############################################################
+#####################  测试环境专有的配置  ####################
+##############################################################
+
+###################### 数据源服务地址配置  ##########################
+dataSourceServer:
+              tongdun:
+                  url: http://localhost:8030/bodyguard/apply/v4.2
+                  partner_code: test
+                  partner_key: test
+                  partner_app: test
+              rcsDataSource:
+                  url: http://localhost:8030
+              dataplatform:
+                  url:  http://10.111.33.30:8030/BrcbIndex/indexSearch
+              wuXiDate:
+                       url: 10.200.64.50
+                       port: 7790
+                       xml76: aaa0000069010999007                             Q01OLS     721                  <?xml version="1.0" encoding="GBK"?>aaa
+                       xml77: aaa0000069010999007                             Q01OLS     721                  <?xml version="1.0" encoding="GBK"?>aaa
+                       xml79: aaa0000069010999007                             Q01OLS     721                  <?xml version="1.0" encoding="GBK"?>aaa
+              wuXiDateZx:
+                        url: 166.8.61.127
+                        port: 9810
+                        xml1: aaa0000128610999007                             Q01OLS     736                  <?xml version="1.0" encoding="GBK"?>aaa
+                        xml3: aaa0000128610999007                             Q01OLS     736                  <?xml version="1.0" encoding="GBK"?>aaa
+#################### 数据源及Redis链接配置 ########################
+spring:
+    ########################  DEBUG模式开关  ##########################
+    debug: true
+    ########################  数据源链接配置  ##########################
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            url: jdbc:mysql://10.111.32.156:3306/rcs2?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            username: rcs
+            password: GEOrcs,,123
+            initial-size: 10
+            max-active: 1000
+            min-idle: 10
+            max-wait: 60000
+            removeAbandoned: false
+            logAbandoned : true
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+    ########################  Redis链接配置  ##########################
+    redis:
+        database: 0
+        host: 10.111.32.170
+        port: 6379
+        password: geo456ABC      # 密码（默认为空）
+        timeout: 6000            # 连接超时时长（毫秒）
+        pool:
+            max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+            max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+            max-idle: 10      # 连接池中的最大空闲连接
+            min-idle: 5       # 连接池中的最小空闲连接
+    #################### rabbitmq配置 ########################
+    rabbitmq :
+         host : 10.111.32.170
+         port : 5672
+         username : rcs
+         password : rcs@geotmt123
+    #################### job长度配置 ########################
+    jobqueue :
+         queue-max-size : 10000 #队列长度
+         distribute-max-size : 1000  #单任务分发上限
+    ########################  系统邮件配置  ##########################
+    mail:
+      host: smtp.geotmt.com
+      username: radar-service@geotmt.com
+      password: Geotmt231
+      default-encoding: UTF-8
+      fromMail:
+        addr: radar-service@geotmt.com
+###################### kafka配置  ##########################
+# 指定kafka 代理地址，可以多个
+    kafka:
+          zkSendIpPortList: hadoop2.rcs.com:6667
+          zkListenIpPortList: hadoop2.rcs.com:2181
+          hdfsIpPortList: hdfs://hadoop2.rcs.com:8020
+          hdfsLogSwitch: false  # true开  false关
+          flinkStreamOpen: true # true开  false关
+####################  配置日志存放目录  ########################
+logging:
+    path: /server/logs/rcs/rcs2_server
+####################  上传文件路径  ########################
+file:
+  uploadFolder: /server/files

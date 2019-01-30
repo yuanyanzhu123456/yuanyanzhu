@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.evestat.dao.EveStatMapper" >
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.evestat.entity.EveStat" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="place" property="place" jdbcType="VARCHAR" />
+        <result column="bus_type" property="busType" jdbcType="VARCHAR" />
+        <result column="scene" property="scene" jdbcType="VARCHAR" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="rules_name" property="rulesName" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+        <result column="check_time" property="checkTime" jdbcType="DATE" />
+        <result column="checker" property="checker" jdbcType="VARCHAR" />
+        <result column="check_status" property="checkStatus" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, place, bus_type, scene, account, rules_name, name, id_card, mobilephone, check_time,
+        checker, check_status
+    </sql>
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.evestat.entity.EveStat" parameterType="com.geo.rcs.modules.evestat.entity.EveStat">
+        select
+        *
+        from event_stat WHERE 1=1
+        <if test="rulesName != null">
+            and rules_name like '%${rulesName}%'
+        </if>
+        <if test="id != null">
+            and id like '%${id}%'
+        </if>
+        <if test="checker != null">
+            and checker = #{checker}
+        </if>
+        <if test="busType != null">
+            and bus_type like '%${busType}%'
+        </if>
+        <if test="place != null">
+            and place like '%${place}%'
+        </if>
+        <if test="scene != null">
+            and scene like '%${scene}%'
+        </if>
+        and unique_code = #{uniqueCode} order by stat_time desc
+    </select>
+</mapper>

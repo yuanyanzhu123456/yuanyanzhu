@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.rule.scene.dao.EngineSceneMapper" >
+  <resultMap id="BaseResultMap" type="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="verify" property="verify" jdbcType="INTEGER" />
+    <result column="active" property="active" jdbcType="INTEGER" />
+    <result column="add_user" property="addUser" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="unique_code" property="uniqueCode" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_id, name, describ, verify, active, add_user, add_time,unique_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="Base_Column_List"/>
+    from engine_scenes
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="querySceneName" resultType="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    select *
+    from engine_scenes
+    where name = #{name} and unique_code = #{uniqueCode} and business_id = #{businessId}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from engine_scenes
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    insert into engine_scenes (id, business_id, name, 
+      describe, verify, active, 
+      add_user, add_time)
+    values (#{id,jdbcType=BIGINT}, #{businessId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{describe,jdbcType=VARCHAR}, #{verify,jdbcType=INTEGER}, #{active,jdbcType=INTEGER},
+      #{addUser,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    insert into engine_scenes
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="describ != null" >
+        describ,
+      </if>
+      <if test="verify != null" >
+        verify,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="addUser != null" >
+        add_user,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="uniqueCode != null" >
+        unique_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describ != null" >
+        #{describ,jdbcType=VARCHAR},
+      </if>
+      <if test="verify != null" >
+        #{verify,jdbcType=INTEGER},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=INTEGER},
+      </if>
+      <if test="addUser != null" >
+        #{addUser,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uniqueCode != null" >
+        #{uniqueCode},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    update engine_scenes
+    <set >
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describ != null" >
+        describ = #{describ,jdbcType=VARCHAR},
+      </if>
+      <if test="verify != null" >
+        verify = #{verify,jdbcType=INTEGER},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=INTEGER},
+      </if>
+      <if test="addUser != null" >
+        add_user = #{addUser,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene" >
+    update engine_scenes
+    set business_id = #{businessId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      describe = #{describe,jdbcType=VARCHAR},
+      verify = #{verify,jdbcType=INTEGER},
+      active = #{active,jdbcType=INTEGER},
+      add_user = #{addUser,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 分页查询 -->
+  <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene">
+    select es.*,eb.type_name from engine_scenes es left join engine_business_type eb on es.business_id = eb.id
+    WHERE 1=1
+    <if test="businessId != null">
+      and  es.business_id = #{businessId}
+    </if>
+    <if test="name != null">
+      and es.name like '%${name}%'
+    </if>
+    <if test="addUser != null">
+      and es.add_user like '%${addUser}%'
+    </if>
+    and es.unique_code = #{uniqueCode} order by es.add_time desc
+  </select>
+  <select id="queryByTypeAndName" resultType="com.geo.rcs.modules.rule.scene.entity.EngineScene" parameterType="com.geo.rcs.modules.rule.scene.entity.EngineScene">
+    select
+    <include refid="Base_Column_List"/>
+    from engine_scenes where business_id = #{businessId} and name = #{name}
+  </select>
+  <select id="getBusType" resultType="com.geo.rcs.modules.rule.scene.entity.BusinessType">
+    select
+    *
+    from engine_business_type
+  </select>
+  <select id="getSceneType" resultType="com.geo.rcs.modules.rule.scene.entity.EngineScene">
+      select id,name from engine_scenes where verify =1 and active = 1 and unique_code = #{uniqueCode}
+  </select>
+  <update id="updateSceneSelect" parameterType="com.geo.rcs.modules.approval.entity.PatchData">
+    update engine_scenes
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="describ != null">
+        describ = #{describ,jdbcType=VARCHAR},
+      </if>
+      <if test="verify != null">
+        verify = #{verify,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{onlyId,jdbcType=BIGINT}
+  </update>
+
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.admin.adminIndex.dao.AdminViewMapper">
+
+    <!--查unique_code-->
+    <select id="queryUniqueCode" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT unique_code from sys_user where id = #{id}
+    </select>
+
+    <!--查submitter-->
+    <select id="getSubmitter" parameterType="java.lang.Long" resultType="java.lang.String">
+      SELECT DISTINCT a.submitter from approval_manage a LEFT JOIN sys_user s on s.name = a.submitter WHERE s.id = #{id}
+    </select>
+
+
+    <!--查getUserNum-->
+    <select id="getUserNum" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM sys_user WHERE unique_code = #{unique_code}
+    </select>
+
+
+    <!--查客户概览信息-->
+    <select id="getUserInfo" resultType="java.util.Map" parameterType="java.lang.Long">
+       SELECT su.name,su.username,sr.role_name from sys_user su LEFT JOIN sys_role sr on sr.id = su.role_id WHERE su.id = #{id}
+    </select>
+
+
+    <!--首页活跃度-->
+    <select id="getActivity" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT COUNT(DISTINCT DATE_FORMAT(createtime,'%Y-%m-%d 00:00:00')) as num from sys_login_log where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(createtime) and userid = #{id}
+    </select>
+
+    <!--全部审批记录统计-->
+    <select id="getAllCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT COUNT(*) from approval_manage where unique_code = #{unique_code}
+    </select>
+    <!--我发出审批记录统计-->
+    <select id="getMyCount" resultType="java.lang.Long" parameterType="java.lang.String">
+      SELECT COUNT(*) from approval_manage WHERE submitter = #{submitter}
+    </select>
+
+    <!--查询角色id-->
+    <select id="getRoleId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT role_id from sys_user WHERE id =  #{id}
+    </select>
+
+    <!--待我处理审批记录统计-->
+    <select id="getPrepareCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT COUNT(*) from approval_manage WHERE app_status = 0 and unique_code = #{uniqueCode}
+    </select>
+
+
+</mapper>

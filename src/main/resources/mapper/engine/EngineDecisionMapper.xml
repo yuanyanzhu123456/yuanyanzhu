@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.decision.dao.EngineDecisionMapper" >
+
+    <sql id="Base_Column_List" >
+        id, name,decision_flow,scene_id,business_id,creater,date_format(create_time, '%Y-%m-%d %H:%i:%s') AS create_time,date_format(update_time, '%Y-%m-%d %H:%i:%s') AS update_time,status,active_status,app_status,user_id,remark,parameters,used_rules_ids,usage_rules_ids
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        select
+        <include refid="Base_Column_List" />
+        from  decision_model
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getEngineDecisionByUserId" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        select
+        <include refid="Base_Column_List" />
+        from  decision_model
+        where id = #{id} and user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <insert id="save" parameterType="com.geo.rcs.modules.decision.entity.EngineDecision" useGeneratedKeys="true" keyProperty="id">
+        insert into  decision_model
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="decisionFlow != null" >
+                decision_flow,
+            </if>
+            <if test="creater != null" >
+                creater,
+            </if>
+            <if test="sceneId != null" >
+                scene_id,
+            </if>
+            <if test="businessId != null" >
+                business_id,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                #{name},
+            </if>
+            <if test="decisionFlow != null" >
+                #{decisionFlow},
+            </if>
+            <if test="creater != null" >
+                #{creater},
+            </if>
+            <if test="sceneId != null" >
+                #{sceneId},
+            </if>
+            <if test="businessId != null" >
+                #{businessId},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="remark != null" >
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.geo.rcs.modules.decision.entity.EngineDecision" >
+        update  decision_model
+        <set >
+            <if test="name != null" >
+                name = #{name},
+            </if>
+            <if test="decisionFlow != null" >
+                decision_flow = #{decisionFlow},
+            </if>
+            <if test="sceneId != null" >
+                scene_id = #{sceneId},
+            </if>
+            <if test="businessId != null" >
+                business_id = #{businessId},
+            </if>
+            <if test="creater != null" >
+                creater = #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="usedRulesIds != null" >
+                used_rules_ids = #{usedRulesIds,jdbcType=VARCHAR},
+            </if>
+            <if test="parameters != null" >
+                parameters = #{parameters,jdbcType=VARCHAR},
+            </if>
+            <if test="appStatus != null" >
+                app_status = #{appStatus},
+            </if>
+            <if test="activeStatus != null" >
+                active_status = #{activeStatus},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="usageRulesIds != null" >
+                usage_rules_ids = #{usageRulesIds,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from  decision_model where id = #{id}
+    </delete>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultType="com.geo.rcs.modules.decision.entity.EngineDecision" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from decision_model where  user_id = #{userId}
+        <if test="name != null">
+            AND CONCAT(name) LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="sceneId != null">
+            AND scene_id = #{sceneId}
+        </if>
+        order by create_time ${order}
+    </select>
+
+    <select id="getDecisionByUserId" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        select id,name,parameters,scene_id,business_id,active_status from decision_model where   user_id = #{userId}
+    </select>
+
+    <select id="getDecisionTotal" resultType="java.lang.Integer" parameterType="map">
+        select count(id) from decision_model where user_id = #{userId}
+    </select>
+
+    <select id="verifyName" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        SELECT * from decision_model WHERE name =  #{name} and user_id = #{uniqueCode} and business_id = #{businessId}
+    </select>
+
+    <select id="queryEngineDecisionUniqueCode" resultType="java.lang.Long">
+       SELECT unique_code from sys_user WHERE id = #{user_id}
+    </select>
+
+    <!--查询决策名通过id-->
+    <select id="selectNameById" resultType="java.lang.String">
+        SELECT name from decision_model WHERE id = #{id}
+    </select>
+
+    <select id="selectBusinessIdById" resultType="java.lang.Long">
+        SELECT business_id from decision_model WHERE business_id = #{businessId}
+    </select>
+
+    <select id="getDecisionByNb" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        SELECT * from decision_model WHERE name = #{name} and business_id = #{businessId}
+    </select>
+
+    <select id="getDecisionByName" resultType="com.geo.rcs.modules.decision.entity.EngineDecision">
+        SELECT * from decision_model WHERE name = #{name}
+    </select>
+
+    <select id="getUsageRuleSet" resultType="java.lang.String">
+        select distinct usage_rules_ids from decision_model where user_id = #{uniqueCode} and usage_rules_ids != 'null'
+    </select>
+</mapper>

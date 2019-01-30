@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.geo.rcs.modules.admin.adminIndex.dao.StatisticInfoMapper">
+
+       <select id="getSingleCustomInfo" parameterType="java.lang.Long" resultType="java.util.Map">
+        select er.rulesNum,su.usersNum,dm.decisionsNum
+        from
+        (select count(*) as rulesNum from engine_rules where unique_code = #{id})as er,
+        (select count(*) as usersNum from sys_user where unique_code = #{id}) as su,
+        (select count(*) as decisionsNum from decision_model where user_id = #{id}) as dm;
+       </select>
+
+        <select id="StatisticInfoService" resultType="java.util.Map">
+            select su1.num as cmpNum,su2.num as userNum,sl.num as activeUsersNum
+             from
+              (select count(*) as num from sys_user where id = unique_code) as su1,
+              (select count(*) as num from sys_user) as su2,
+              (select count(*) as num from
+                      (select *,count(*) as num1 from sys_login_log
+                                where createtime > DATE_SUB(NOW(),INTERVAL 30 DAY) group by userid,username) as sl
+                                          where sl.num1 >= 1) as sl;
+        </select>
+
+
+        <!--用户活跃度分析图表数据-->
+        <select id="getActivityUserGraph" resultType="java.util.Map" parameterType="java.util.Map">
+            select loginUsr.time,CAST(loginUsr.sum/usr.sum as DECIMAL(4,2)) as percent
+						 from
+							(select count(distinct userid) as sum,
+                                     DATE_FORMAT(createtime,"%Y-%m-%d %H:%i:%s") as time
+									from sys_login_log
+											where createtime between DATE_SUB(NOW(),INTERVAL #{dayNum} DAY ) and NOW()
+													group by
+                                                <if test="dayNum == 1">
+                                                    DATE_FORMAT(createtime,"%Y-%m-%d %H-00-00")
+                                                </if>
+                                                <if test="dayNum == 7 || dayNum == 31 || dayNum == 30">
+                                                    DATE_FORMAT(createtime,"%Y-%m-%d 00-00-00")
+                                                </if>
+                                                 ) as loginUsr,
+							(select count(*) as sum from sys_user) as usr;
+        </select>
+
+    <!--客户活跃度分析图表数据-->
+    <select id="getActivityCmpGraph" resultType="java.util.Map" parameterType="java.util.Map">
+        select loginCmp.time,CAST(loginCmp.sum/cmp.sum as DECIMAL(4,2)) as percent
+                from
+                    (select count(distinct slu.uniqueCode) as sum,
+                        DATE_FORMAT(slu.createtime,"%Y-%m-%d %H:%i:%s") as time
+                            from
+                                  (select su.unique_code as uniqueCode,sl.createtime
+                                            from
+                                                  sys_login_log as sl
+                                                  left join sys_user as su  on su.id = sl.userid) slu
+                                                  where createtime between DATE_SUB(NOW(),INTERVAL #{dayNum} DAY ) and NOW()
+                                                  group by
+
+                                                    <if test="dayNum == 1">
+                                                        DATE_FORMAT(createtime,"%Y-%m-%d %H-00-00")
+                                                    </if>
+                                                    <if test="dayNum == 7 || dayNum == 31 || dayNum == 30">
+                                                        DATE_FORMAT(createtime,"%Y-%m-%d 00-00-00")
+                                                    </if>
+                                                    ) as loginCmp,
+                    (select count(*) as sum from sys_user where id=unique_code) as cmp;
+    </select>
+
+
+    <!--获取各个公司各个时间段的新增用户数(最近一天、最近一周、最近一月)-->
+    <select id="getPerCompanyNewUserNum" resultType="java.util.Map" parameterType="java.lang.Integer">
+        select company,count(*) as num from sys_user
+				where create_time between DATE_SUB(NOW(),INTERVAL #{dayNum} DAY) and NOW()
+					group by unique_code
+						order by num desc
+							limit 10;
+    </select>
+
+
+    <!--获取各个时间段的新增客户趋势(最近一天、最近一周、最近一月)-->
+    <select id="getNewCustomsTrend" resultType="java.util.Map" parameterType="java.util.Map">
+        select
+        DATE_FORMAT(create_time,"%Y-%m-%d %H:%i:%s") as time
+        ,count(*) as num
+        from sys_user
+        where create_time between DATE_SUB(NOW(),INTERVAL ${dayNum} DAY) and NOW()
+        group by
+        <if test="dayNum == 1">
+            DATE_FORMAT(create_time,"%Y-%m-%d %H-00-00")
+        </if>
+        <if test="dayNum == 7 || dayNum == 30 || dayNum == 31">
+            DATE_FORMAT(create_time,"%Y-%m-%d 00-00-00")
+        </if>
+    </select>
+
+    <!--获取各个时间段的客户总数、用户总数(最近一天、最近一周、最近一月)-->
+    <select id="getCustomAndUserNumForTime" resultType="java.util.Map" parameterType="java.lang.Integer">
+        select cmp.cmpNum,usr.userNum from
+            (select count(*) as cmpNum from sys_user where id=unique_code and create_time <![CDATA[<]]> DATE_SUB(NOW(),INTERVAL #{dayNum} DAY) ) as cmp,
+            (select count(*) as userNum from sys_user where create_time <![CDATA[<]]> DATE_SUB(NOW(),INTERVAL #{dayNum} DAY) ) as usr;
+    </select>
+
+    <!--获取各个时间段内的登陆客户总数、用户总数(最近一天、最近一周、最近一月)-->
+    <select id="getLoginCmpAndUserNum" resultType="java.util.Map" parameterType="java.lang.Integer">
+       select  cmp.cmpNum,usr.userNum
+		from
+			(select count(distinct userid) as userNum
+					from sys_login_log
+						where createtime > DATE_SUB(NOW(),INTERVAL #{dayNum} DAY)) as usr,
+			(select count(distinct userid) as cmpNum
+					from (select sl.userid,sl.createtime,su.username
+						from sys_login_log sl left join sys_user su on sl.userid=su.id where userid = unique_code) as loginCmp
+							where loginCmp.createtime BETWEEN DATE_SUB(NOW(),INTERVAL #{dayNum} DAY) and NOW()) as cmp;
+    </select>
+
+    <!--wzq-->
+    <!--客户登录次数排行查询-->
+    <select id="logCountByCom" resultType="java.util.Map" parameterType="java.lang.Integer">
+        SELECT company,count(*) as num from sys_login_log sl  LEFT JOIN sys_user as su on sl.userid = su.id WHERE createtime
+        between DATE_SUB(NOW(),INTERVAL #{num} DAY) and NOW() group by unique_code ORDER BY num desc LIMIT 10
+    </select>
+
+</mapper>

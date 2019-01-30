@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geo.rcs.modules.monitor.dao.DimensionMapper">
+
+    <resultMap id="BaseResultMap" type="com.geo.rcs.modules.monitor.entity.Dimension">
+
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="dimension_name" property="dimensionName" jdbcType="VARCHAR"/>
+        <result column="dimension_desc" property="dimensionDesc" jdbcType="VARCHAR"/>
+        <result column="inter_desc" property="interDesc" jdbcType="VARCHAR"/>
+        <result column="policy_id" property="policyId" jdbcType="BIGINT"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+        <result column="unicode" property="unicode" jdbcType="BIGINT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, dimension_name, dimension_desc, policy_id, user_name, unicode, create_date, update_date, remark,policy_type,alarm_policy,policy_name,status,param_json
+  </sql>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from monitor_dimension where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <insert id="save" parameterType="com.geo.rcs.modules.monitor.entity.Dimension" useGeneratedKeys="true" keyProperty="id">
+        insert into monitor_dimension
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dimensionName != null">
+                dimension_name,
+            </if>
+            <if test="dimensionDesc != null">
+                dimension_desc,
+            </if>
+            <if test="policyId != null">
+                policy_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="unicode != null">
+                unicode,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="policyType != null">
+                policy_type,
+            </if>
+            <if test="alarmPolicy != null">
+                alarm_policy,
+            </if>
+            <if test="policyName != null">
+                policy_name,
+            </if>
+            <if test="paramJson != null">
+                param_json,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="dimensionName != null">
+                #{dimensionName,jdbcType=VARCHAR},
+            </if>
+            <if test="dimensionDesc != null">
+                #{dimensionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="policyId != null">
+                #{policyId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="unicode != null">
+                #{unicode,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">DimensionMapper
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="policyType != null">
+                #{policyType,jdbcType=VARCHAR},
+            </if>
+            <if test="alarmPolicy != null">
+                #{alarmPolicy,jdbcType=VARCHAR},
+            </if>
+            <if test="policyName != null">
+                #{policyName,jdbcType=VARCHAR},
+            </if>
+            <if test="paramJson != null">
+                #{paramJson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.geo.rcs.modules.monitor.entity.Dimension">
+        update monitor_dimension
+        <set>
+            <if test="dimensionName != null">
+                dimension_name = #{dimensionName,jdbcType=VARCHAR},
+            </if>
+            <if test="dimensionDesc != null">
+                dimension_desc = #{dimensionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="policyId != null">
+                policy_id = #{policyId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="unicode != null">
+                unicode = #{unicode,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="policyType != null">
+                policy_type = #{policyType,jdbcType=VARCHAR},
+            </if>
+            <if test="alarmPolicy != null">
+                alarm_policy = #{alarmPolicy,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="policyName != null">
+                policy_name = #{policyName,jdbcType=VARCHAR},
+            </if>
+            <if test="paramJson != null">
+                param_json = #{paramJson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 分页查询 -->
+
+    <select id="findByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.monitor.entity.Dimension">
+        select
+        DISTINCT ms.id, ms.dimension_name, ms.dimension_desc, ms.policy_id,
+        ms.user_name, ms.unicode, ms.create_date, ms.update_date, ms.remark,ms.policy_type,ms.alarm_policy
+        ,ms.policy_name,ms.status,ms.param_json from monitor_dimension ms
+        WHERE ms.unicode = #{unicode}
+        <if test="id != null">
+            and ms.id = #{id}
+        </if>
+        <if test="dimensionName != null">
+            and ms.dimension_name like '%${dimensionName}%'
+        </if>
+        <if test="dimensionDesc != null">
+            and
+            ms.dimension_desc like '%${dimensionDesc}%'
+        </if>
+        <if test="policyId != null">
+            and ms.policy_id = #{policyId}
+        </if>
+        <if test="userName != null">
+            and ms.user_name = #{userName}
+        </if>
+        <if test="createDate != null">
+            and ms.create_date = #{createDate}
+        </if>
+        <if test="updateDate != null">
+            and ms.update_date = #{updateDate}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.geo.rcs.modules.monitor.entity.Dimension">
+        select
+        <include refid="Base_Column_List" />
+        from  monitor_dimension
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="getDimensionByName" resultType="com.geo.rcs.modules.monitor.entity.Dimension">
+        select id,unicode from  monitor_dimension
+        where dimension_desc = #{dimensionDesc,jdbcType=VARCHAR} and unicode = #{uniqueCode}
+    </select>
+
+    <select id="queryListByJobIds" resultType="com.geo.rcs.modules.monitor.entity.Dimension">
+        select md.id,md.status from `monitor_dimension` md left join `monitor_jobs` mj on md.id = mj.`dimension` where mj.`job_id` in
+        <foreach collection="array" item="jobId" index="index"
+                 open="(" close=")" separator=",">
+            '${jobId}'
+        </foreach>
+    </select>
+</mapper>

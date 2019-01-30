@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.sys.dao.SysVersionLogMapper">
+	 
+	<insert id="createVersionLog" parameterType="com.geo.rcs.modules.sys.entity.SysVersionLog" useGeneratedKeys="true"
+			keyProperty="id">
+		insert into sys_version_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="oldVersionId != null">
+				old_version_id,
+			</if>
+			<if test="times != null">
+				times,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="creater != null">
+				creater,
+			</if>
+			<if test="createTime != null">
+				createtime,
+			</if>
+			<if test="message != null">
+				message,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="newVersionId != null">
+				new_version_id
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="oldVersionId != null">
+				#{oldVersionId,jdbcType=BIGINT},
+			</if>
+			<if test="times != null">
+				#{times,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=BIGINT},
+			</if>
+			<if test="creater != null">
+				#{creater,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="message != null">
+				#{message,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="newVersionId != null">
+				#{newVersionId,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+</mapper>

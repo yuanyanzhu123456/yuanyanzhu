@@ -1,0 +1,60 @@
+{
+  "id": "10001",
+  "name": "rules001",
+  "rules": [
+    {
+      "name": "rule001",
+      "id": "10001",
+      "threshold": 100,
+      "score": 0,
+      "level": 2,
+      "relationShip":"10001|10002",
+      "condition": [
+        {
+          "name": "con001", "id": "10001","relationShip":"10001+10002", "result": 9999, "fields": [
+          {"name": "fi001", "id": "10001", "value": 100, "parameter": 300, "operator":"<", "result": 9999},
+          {"name": "fi002", "id": "10002", "value": 100, "parameter": 300, "operator":"<", "result": 9999}
+        ]
+        } ,
+
+        {
+          "name": "con002", "id": "10002", "relationShip":"10003|10008", "result": 9999, "fields": [
+          {"name": "fi003", "id": "10003", "value": 100, "parameter": 300, "operator":"<", "result": 9999},
+          {"name": "fi004", "id": "10004", "value": 100, "parameter": 300, "operator":"<", "result": 9999}
+        ]
+        }
+      ]
+    } ,
+    {
+      "name": "rule002",
+      "id": "10002",
+      "threshold": 100,
+      "score": 0,
+      "level": 3,
+      "relationShip":"10003&10004",
+      "condition": [
+        {
+          "name": "con003", "id": "10003",  "relationShip":"10005", "result": 9999, "fields": [
+          {"name": "fi005", "id": "10005", "value": 100, "parameter": 300, "operator":"<", "result": 9999}
+        ]
+        } ,
+        {
+          "name": "con004", "id": "10004",  "relationShip":"10006", "result": 9999, "fields": [
+          {"name": "fi006", "id": "10006", "value": 100, "parameter": 300, "operator":"<", "result": 9999}
+        ]
+        }
+      ]
+    }
+  ],
+
+  "match_type": 0,
+  "threshold_min": 300,
+  "threshold_max": 600,
+  "status": 0,
+  "parameters": {
+     "innerIfType": "B7",
+     "cid": "13306328903",
+     "idNumber": "370404196212262212",
+     "realName": "赵玉柏"
+  }
+}

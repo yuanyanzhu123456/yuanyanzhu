@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geo.rcs.modules.admin.customerstatistics.dao.CustomerStatisticsMapper">
+<resultMap id="BaseResultMap" type="com.geo.rcs.modules.event.entity.EventEntry">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="sence_id" jdbcType="BIGINT" property="senceId" />
+    <result column="rules_id" jdbcType="BIGINT" property="rulesId" />
+    <result column="rules_name" jdbcType="VARCHAR" property="rulesName" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="acct_no" jdbcType="VARCHAR" property="acctNo" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="approver_id" jdbcType="BIGINT" property="approverId" />
+    <result column="approver_name" jdbcType="VARCHAR" property="approverName" />
+    <result column="sys_approval_time" jdbcType="TIMESTAMP" property="sysApprovalTime" />
+    <result column="man_approval_time" jdbcType="TIMESTAMP" property="manApprovalTime" />
+    <result column="sys_status" jdbcType="TINYINT" property="sysStatus" />
+    <result column="man_status" jdbcType="TINYINT" property="manStatus" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="result_map" jdbcType="VARCHAR" property="resultMap"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="province" jdbcType="VARCHAR" property="province"/>
+    <result column="city" jdbcType="VARCHAR" property="city"/>
+    <result column="isp" jdbcType="VARCHAR" property="isp"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, channel, business_id, sence_id, rules_id, user_id, rules_name, nickname, user_name, id_card,
+    acct_no, mobile, approver_id, approver_name, sys_approval_time, man_approval_time, 
+    sys_status, man_status, status, remark, result_map, create_time, province, city, isp
+  </sql>
+   <select id="findAllByPage" resultMap="BaseResultMap" parameterType="com.geo.rcs.modules.event.entity.EventEntry">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM `api_event_entry`
+    <where>
+     <!--  <if test="condition != null and condition != ''">
+        `nickname` LIKE "%"#{condition}"%"
+        OR `user_name` LIKE "%"#{condition}"%"
+        OR `rules_name` LIKE "%"#{condition}"%"
+        OR `id_card` LIKE "%"#{condition}"%"
+        OR `mobile` LIKE "%"#{condition}"%"
+      </if> -->
+      <if test="channel != null and channel != ''">
+        AND `channel` = #{channel}
+      </if>
+      <if test="businessId != null">
+        AND `business_id` = #{businessId}
+      </if>
+      <if test="senceId != null">
+        AND `sence_id` = #{senceId}
+      </if>
+<!--       <if test="manStatus != null">
+        AND `man_status` = #{manStatus}
+      </if>
+      <if test="status != null">
+        AND `status` = #{status}
+      </if>
+      <if test="sysStatus != null">
+        AND `sys_status` = #{sysStatus}
+      </if> -->
+    </where>
+      order by create_time desc
+  </select>
+
+	  
+
+</mapper>
